@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.ridesharing.network;
+package com.ridesharing.test;
 
 import java.io.IOException;
 
@@ -32,6 +32,7 @@ import android.util.Log;
  * @author wensheng
  *
  */
+@Deprecated
 public class SOAPHelper {
 	private static final String NAMESPACE = "http://ridesharing.com/";
 	private static final String BASE_URL = "http://maxwell.sju.edu/~wy590204/RideSharing/";

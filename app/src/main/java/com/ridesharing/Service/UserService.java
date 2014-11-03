@@ -14,15 +14,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.ridesharing.network;
+package com.ridesharing.Service;
 
-import com.google.gson.Gson;
+import com.ridesharing.Entity.Result;
+import com.ridesharing.Entity.User;
 
-public class Manager {
-	private static Gson gson = new Gson();
-	
-	
-	public static Gson getGson(){
-		return gson;
-	}
+/**
+ * @Package com.ridesharing.Service
+ * @Author wensheng
+ * @Date 2014/10/23.
+ */
+public interface UserService {
+    public Result Login(User user);
+    public Result Register(User user);
+    public User getUser();
+    public void setUser(User user);
 }

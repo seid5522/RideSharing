@@ -27,8 +27,7 @@ public class User {
 	private int sex;
 	private Date birthday;
 	private String address;
-	private String sessionId;
-	private String sessionKey;
+    private String sessionKey;
 	
 	public User(String username, String password) {
 		super();
@@ -110,14 +109,6 @@ public class User {
 
 	public void setAddress(String address) {
 		this.address = address;
-	}
-
-	public String getSessionId() {
-		return sessionId;
-	}
-
-	public void setSessionId(String sessionId) {
-		this.sessionId = sessionId;
 	}
 
 	public String getSessionKey() {

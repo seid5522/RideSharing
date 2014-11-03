@@ -14,28 +14,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.ridesharing.network;
-
-import java.io.IOException;
-
-import org.ksoap2.SoapEnvelope;
-import org.ksoap2.SoapFault;
-import org.ksoap2.serialization.*;
-import org.ksoap2.transport.HttpTransportSE;
-import org.xmlpull.v1.XmlPullParserException;
+package com.ridesharing.test;
 
 import com.google.gson.Gson;
 import com.ridesharing.Entity.Result;
 import com.ridesharing.Entity.User;
-
-import android.R.string;
-import android.util.Log;
 
 /**
  * UserServiceHelper class connect server directly by using SOAP protocol.
  * @author wensheng
  *
  */
+@Deprecated
 public class UserServiceHelper {
     private static final String LOGIN_METHOD_NAME = "login";
     private static final String LOGIN_URL = "UserService.php?wsdl";

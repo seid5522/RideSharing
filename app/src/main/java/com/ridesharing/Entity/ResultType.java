@@ -22,8 +22,11 @@ public enum ResultType {
 	@SerializedName("0")
 	Success(0), 
 	
-	@SerializedName("-1")
-	Error(-1);
+	@SerializedName("1")
+	Error(1),
+
+    @SerializedName("2")
+    RequireAuthenticate(2);
 	
 	private int value;
 	private ResultType(int value){

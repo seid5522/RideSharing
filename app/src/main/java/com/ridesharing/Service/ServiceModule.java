@@ -14,37 +14,32 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.ridesharing.Entity;
+package com.ridesharing.Service;
 
-public class Result {
-	private ResultType type;
-	private String message;
+import android.app.Activity;
+import android.app.Application;
 
-    public Result(){}
+import com.ridesharing.AppModule;
+import com.ridesharing.ui.login.LoginActivity;
+import com.ridesharing.ui.main.MainActivity;
 
-    public Result(ResultType type){
-        this.type = type;
+import javax.inject.Singleton;
+
+import dagger.Module;
+import dagger.Provides;
+
+/**
+ * @Package com.ridesharing.Service
+ * @Author wensheng
+ * @Date 2014/10/25.
+ */
+@Module(
+   // complete = false,
+    library = true
+)
+public class ServiceModule {
+    @Provides @Singleton public UserService provideUserService(){
+
+        return new UserServiceImpl();
     }
-	
-	public Result(ResultType type, String message) {
-		this.type = type;
-		this.message = message;
-	}
-
-	public ResultType getType() {
-		return type;
-	}
-
-	public void setType(ResultType type) {
-		this.type = type;
-	}
-
-	public String getMessage() {
-		return message;
-	}
-
-	public void setMessage(String message) {
-		this.message = message;
-	}
-
 }

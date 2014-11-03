@@ -1,34 +1,34 @@
-package com.ridesharing;
+package com.ridesharing.ui.main;
 
 import android.app.Activity;
-import android.location.Location;
-import android.support.v7.app.ActionBarActivity;
+import android.content.ComponentName;
+import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.IBinder;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
 
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.ridesharing.Service.LocationService;
+import com.ridesharing.Service.LocationServiceImpl_;
+import com.ridesharing.Service.UserService;
+import com.ridesharing.R;
+import com.ridesharing.ui.ActionBarBaseActivity;
+import com.ridesharing.ui.login.LoginActivity_;
+
+import javax.inject.Inject;
 
 
-public class MainActivity extends ActionBarActivity
+public class MainActivity extends ActionBarBaseActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
     /**
@@ -42,26 +42,40 @@ public class MainActivity extends ActionBarActivity
     private CharSequence mTitle;
 
 
+    @Inject UserService userService;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        mNavigationDrawerFragment = (NavigationDrawerFragment)
-                getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
-        mTitle = getTitle();
+        if(userService.getUser() == null){
+            Intent login = new Intent(getApplicationContext(), LoginActivity_.class);
+            login.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(login);
+            // Closing dashboard screen
+            finish();
+            Log.v("activity switched","switch to login activity");
+        }else {
 
-        // Set up the drawer.
-        mNavigationDrawerFragment.setUp(
-                R.id.navigation_drawer,
-                (DrawerLayout) findViewById(R.id.drawer_layout));
+            setContentView(R.layout.activity_main);
+
+            mNavigationDrawerFragment = (NavigationDrawerFragment)
+                    getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
+            mTitle = getTitle();
+
+            // Set up the drawer.
+            mNavigationDrawerFragment.setUp(
+                    R.id.navigation_drawer,
+                    (DrawerLayout) findViewById(R.id.drawer_layout));
+
+
+
+        }
 
 
 
     }
-
-
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {

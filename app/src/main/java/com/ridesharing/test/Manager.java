@@ -14,37 +14,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.ridesharing.Entity;
+package com.ridesharing.test;
 
-public class Result {
-	private ResultType type;
-	private String message;
-
-    public Result(){}
-
-    public Result(ResultType type){
-        this.type = type;
-    }
+import com.google.gson.Gson;
+@Deprecated
+public class Manager {
+	private static Gson gson = new Gson();
 	
-	public Result(ResultType type, String message) {
-		this.type = type;
-		this.message = message;
+	
+	public static Gson getGson(){
+		return gson;
 	}
-
-	public ResultType getType() {
-		return type;
-	}
-
-	public void setType(ResultType type) {
-		this.type = type;
-	}
-
-	public String getMessage() {
-		return message;
-	}
-
-	public void setMessage(String message) {
-		this.message = message;
-	}
-
 }

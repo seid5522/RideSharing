@@ -13,5 +13,24 @@
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/Main_Map"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
+
+    <it.gmariotti.cardslib.library.view.CardView
+        android:id="@+id/infoCard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginTop="12dp"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/maploading_progress"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="8dp"
+        />
 </RelativeLayout>
