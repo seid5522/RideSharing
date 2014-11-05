@@ -14,18 +14,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.ridesharing.Service;
+package com.ridesharing.network;
 
 import com.ridesharing.Entity.Result;
 import com.ridesharing.Entity.User;
+import com.ridesharing.R;
 
 /**
- * @Package com.ridesharing.Service
+ * @Package com.ridesharing.network
  * @Author wensheng
- * @Date 2014/10/23.
+ * @Date 2014/11/3.
  */
-public interface UserService {
-    public Result Register(User user);
-    public User getUser();
-    public void setUser(User user);
+public class AuthServiceClient {
+    private static final String BASE_URL = R.string.serverURL + "AuthService.php";
+
+    public static Result login(User user){
+        String url = BASE_URL + "?type=login";
+        RestHelper<User, Result> helper = new RestHelper<>(url, user, Result.class);
+        return helper.execute();
+    }
 }

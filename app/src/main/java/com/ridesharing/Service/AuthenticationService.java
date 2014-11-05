@@ -18,14 +18,14 @@ package com.ridesharing.Service;
 
 import com.ridesharing.Entity.Result;
 import com.ridesharing.Entity.User;
+import com.ridesharing.network.UserServiceClient;
 
 /**
  * @Package com.ridesharing.Service
  * @Author wensheng
- * @Date 2014/10/23.
+ * @Date 2014/11/3.
  */
-public interface UserService {
-    public Result Register(User user);
-    public User getUser();
-    public void setUser(User user);
+public interface AuthenticationService {
+    public Result isAuthorized(User user);
+    public Result Login(User user);
 }

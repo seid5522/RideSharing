@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.ridesharing.test;
+package com.ridesharing.network;
 
 import com.google.gson.Gson;
 import com.ridesharing.Entity.Result;

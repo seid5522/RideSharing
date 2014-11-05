@@ -43,6 +43,7 @@ import com.ridesharing.Entity.Result;
 import com.ridesharing.Entity.ResultType;
 import com.ridesharing.Entity.User;
 import com.ridesharing.R;
+import com.ridesharing.Service.AuthenticationService;
 import com.ridesharing.Service.LocationServiceImpl;
 import com.ridesharing.Service.LocationServiceImpl_;
 import com.ridesharing.Service.UserService;
@@ -100,7 +101,10 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
     View mSignOutButtons;
     @ViewById(R.id.login_form)
     View mLoginFormView;
-    @Inject UserService userService;
+    @Inject
+    AuthenticationService authService;
+    @Inject
+    UserService userService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -468,7 +472,7 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
         protected Boolean doInBackground(Void... params) {
 
             User user = new User(mEmail, mPassword);
-            Result result = userService.Login(user);
+            Result result = authService.Login(user);
             userService.setUser(user);
             return (result.getType() == ResultType.Success);
 

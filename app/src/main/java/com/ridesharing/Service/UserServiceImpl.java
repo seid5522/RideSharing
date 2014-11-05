@@ -18,9 +18,7 @@ package com.ridesharing.Service;
 
 import com.ridesharing.Entity.Result;
 import com.ridesharing.Entity.User;
-import com.ridesharing.test.UserServiceClient;
-
-import org.androidannotations.annotations.rest.Rest;
+import com.ridesharing.network.UserServiceClient;
 
 /**
  * @Package com.ridesharing.Service
@@ -33,9 +31,7 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    public Result Login(User user){
-        return UserServiceClient.login(user);
-    }
+
 
     public Result Register(User user){
         return  UserServiceClient.register(user);

@@ -78,6 +78,11 @@ public class MainActivity extends ActionBarBaseActivity
     }
 
     @Override
+    public void onResume(){
+
+    }
+
+    @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getSupportFragmentManager();

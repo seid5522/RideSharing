@@ -42,4 +42,8 @@ public class ServiceModule {
 
         return new UserServiceImpl();
     }
+
+    @Provides @Singleton public AuthenticationService provideAuthenticationService(){
+        return new AuthenticationServiceImpl();
+    }
 }

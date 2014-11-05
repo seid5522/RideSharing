@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+    <string name="serverURL">http://maxwell.sju.edu/~wy590204/rest/</string>
     <string name="google_api_key">AIzaSyAdWM-HLsNvvTBzr9xFJsuT5qnqmlH3G7E</string>
     <string name="app_name">RideSharing</string>
     <string name="title_section1">Section 1</string>

@@ -14,10 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.ridesharing.test;
+package com.ridesharing.network;
 
 import com.ridesharing.Entity.Result;
 import com.ridesharing.Entity.User;
+import com.ridesharing.R;
 
 /**
  * @Package com.ridesharing.network
@@ -25,13 +26,7 @@ import com.ridesharing.Entity.User;
  * @Date 2014/11/1.
  */
 public class UserServiceClient {
-    private static final String BASE_URL = "http://maxwell.sju.edu/~wy590204/rest/UserService.php";
-
-    public static Result login(User user){
-        String url = BASE_URL + "?type=login";
-        RestHelper<User, Result> helper = new RestHelper<>(url, user, Result.class);
-        return helper.execute();
-    }
+    private static final String BASE_URL = R.string.serverURL + "UserService.php";
 
     public static Result register(User user){
         String url = BASE_URL + "?type=register";
