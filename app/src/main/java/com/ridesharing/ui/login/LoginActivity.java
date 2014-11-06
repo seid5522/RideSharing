@@ -56,11 +56,14 @@ import org.androidannotations.annotations.SystemService;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
+
+
 
 
 /**
@@ -72,7 +75,7 @@ import javax.inject.Inject;
  * and follow the steps in "Step 1" to create an OAuth 2.0 client for your package.
  */
 @EActivity(R.layout.activity_login)
-public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<Cursor>{
+public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<Cursor>,OnClickListener{
     private static final int AUTH_CODE_REQUEST_CODE = 2000;
     /**
      * A dummy authentication store containing known user names and passwords.
@@ -101,16 +104,38 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
     View mSignOutButtons;
     @ViewById(R.id.login_form)
     View mLoginFormView;
+
     @Inject
     AuthenticationService authService;
     @Inject
     UserService userService;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
 
-        populateAutoComplete();
+
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // setting default screen to login.xml
+
+        setContentView(R.layout.activity_login);
+
+
+        // Listening to register new account link
+
+    }
+
+    @Override
+    public void onClick(View view) {
+
+        TextView registerLink = (TextView) findViewById(R.id.link_to_register);
+
+
+        registerLink.setOnClickListener(this);
+        //Log.i("clicks","You Clicked B1");
+        // Switching to Register screen
+        Intent i = new Intent(this, com.ridesharing.ui.user.registerActivity.class);
+        startActivity(i);
 
     }
 
@@ -405,6 +430,8 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
 
     }
 
+
+
     private interface ProfileQuery {
         String[] PROJECTION = {
                 ContactsContract.CommonDataKinds.Email.ADDRESS,
@@ -500,6 +527,10 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
             showProgress(false);
         }
     }
+
+
+
+
 }
 
 

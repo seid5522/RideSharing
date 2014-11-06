@@ -61,9 +61,11 @@
         <service android:name="com.ridesharing.Service.LocationServiceImpl_" />
 
         <activity
-            android:name="com.ridesharing.ui.user.register"
-            android:label="@string/title_activity_register">
+            android:name="com.ridesharing.ui.user.registerActivity"
+            android:label="Register New Account">
         </activity>
+
+
     </application>
 
 </manifest>

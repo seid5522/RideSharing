@@ -28,4 +28,6 @@ public interface UserService {
     public Result Register(User user);
     public User getUser();
     public void setUser(User user);
+
+
 }

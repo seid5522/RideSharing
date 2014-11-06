@@ -19,6 +19,8 @@ package com.ridesharing.test;
 import com.ridesharing.Entity.Result;
 import com.ridesharing.Entity.ResultType;
 import com.ridesharing.Entity.User;
+import com.ridesharing.Service.AuthenticationService;
+import com.ridesharing.Service.AuthenticationServiceImpl;
 import com.ridesharing.Service.UserService;
 import com.ridesharing.Service.UserServiceImpl;
 
@@ -38,11 +40,11 @@ import static org.junit.Assert.assertTrue;
  */
 @Config(emulateSdk = 18)
 @RunWith(RobolectricTestRunner.class)
-public class UserSerivceUnitTest {
+public class UserServiceUnitTest {
 
     @Test
     public void testLogin() throws Exception{
-        UserService service = new UserServiceImpl();
+        AuthenticationServiceImpl service = new AuthenticationServiceImpl();
         User user = new User("yanwsh","888888");
         Result res = service.Login(user);
         assertTrue(res.getType() == ResultType.Success);
@@ -50,7 +52,7 @@ public class UserSerivceUnitTest {
 
     @Test
     public void testLoginFailed() throws Exception{
-        UserService service = new UserServiceImpl();
+        AuthenticationServiceImpl service = new AuthenticationServiceImpl();
         User user = new User("yanwsh","123456");
         Result res = service.Login(user);
         assertTrue(res.getType() == ResultType.Error);
