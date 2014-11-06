@@ -27,6 +27,7 @@ public class registerActivity extends Activity {
             public void onClick(View arg0) {
                 // Closing registration screen
                 // Switching to Login Screen/closing register screen
+                //
                finish();
             }
         });
