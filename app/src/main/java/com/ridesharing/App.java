@@ -37,6 +37,7 @@ import dagger.ObjectGraph;
  */
 public class App extends Application {
     private ObjectGraph applicationGraph;
+    public static String BaseURL;
     @Override
     public void onCreate(){
         super.onCreate();
@@ -44,6 +45,7 @@ public class App extends Application {
         //getApplicationContext().startService(mServiceIntent);
         //LocationServiceImpl_.intent(this).start();
         applicationGraph = ObjectGraph.create(getModules().toArray());
+        BaseURL = getString(R.string.serverURL);
     }
 
     @Override

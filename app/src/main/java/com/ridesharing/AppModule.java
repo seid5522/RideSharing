@@ -21,6 +21,7 @@ import android.app.Application;
 import com.ridesharing.Service.ServiceModule;
 import com.ridesharing.ui.login.LoginActivity_;
 import com.ridesharing.ui.main.MainActivity;
+import com.ridesharing.ui.user.registerActivity_;
 
 import javax.inject.Singleton;
 
@@ -37,6 +38,7 @@ import dagger.Provides;
         injects = {
                 MainActivity.class,
                 LoginActivity_.class,
+                registerActivity_.class
         },
         includes = {
                 ServiceModule.class

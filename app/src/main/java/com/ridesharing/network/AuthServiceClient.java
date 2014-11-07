@@ -16,6 +16,9 @@
  */
 package com.ridesharing.network;
 
+import android.content.res.Resources;
+
+import com.ridesharing.App;
 import com.ridesharing.Entity.Result;
 import com.ridesharing.Entity.User;
 import com.ridesharing.R;
@@ -26,10 +29,16 @@ import com.ridesharing.R;
  * @Date 2014/11/3.
  */
 public class AuthServiceClient {
-    private static final String BASE_URL = R.string.serverURL + "AuthService.php";
+    private static final String BASE_URL = App.BaseURL + "AuthService.php";
 
     public static Result login(User user){
         String url = BASE_URL + "?type=login";
+        RestHelper<User, Result> helper = new RestHelper<>(url, user, Result.class);
+        return helper.execute();
+    }
+
+    public static Result isAuthorized(User user){
+        String url = BASE_URL + "?type=isAuth";
         RestHelper<User, Result> helper = new RestHelper<>(url, user, Result.class);
         return helper.execute();
     }

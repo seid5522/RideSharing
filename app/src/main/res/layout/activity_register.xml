@@ -48,7 +48,40 @@
                     android:padding="10dip"
                     android:layout_below="@id/header">
 
-
+                <!-- Username -->
+                <TextView android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="#372c24"
+                    android:text="Username"/>
+                <EditText android:id="@+id/reg_username"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dip"
+                    android:singleLine="true"
+                    android:layout_marginBottom="10dip"/>
+                <!--  Email Label -->
+                <TextView android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="#372c24"
+                    android:text="Email"/>
+                <EditText android:id="@+id/reg_email"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dip"
+                    android:singleLine="true"
+                    android:inputType="textWebEmailAddress"
+                    android:layout_marginBottom="10dip"/>
+                <!-- Password Label -->
+                <TextView android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="#372c24"
+                    android:text="Password"/>
+                <EditText android:id="@+id/reg_password"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:password="true"
+                    android:singleLine="true"
+                    android:layout_marginTop="5dip"/>
                 <!-- First Name Label -->
                 <TextView android:layout_width="match_parent"
                           android:layout_height="wrap_content"
@@ -73,7 +106,23 @@
                           android:singleLine="true"
                           android:inputType="textPersonName"
                           android:layout_marginBottom="10dip"/>
+                <!-- Birthday Label-->
+                <TextView android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="#372c24"
+                    android:text="Birthday"/>
+
+                <DatePicker android:id="@+id/reg_birthday"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dip"
+                    android:layout_marginBottom="10dip"
+                    android:singleLine="true"
+
+                    android:calendarViewShown="false" />
                 <!-- Address Label -->
+
+
                 <TextView android:layout_width="match_parent"
                           android:layout_height="wrap_content"
                           android:textColor="#372c24"
@@ -142,40 +191,6 @@
                           android:singleLine="true"
                           android:inputType="number"
                           android:layout_marginBottom="10dip"/>
-                <!-- Username -->
-                <TextView android:layout_width="match_parent"
-                          android:layout_height="wrap_content"
-                          android:textColor="#372c24"
-                          android:text="Username"/>
-                <EditText android:id="@+id/reg_username"
-                          android:layout_width="fill_parent"
-                          android:layout_height="wrap_content"
-                          android:layout_marginTop="5dip"
-                          android:singleLine="true"
-                          android:layout_marginBottom="10dip"/>
-                <!--  Email Label -->
-                <TextView android:layout_width="match_parent"
-                          android:layout_height="wrap_content"
-                          android:textColor="#372c24"
-                          android:text="Email"/>
-                <EditText android:id="@+id/reg_email"
-                          android:layout_width="fill_parent"
-                          android:layout_height="wrap_content"
-                          android:layout_marginTop="2dip"
-                          android:singleLine="true"
-                          android:inputType="textWebEmailAddress"
-                          android:layout_marginBottom="10dip"/>
-                <!-- Password Label -->
-                <TextView android:layout_width="match_parent"
-                          android:layout_height="wrap_content"
-                          android:textColor="#372c24"
-                          android:text="Password"/>
-                <EditText android:id="@+id/reg_password"
-                          android:layout_width="fill_parent"
-                          android:layout_height="wrap_content"
-                          android:password="true"
-                          android:singleLine="true"
-                          android:layout_marginTop="5dip"/>
                 <!-- Register Button -->
                 <Button android:id="@+id/btnRegister"
                         android:layout_width="match_parent"

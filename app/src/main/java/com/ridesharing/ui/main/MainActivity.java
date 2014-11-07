@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
 
+import com.ridesharing.Service.AuthenticationService;
 import com.ridesharing.Service.LocationService;
 import com.ridesharing.Service.LocationServiceImpl_;
 import com.ridesharing.Service.UserService;
@@ -25,8 +26,10 @@ import com.ridesharing.R;
 import com.ridesharing.ui.ActionBarBaseActivity;
 import com.ridesharing.ui.login.LoginActivity_;
 
-import javax.inject.Inject;
+import org.androidannotations.annotations.Background;
+import org.androidannotations.annotations.EActivity;
 
+import javax.inject.Inject;
 
 public class MainActivity extends ActionBarBaseActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
@@ -43,7 +46,7 @@ public class MainActivity extends ActionBarBaseActivity
 
 
     @Inject UserService userService;
-
+    @Inject AuthenticationService authService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +82,14 @@ public class MainActivity extends ActionBarBaseActivity
 
     @Override
     public void onResume(){
-
+        super.onResume();
+        /*
+        if(!authService.isAuthorized(userService.getUser())){
+            Intent login = new Intent(getApplicationContext(), LoginActivity_.class);
+            login.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(login);
+            finish();
+        }*/
     }
 
     @Override

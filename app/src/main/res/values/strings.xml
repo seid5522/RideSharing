@@ -2,7 +2,7 @@
 <resources>
     <string name="serverURL">http://maxwell.sju.edu/~wy590204/rest/</string>
     <string name="google_api_key">AIzaSyAdWM-HLsNvvTBzr9xFJsuT5qnqmlH3G7E</string>
-    <string name="app_name">RideSharing</string>
+    <string name="app_name">Flock</string>
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>
     <string name="title_section3">Section 3</string>

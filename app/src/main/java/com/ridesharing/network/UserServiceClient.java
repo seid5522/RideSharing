@@ -16,6 +16,7 @@
  */
 package com.ridesharing.network;
 
+import com.ridesharing.App;
 import com.ridesharing.Entity.Result;
 import com.ridesharing.Entity.User;
 import com.ridesharing.R;
@@ -26,7 +27,7 @@ import com.ridesharing.R;
  * @Date 2014/11/1.
  */
 public class UserServiceClient {
-    private static final String BASE_URL = R.string.serverURL + "UserService.php";
+    private static final String BASE_URL = App.BaseURL + "UserService.php";
 
     public static Result register(User user){
         String url = BASE_URL + "?type=register";

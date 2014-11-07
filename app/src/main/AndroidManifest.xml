@@ -61,8 +61,8 @@
         <service android:name="com.ridesharing.Service.LocationServiceImpl_" />
 
         <activity
-            android:name="com.ridesharing.ui.user.registerActivity"
-            android:label="Register New Account">
+            android:name="com.ridesharing.ui.user.registerActivity_"
+            android:label="Register New Account" android:theme="@style/FlockActionBarTheme">
         </activity>
 
 

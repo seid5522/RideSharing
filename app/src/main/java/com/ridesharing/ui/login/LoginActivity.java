@@ -104,6 +104,8 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
     View mSignOutButtons;
     @ViewById(R.id.login_form)
     View mLoginFormView;
+    @ViewById(R.id.link_to_register)
+    TextView registerLink;
 
     @Inject
     AuthenticationService authService;
@@ -127,14 +129,9 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
 
     @Override
     public void onClick(View view) {
-
-        TextView registerLink = (TextView) findViewById(R.id.link_to_register);
-
-
-        registerLink.setOnClickListener(this);
         //Log.i("clicks","You Clicked B1");
         // Switching to Register screen
-        Intent i = new Intent(this, com.ridesharing.ui.user.registerActivity.class);
+        Intent i = new Intent(this, com.ridesharing.ui.user.registerActivity_.class);
         startActivity(i);
 
     }
@@ -172,6 +169,7 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
                 attemptLogin();
             }
         });
+        registerLink.setOnClickListener(this);
     }
 
     private void populateAutoComplete() {
@@ -308,19 +306,6 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
                 revokeAccess();
             }
         });
-/*
-        if(getGoogleApiClient().isConnected()){
-            String email = Plus.AccountApi.getAccountName(getGoogleApiClient());
-            //getPlusAuthorizationCode();
-            User user = new User(email, "");
-            userService.setUser(user);
-            Intent main = new Intent(getApplicationContext(), MainActivity.class);
-            main.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(main);
-            finish();
-        }
-*/
-
     }
 
     @Background
@@ -366,12 +351,22 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
 
     @Override
     protected void updateConnectButtonState() {
-        //TODO: Update this logic to also handle the user logged in by email.
         boolean connected = getGoogleApiClient().isConnected();
 
         mSignOutButtons.setVisibility(connected ? View.VISIBLE : View.GONE);
         mPlusSignInButton.setVisibility(connected ? View.GONE : View.VISIBLE);
         mEmailLoginFormView.setVisibility(connected ? View.GONE : View.VISIBLE);
+/*
+        if(getGoogleApiClient().isConnected()){
+            String email = Plus.AccountApi.getAccountName(getGoogleApiClient());
+            //getPlusAuthorizationCode();
+            User user = new User(email, "");
+            userService.setUser(user);
+            Intent main = new Intent(getApplicationContext(), MainActivity.class);
+            main.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(main);
+            finish();
+        }*/
     }
 
     @Override
