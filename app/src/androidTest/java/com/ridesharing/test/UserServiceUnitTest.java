@@ -26,11 +26,13 @@ import com.ridesharing.Service.UserServiceImpl;
 
 import junit.framework.TestCase;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
+import static junit.framework.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -41,19 +43,30 @@ import static org.junit.Assert.assertTrue;
 @Config(emulateSdk = 18)
 @RunWith(RobolectricTestRunner.class)
 public class UserServiceUnitTest {
+    AuthenticationServiceImpl service;
+    @Before
+    public void initial(){
+        service = new AuthenticationServiceImpl();
+    }
 
     @Test
     public void testLogin() throws Exception{
-        AuthenticationServiceImpl service = new AuthenticationServiceImpl();
-        User user = new User("yanwsh","888888");
+        User user = new User("yanwsh@gmail.com","888888");
         Result res = service.Login(user);
         assertTrue(res.getType() == ResultType.Success);
     }
 
     @Test
+    public void testAuthorized() throws Exception{
+        User user = new User("yanwsh@gmail.com","888888");
+        Result res = service.Login(user);
+        assertTrue(res.getType() == ResultType.Success);
+        assertTrue(service.isAuthorized(user));
+    }
+
+    @Test
     public void testLoginFailed() throws Exception{
-        AuthenticationServiceImpl service = new AuthenticationServiceImpl();
-        User user = new User("yanwsh","123456");
+        User user = new User("yanwsh@gmail.com","123456");
         Result res = service.Login(user);
         assertTrue(res.getType() == ResultType.Error);
     }

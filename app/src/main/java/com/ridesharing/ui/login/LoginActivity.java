@@ -44,10 +44,8 @@ import com.ridesharing.Entity.ResultType;
 import com.ridesharing.Entity.User;
 import com.ridesharing.R;
 import com.ridesharing.Service.AuthenticationService;
-import com.ridesharing.Service.LocationServiceImpl;
-import com.ridesharing.Service.LocationServiceImpl_;
 import com.ridesharing.Service.UserService;
-import com.ridesharing.ui.main.MainActivity;
+import com.ridesharing.ui.main.MainActivity_;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Background;
@@ -506,7 +504,7 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
             showProgress(false);
 
             if (success) {
-                Intent main = new Intent(getApplicationContext(), MainActivity.class);
+                Intent main = new Intent(getApplicationContext(), MainActivity_.class);
                 main.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(main);
                 finish();

@@ -19,6 +19,7 @@ package com.ridesharing.Service;
 import android.app.Activity;
 import android.app.Application;
 
+import com.ridesharing.App;
 import com.ridesharing.AppModule;
 import com.ridesharing.ui.login.LoginActivity;
 import com.ridesharing.ui.main.MainActivity;
@@ -34,7 +35,7 @@ import dagger.Provides;
  * @Date 2014/10/25.
  */
 @Module(
-   // complete = false,
+    complete = false,
     library = true
 )
 public class ServiceModule {
@@ -45,5 +46,9 @@ public class ServiceModule {
 
     @Provides @Singleton public AuthenticationService provideAuthenticationService(){
         return new AuthenticationServiceImpl();
+    }
+
+    @Provides @Singleton public SearchPlaceService provideSearchPlaceService(Application app){
+        return new SearchPlaceServiceImpl(app);
     }
 }

@@ -1,15 +1,21 @@
 package com.ridesharing.ui.main;
 
 import android.app.Activity;
+import android.app.SearchManager;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.database.MatrixCursor;
+import android.os.AsyncTask;
 import android.os.IBinder;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -17,27 +23,39 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ridesharing.Service.AuthenticationService;
 import com.ridesharing.Service.LocationService;
 import com.ridesharing.Service.LocationServiceImpl_;
+import com.ridesharing.Service.SearchPlaceService;
 import com.ridesharing.Service.UserService;
 import com.ridesharing.R;
 import com.ridesharing.ui.ActionBarBaseActivity;
 import com.ridesharing.ui.login.LoginActivity_;
 
+import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.FragmentById;
+import org.androidannotations.annotations.ViewById;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
+@EActivity(R.layout.activity_main)
 public class MainActivity extends ActionBarBaseActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
-    private NavigationDrawerFragment mNavigationDrawerFragment;
+    @FragmentById(R.id.navigation_drawer)
+    protected NavigationDrawerFragment mNavigationDrawerFragment;
 
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
@@ -47,11 +65,12 @@ public class MainActivity extends ActionBarBaseActivity
 
     @Inject UserService userService;
     @Inject AuthenticationService authService;
+    @Inject SearchPlaceService searchPlaceService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        //setContentView(R.layout.activity_main);
         if(userService.getUser() == null){
             Intent login = new Intent(getApplicationContext(), LoginActivity_.class);
             login.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -59,37 +78,36 @@ public class MainActivity extends ActionBarBaseActivity
             // Closing dashboard screen
             finish();
             Log.v("activity switched","switch to login activity");
-        }else {
+        }
+    }
 
-            setContentView(R.layout.activity_main);
+    @AfterViews
+    public void initial(){
+        if(userService.getUser() != null){
 
-            mNavigationDrawerFragment = (NavigationDrawerFragment)
-                    getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
             mTitle = getTitle();
 
             // Set up the drawer.
             mNavigationDrawerFragment.setUp(
                     R.id.navigation_drawer,
                     (DrawerLayout) findViewById(R.id.drawer_layout));
-
-
-
         }
-
-
-
     }
 
     @Override
     public void onResume(){
         super.onResume();
-        /*
+        authUser();
+    }
+
+    @Background
+    public void authUser(){
         if(!authService.isAuthorized(userService.getUser())){
             Intent login = new Intent(getApplicationContext(), LoginActivity_.class);
             login.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(login);
             finish();
-        }*/
+        }
     }
 
     @Override
@@ -129,14 +147,71 @@ public class MainActivity extends ActionBarBaseActivity
     }
 
 
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        final MainActivity activity = this;
         if (!mNavigationDrawerFragment.isDrawerOpen()) {
             // Only show items in the action bar relevant to this screen
             // if the drawer is not showing. Otherwise, let the drawer
             // decide what to show in the action bar.
             getMenuInflater().inflate(R.menu.main, menu);
             restoreActionBar();
+
+            SearchManager manager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+            final Menu currentmenu = menu;
+            MenuItem searchItem = menu.findItem(R.id.action_search);
+            SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+            searchView.setSearchableInfo(manager.getSearchableInfo(getComponentName()));
+
+            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String s) {
+                    hideKeyboard();
+                    final SearchView search = (SearchView) currentmenu.findItem(R.id.action_search).getActionView();
+                    search.onActionViewCollapsed();
+                    Toast.makeText(activity, "Search for: " + s, Toast.LENGTH_LONG);
+                    return true;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String s) {
+                    if(s.equals("")){
+                        final SearchView search = (SearchView) currentmenu.findItem(R.id.action_search).getActionView();
+                        MatrixCursor cursor = new MatrixCursor(new String[] { "_id", "text" });
+                        search.setSuggestionsAdapter(new SearchPlaceAdapter(activity, cursor, null, search));
+                    }else {
+                        new SetupPlaceAutoCompleteTask(s).execute(null, null);
+                    }
+                    return true;
+                }
+
+                class SetupPlaceAutoCompleteTask extends AsyncTask<Void, Void, List<String>> {
+                    private String input;
+                    SetupPlaceAutoCompleteTask(String input) {
+                        this.input = input;
+                    }
+                    @Override
+                    protected List<String> doInBackground(Void... voids) {
+                        return searchPlaceService.autocomplete(input);
+                    }
+
+                    @Override
+                    protected void onPostExecute(List<String> items) {
+                        MatrixCursor cursor = new MatrixCursor(new String[] { "_id", "text" });
+
+                         for (int i = 0; i < items.size(); i++) {
+                              cursor.addRow(new Object[]{ (Object)i, items.get(i)});
+                         }
+                        // SearchView
+                        SearchManager manager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+
+                        final SearchView search = (SearchView) currentmenu.findItem(R.id.action_search).getActionView();
+                        search.setSuggestionsAdapter(new SearchPlaceAdapter(activity, cursor, items, search));
+                    }
+                }
+            });
             return true;
         }
         return super.onCreateOptionsMenu(menu);

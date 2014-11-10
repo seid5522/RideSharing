@@ -16,6 +16,8 @@
  */
 package com.ridesharing.network;
 
+import android.util.Log;
+
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -24,6 +26,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.GsonHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.List;
+import java.util.Set;
 
 /**
  * @Package com.ridesharing.network
@@ -35,6 +40,7 @@ public class RestHelper<I, R> {
 
     private I input;
     private Class<R> output;
+    private static String cookie;
 
     public RestHelper(String url, I input, Class<R> output){
         this.url = url;
@@ -46,6 +52,9 @@ public class RestHelper<I, R> {
         // Set the Content-Type header
         HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.setContentType(new MediaType("application","json"));
+        if(cookie != null){
+            requestHeaders.add("Cookie", cookie);
+        }
         HttpEntity<I> requestEntity = new HttpEntity<I>(input, requestHeaders);
         // Create a new RestTemplate instance
         RestTemplate restTemplate = new RestTemplate();
@@ -57,6 +66,11 @@ public class RestHelper<I, R> {
 
         // Make the HTTP GET request, marshaling the response from JSON to an array of Events
         ResponseEntity<R> responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, output );
+        List<String> cookieList = responseEntity.getHeaders().get("Set-Cookie");
+        if(cookieList != null && cookieList.size() > 0) {
+            cookie = responseEntity.getHeaders().get("Set-Cookie").get(0);
+            Log.v("com.ride.sharing: cookie",cookie);
+        }
         return responseEntity.getBody();
     }
 }

@@ -13,6 +13,13 @@
     <color name="mantis">#73be5b</color>
     <color name="sulu">#a3eb8c</color>
 
+    <style name="CodeFont" parent="@android:style/TextAppearance.Medium">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/sugar_kane</item>
+        <item name="android:typeface">monospace</item>
+    </style>
+
     <!-- the theme applied to the application or activity -->
     <style name="FlockActionBarTheme"
         parent="Theme.AppCompat.Light.DarkActionBar">

@@ -16,8 +16,10 @@
  */
 package com.ridesharing.ui;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.view.inputmethod.InputMethodManager;
 
 import com.ridesharing.App;
 import com.ridesharing.Service.ServiceModule;
@@ -66,5 +68,10 @@ public class ActionBarBaseActivity extends ActionBarActivity {
     /** Inject the supplied {@code object} using the activity-specific graph. */
     public void inject(Object object) {
         activityGraph.inject(object);
+    }
+
+    protected void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
     }
 }

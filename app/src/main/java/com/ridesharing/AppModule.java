@@ -20,7 +20,7 @@ import android.app.Application;
 
 import com.ridesharing.Service.ServiceModule;
 import com.ridesharing.ui.login.LoginActivity_;
-import com.ridesharing.ui.main.MainActivity;
+import com.ridesharing.ui.main.MainActivity_;
 import com.ridesharing.ui.user.registerActivity_;
 
 import javax.inject.Singleton;
@@ -36,7 +36,7 @@ import dagger.Provides;
 
 @Module(
         injects = {
-                MainActivity.class,
+                MainActivity_.class,
                 LoginActivity_.class,
                 registerActivity_.class
         },
@@ -50,5 +50,5 @@ public class AppModule {
 
     public AppModule(App app){this.app = app;}
 
-   // @Provides @Singleton public Application provideApplication(){return app;}
+   @Provides @Singleton public Application provideApplication(){return app;}
 }
