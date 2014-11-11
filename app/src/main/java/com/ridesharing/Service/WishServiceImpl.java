@@ -17,32 +17,32 @@
 package com.ridesharing.Service;
 
 import com.ridesharing.Entity.Result;
-import com.ridesharing.Entity.ResultType;
-import com.ridesharing.Entity.User;
-import com.ridesharing.network.AuthServiceClient;
+import com.ridesharing.Entity.Wish;
+import com.ridesharing.network.WishServiceClient;
 
 /**
  * @Package com.ridesharing.Service
  * @Author wensheng
- * @Date 2014/11/3.
+ * @Date 2014/11/11.
  */
-public class AuthenticationServiceImpl implements AuthenticationService {
+public class WishServiceImpl implements WishService {
     @Override
-    public boolean isAuthorized(User user) {
-        Result result = AuthServiceClient.isAuthorized(user);
-        if(result.getType() == ResultType.Success && result.getMessage().equals("true")){
-            return true;
-        }
-        return false;
+    public Result search(Wish wish) {
+        return WishServiceClient.search(wish);
     }
 
     @Override
-    public Result Login(User user) {
-        return AuthServiceClient.login(user);
+    public Result add(Wish wish) {
+        return WishServiceClient.add(wish);
     }
 
     @Override
-    public void Logout(User user){
-        AuthServiceClient.logout(user);
+    public Result remove(Wish wish) {
+        return WishServiceClient.remove(wish);
+    }
+
+    @Override
+    public Result update(Wish wish) {
+        return WishServiceClient.update(wish);
     }
 }

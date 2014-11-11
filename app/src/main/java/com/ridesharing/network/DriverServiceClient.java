@@ -14,35 +14,35 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.ridesharing.Service;
+package com.ridesharing.network;
 
+import com.ridesharing.App;
+import com.ridesharing.Entity.Driver;
 import com.ridesharing.Entity.Result;
-import com.ridesharing.Entity.ResultType;
-import com.ridesharing.Entity.User;
-import com.ridesharing.network.AuthServiceClient;
 
 /**
- * @Package com.ridesharing.Service
+ * @Package com.ridesharing.network
  * @Author wensheng
- * @Date 2014/11/3.
+ * @Date 2014/11/11.
  */
-public class AuthenticationServiceImpl implements AuthenticationService {
-    @Override
-    public boolean isAuthorized(User user) {
-        Result result = AuthServiceClient.isAuthorized(user);
-        if(result.getType() == ResultType.Success && result.getMessage().equals("true")){
-            return true;
-        }
-        return false;
+public class DriverServiceClient {
+    private static final String BASE_URL = App.BaseURL + "DriverService.php";
+
+    private static Result base(Driver driver, String type){
+        String url = BASE_URL + "?type=" + type;
+        RestHelper<Driver, Result> helper = new RestHelper<>(url, driver, Result.class);
+        return helper.execute();
     }
 
-    @Override
-    public Result Login(User user) {
-        return AuthServiceClient.login(user);
+    public static Result add(Driver driver){
+        return base(driver, "add");
     }
 
-    @Override
-    public void Logout(User user){
-        AuthServiceClient.logout(user);
+    public static Result update(Driver driver){
+        return base(driver, "update");
+    }
+
+    public static Result remove(Driver driver){
+        return base(driver, "remove");
     }
 }

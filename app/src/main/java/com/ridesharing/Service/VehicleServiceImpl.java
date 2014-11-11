@@ -17,32 +17,38 @@
 package com.ridesharing.Service;
 
 import com.ridesharing.Entity.Result;
-import com.ridesharing.Entity.ResultType;
-import com.ridesharing.Entity.User;
-import com.ridesharing.network.AuthServiceClient;
+import com.ridesharing.Entity.Vehicle;
+import com.ridesharing.network.VehicleServiceClient;
 
 /**
  * @Package com.ridesharing.Service
  * @Author wensheng
- * @Date 2014/11/3.
+ * @Date 2014/11/11.
  */
-public class AuthenticationServiceImpl implements AuthenticationService {
+public class VehicleServiceImpl implements VehicleService {
+    Vehicle vehicle;
     @Override
-    public boolean isAuthorized(User user) {
-        Result result = AuthServiceClient.isAuthorized(user);
-        if(result.getType() == ResultType.Success && result.getMessage().equals("true")){
-            return true;
-        }
-        return false;
+    public Vehicle getVehicle() {
+        return this.vehicle;
     }
 
     @Override
-    public Result Login(User user) {
-        return AuthServiceClient.login(user);
+    public void setVehicle(Vehicle vehicle) {
+        this.vehicle = vehicle;
     }
 
     @Override
-    public void Logout(User user){
-        AuthServiceClient.logout(user);
+    public Result add(Vehicle vehicle) {
+        return VehicleServiceClient.add(vehicle);
+    }
+
+    @Override
+    public Result remove(Vehicle vehicle) {
+        return VehicleServiceClient.remove(vehicle);
+    }
+
+    @Override
+    public Result update(Vehicle vehicle) {
+        return VehicleServiceClient.update(vehicle);
     }
 }

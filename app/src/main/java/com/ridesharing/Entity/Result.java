@@ -19,6 +19,7 @@ package com.ridesharing.Entity;
 public class Result {
 	private ResultType type;
 	private String message;
+    private String data;
 
     public Result(){}
 
@@ -31,7 +32,13 @@ public class Result {
 		this.message = message;
 	}
 
-	public ResultType getType() {
+    public Result(ResultType type, String message, String data) {
+        this.type = type;
+        this.message = message;
+        this.data = data;
+    }
+
+    public ResultType getType() {
 		return type;
 	}
 
@@ -47,4 +54,11 @@ public class Result {
 		this.message = message;
 	}
 
+    public String getData() {
+        return data;
+    }
+
+    public void setData(String data) {
+        this.data = data;
+    }
 }

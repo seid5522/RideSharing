@@ -31,8 +31,6 @@ public class UserServiceImpl implements UserService {
 
     }
 
-
-
     public Result Register(User user){
         return  UserServiceClient.register(user);
     }
@@ -43,5 +41,12 @@ public class UserServiceImpl implements UserService {
 
     public User getUser() {
         return user;
+    }
+
+    public User fetchSelfInfo(){
+        return null;
+    }
+    public User fetchOtherInfo(int id){
+        return null;
     }
 }

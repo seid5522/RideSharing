@@ -16,33 +16,42 @@
  */
 package com.ridesharing.Entity;
 
-import com.google.gson.annotations.SerializedName;
+/**
+ * @Package com.ridesharing.Entity
+ * @Author wensheng
+ * @Date 2014/11/11.
+ */
+public class Driver {
+    private int id;
+    private int uid;
+    private String drlicense;
 
-public enum ResultType {
-	@SerializedName("0")
-	Success(0), 
-	
-	@SerializedName("1")
-	Error(1),
+    public Driver(int uid, String drlicense) {
+        this.uid = uid;
+        this.drlicense = drlicense;
+    }
 
-    @SerializedName("2")
-    RequireAuthenticate(2),
+    public int getUid() {
+        return uid;
+    }
 
-    @SerializedName("3")
-    Duplicate(3),
+    public void setUid(int uid) {
+        this.uid = uid;
+    }
 
-    @SerializedName("4")
-    InternalError(4),
+    public int getId() {
+        return id;
+    }
 
-    @SerializedName("5")
-    NotFound(5);
-	
-	private int value;
-	private ResultType(int value){
-		this.value = value;
-	}
-	
-	public int getValue(){
-		return value;
-	}
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getDrlicense() {
+        return drlicense;
+    }
+
+    public void setDrlicense(String drlicense) {
+        this.drlicense = drlicense;
+    }
 }

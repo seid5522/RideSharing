@@ -16,33 +16,14 @@
  */
 package com.ridesharing.Service;
 
-import com.ridesharing.Entity.Result;
-import com.ridesharing.Entity.ResultType;
-import com.ridesharing.Entity.User;
-import com.ridesharing.network.AuthServiceClient;
+import com.ridesharing.Entity.Driver;
 
 /**
  * @Package com.ridesharing.Service
  * @Author wensheng
- * @Date 2014/11/3.
+ * @Date 2014/11/11.
  */
-public class AuthenticationServiceImpl implements AuthenticationService {
-    @Override
-    public boolean isAuthorized(User user) {
-        Result result = AuthServiceClient.isAuthorized(user);
-        if(result.getType() == ResultType.Success && result.getMessage().equals("true")){
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public Result Login(User user) {
-        return AuthServiceClient.login(user);
-    }
-
-    @Override
-    public void Logout(User user){
-        AuthServiceClient.logout(user);
-    }
+public interface DriverService extends EntityService<Driver> {
+    public Driver getDriver();
+    public void setDriver(Driver driver);
 }

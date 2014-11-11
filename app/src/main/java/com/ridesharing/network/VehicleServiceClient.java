@@ -16,36 +16,33 @@
  */
 package com.ridesharing.network;
 
-import android.content.res.Resources;
-
 import com.ridesharing.App;
 import com.ridesharing.Entity.Result;
-import com.ridesharing.Entity.User;
-import com.ridesharing.R;
+import com.ridesharing.Entity.Vehicle;
 
 /**
  * @Package com.ridesharing.network
  * @Author wensheng
- * @Date 2014/11/3.
+ * @Date 2014/11/11.
  */
-public class AuthServiceClient {
-    private static final String BASE_URL = App.BaseURL + "AuthService.php";
+public class VehicleServiceClient {
+    private static final String BASE_URL = App.BaseURL + "VehicleService.php";
 
-    private static Result base(User user, String type){
+    private static Result base(Vehicle vehicle, String type){
         String url = BASE_URL + "?type=" + type;
-        RestHelper<User, Result> helper = new RestHelper<>(url, user, Result.class);
+        RestHelper<Vehicle, Result> helper = new RestHelper<>(url, vehicle, Result.class);
         return helper.execute();
     }
 
-    public static Result login(User user){
-        return base(user, "login");
+    public static Result add(Vehicle vehicle){
+        return base(vehicle, "add");
     }
 
-    public static Result isAuthorized(User user){
-        return base(user, "isAuth");
+    public static Result update(Vehicle vehicle){
+        return base(vehicle, "update");
     }
 
-    public static Result logout(User user){
-        return base(user, "logout");
+    public static Result remove(Vehicle vehicle){
+        return base(vehicle, "remove");
     }
 }

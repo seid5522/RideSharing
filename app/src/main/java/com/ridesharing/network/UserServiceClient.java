@@ -29,9 +29,21 @@ import com.ridesharing.R;
 public class UserServiceClient {
     private static final String BASE_URL = App.BaseURL + "UserService.php";
 
-    public static Result register(User user){
-        String url = BASE_URL + "?type=register";
+    private static Result base(User user, String type){
+        String url = BASE_URL + "?type=" + type;
         RestHelper<User, Result> helper = new RestHelper<>(url, user, Result.class);
         return helper.execute();
+    }
+
+    public static Result register(User user){
+        return base(user, "register");
+    }
+
+    public static Result getUserProfile(User user){
+        return base(user, "getProfile");
+    }
+
+    public static Result update(User user){
+        return base(user, "update");
     }
 }
