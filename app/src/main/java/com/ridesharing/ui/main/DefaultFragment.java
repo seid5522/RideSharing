@@ -52,9 +52,9 @@ public class DefaultFragment extends Fragment {
 
     private int position;
     private String name;
-    private SupportMapFragment mapFragment;
+    private CustomGoogleMap mapFragment;
     private MainActivity mainActivity;
-    private GoogleMap map;
+    protected GoogleMap map;
 
     @ViewById(R.id.maploading_progress)
     ProgressBar progressBar;
@@ -65,7 +65,7 @@ public class DefaultFragment extends Fragment {
 
     /** Defines callbacks for service binding, passed to bindService() */
     private ServiceConnection mConnection;
-    private Location location;
+    protected Location location;
     protected LocationService locationService;
     protected boolean mlocationServiceBound;
 
@@ -176,28 +176,8 @@ public class DefaultFragment extends Fragment {
 
     @UiThread
     protected void showMainMap(){
-        mapFragment = new com.google.android.gms.maps.SupportMapFragment() {
-            @Override
-            public void onActivityCreated(Bundle savedInstanceState) {
-                super.onActivityCreated(savedInstanceState);
-                map = mapFragment.getMap();
-                if (map != null) {
-                    if(locationService.getLastBestLocation() != null){
-                        location = locationService.getLastBestLocation();
-                    }else if(locationService.getLastLocation() != null){
-                        location = locationService.getLastLocation();
-                    }else{
-                        location = locationService.getLastKnowLocation();
-                    }
-                    if(location != null){
-                        addMapMarker("Current Location", new LatLng(location.getLatitude(), location.getLongitude()));
-                        stopLocationService();
-                        Address addr = LocationServiceImpl_.getLocationFromAddress(getActivity(), "5600 City Ave, Philadelphia, PA");
-                        addMapMarker("School", new LatLng(addr.getLatitude(), addr.getLongitude()));
-                    }
-                }
-            }
-        };
+        mapFragment = new CustomGoogleMap();
+        mapFragment.setFragment(this);
         getFragmentManager()
                 .beginTransaction()
                 .replace(R.id.Main_Map, mapFragment)
