@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import android.widget.*;
 import com.ridesharing.Entity.Result;
 import com.ridesharing.Entity.ResultType;
 import com.ridesharing.Entity.User;
@@ -18,11 +19,6 @@ import com.ridesharing.ui.ActionBarBaseActivity;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Background;
@@ -37,6 +33,12 @@ import java.util.Date;
 
 import javax.inject.Inject;
 
+
+/**
+ * @Package com.ridesharing.ui.user
+ * @Author Nathan
+ * @Date 2014/11/8.
+ */
 @EActivity(R.layout.activity_register)
 public class registerActivity extends ActionBarBaseActivity {
 
@@ -69,15 +71,20 @@ public class registerActivity extends ActionBarBaseActivity {
     @ViewById(R.id.reg_birthday)
     DatePicker birthday;
 
+
+
+
+
+
     @Inject
     UserService userService;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Set View to register.xml
-        //setContentView(R.layout.activity_register);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        setContentView(R.layout.activity_register);
+        //ActionBar actionBar = getSupportActionBar();
+        //actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
     @AfterViews
@@ -97,27 +104,127 @@ public class registerActivity extends ActionBarBaseActivity {
             public void onClick(View arg0) {
                 try {
                     User user = new User(username.getText().toString(), password.getText().toString(), email.getText().toString(), firstname.getText().toString(), lastname.getText().toString(),
-                            getDateFromDatePicket(birthday), address.getText().toString(), address2.getText().toString(),
+                            getDateFromDatePicker(birthday), address.getText().toString(), address2.getText().toString(),
                             city.getText().toString(),state.getText().toString(), zip.getText().toString(), phone.getText().toString(), ""
                             );
                     register(user);
+
+                    User driver = new User(username.getText().toString(), password.getText().toString(), email.getText().toString(), firstname.getText().toString(), lastname.getText().toString(),
+                            getDateFromDatePicker(birthday), address.getText().toString(), address2.getText().toString(),
+                            city.getText().toString(),state.getText().toString(), zip.getText().toString(), phone.getText().toString(), ""
+                    );
+                    register(driver);
                 }
                 catch (Exception e){
                     e.printStackTrace();
                     Log.e("Error", e.getMessage());
                 }
 
+
             }
         });
+
+
     }
 
-    public static Date getDateFromDatePicket(DatePicker datePicker){
+    public void onSwitchClicked(View view) {
+
+        TextView driverTitle = (TextView)registerActivity.this.findViewById(R.id.driverTitle);
+        TextView MakeHeader = (TextView)registerActivity.this.findViewById(R.id.driverMake);
+        TextView ModelHeader = (TextView)registerActivity.this.findViewById(R.id.driverModel);
+        TextView SeatsHeader = (TextView)registerActivity.this.findViewById(R.id.driverSeats);
+        TextView YearHeader = (TextView)registerActivity.this.findViewById(R.id.driverYear);
+
+        EditText carMake = (EditText)registerActivity.this.findViewById(R.id.reg_carMake);
+        EditText carModel = (EditText)registerActivity.this.findViewById(R.id.reg_carModel);
+        EditText numOfSeats = (EditText)registerActivity.this.findViewById(R.id.reg_numSeats);
+        EditText carYear = (EditText)registerActivity.this.findViewById(R.id.reg_carYear);
+
+
+        // Is the toggle on?
+        boolean on = ((Switch) view).isChecked();
+
+        if(on){
+
+            driverTitle.setVisibility(view.VISIBLE);
+            MakeHeader.setVisibility(view.VISIBLE);
+            ModelHeader.setVisibility(view.VISIBLE);
+            SeatsHeader.setVisibility(view.VISIBLE);
+            YearHeader.setVisibility(view.VISIBLE);
+
+            carMake.setVisibility(view.VISIBLE);
+            carModel.setVisibility(view.VISIBLE);
+            numOfSeats.setVisibility(view.VISIBLE);
+            carYear.setVisibility(view.VISIBLE);
+
+
+
+        }else{
+            driverTitle.setVisibility(view.GONE);
+            MakeHeader.setVisibility(view.GONE);
+            ModelHeader.setVisibility(view.GONE);
+            SeatsHeader.setVisibility(view.GONE);
+            YearHeader.setVisibility(view.GONE);
+
+            carMake.setVisibility(view.GONE);
+            carModel.setVisibility(view.GONE);
+            numOfSeats.setVisibility(view.GONE);
+            carYear.setVisibility(view.GONE);
+        }
+    }
+
+
+
+    public static Date getDateFromDatePicker(DatePicker datePicker){
         int day = datePicker.getDayOfMonth();
         int month = datePicker.getMonth();
         int year =  datePicker.getYear();
 
+        int month2 = Calendar.JANUARY;
+
+
+        switch(month){
+            case 1:
+                month2 = Calendar.JANUARY;
+                break;
+            case 2:
+                month2 = Calendar.FEBRUARY;
+                break;
+            case 3:
+                month2 = Calendar.MARCH;
+                break;
+            case 4:
+                month2 = Calendar.APRIL;
+                break;
+            case 5:
+                month2 = Calendar.MAY;
+                break;
+            case 6:
+                month2 = Calendar.JUNE;
+                break;
+            case 7:
+                month2 = Calendar.JULY;
+                break;
+            case 8:
+                month2 = Calendar.AUGUST;
+                break;
+            case 9:
+                month2 = Calendar.SEPTEMBER;
+                break;
+            case 10:
+                month2 = Calendar.OCTOBER;
+                break;
+            case 11:
+                month2 = Calendar.NOVEMBER;
+                break;
+            case 12:
+                month2 = Calendar.DECEMBER;
+                break;
+        }
+
+
         Calendar calendar = Calendar.getInstance();
-        calendar.set(year, month, day);
+        calendar.set(year, month2, day);
 
         return calendar.getTime();
     }

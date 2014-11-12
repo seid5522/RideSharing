@@ -1,4 +1,8 @@
-
+<!--
+Package com.ridesharing.ui.layout
+Author Nathan
+Date 2014/11/10.
+-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
@@ -191,6 +195,92 @@
                           android:singleLine="true"
                           android:inputType="number"
                           android:layout_marginBottom="10dip"/>
+
+                <Switch
+                        android:id="@+id/driverSwitch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textOn="Yay you're a Driver!"
+                        android:textOff="Want to be a Driver?"
+                        android:layout_marginTop="5dip"
+                        android:clickable="true"
+                        android:onClick="onSwitchClicked"
+
+                        />
+
+
+                <TextView
+                        android:id="@+id/driverTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#372c24"
+                        android:layout_gravity="center"
+                        android:visibility="gone"
+                        android:textSize="20sp"
+                        android:layout_marginTop="15dip"
+                        android:text= "Driver Information"/>
+
+
+                <TextView
+                        android:id="@+id/driverMake"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="#372c24"
+                        android:visibility="gone"
+                        android:text="Car Make"/>
+                <EditText android:id="@+id/reg_carMake"
+                          android:layout_width="fill_parent"
+                          android:layout_height="wrap_content"
+                          android:layout_marginTop="5dip"
+                          android:singleLine="true"
+                          android:visibility="gone"
+                          android:layout_marginBottom="10dip"/>
+
+                <TextView
+                        android:id="@+id/driverModel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="#372c24"
+                        android:visibility="gone"
+                        android:text="Car Model"/>
+                <EditText android:id="@+id/reg_carModel"
+                          android:layout_width="fill_parent"
+                          android:layout_height="wrap_content"
+                          android:layout_marginTop="5dip"
+                          android:singleLine="true"
+                          android:visibility="gone"
+                          android:layout_marginBottom="10dip"/>
+
+                <TextView android:id="@+id/driverYear"
+                          android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:textColor="#372c24"
+                          android:visibility="gone"
+                          android:text="Year"/>
+                <EditText android:id="@+id/reg_carYear"
+                          android:layout_width="fill_parent"
+                          android:layout_height="wrap_content"
+                          android:layout_marginTop="5dip"
+                          android:singleLine="true"
+                          android:inputType="number"
+                          android:visibility="gone"
+                          android:layout_marginBottom="10dip"/>
+
+                <TextView android:id="@+id/driverSeats"
+                          android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:textColor="#372c24"
+                          android:visibility="gone"
+                          android:text="Number of Seats"/>
+                <EditText android:id="@+id/reg_numSeats"
+                          android:layout_width="fill_parent"
+                          android:layout_height="wrap_content"
+                          android:layout_marginTop="5dip"
+                          android:singleLine="true"
+                          android:inputType="number"
+                          android:visibility="gone"
+                          android:layout_marginBottom="10dip"/>
+
                 <!-- Register Button -->
                 <Button android:id="@+id/btnRegister"
                         android:layout_width="match_parent"
