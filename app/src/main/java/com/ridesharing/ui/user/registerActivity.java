@@ -70,10 +70,26 @@ public class registerActivity extends ActionBarBaseActivity {
     EditText email;
     @ViewById(R.id.reg_birthday)
     DatePicker birthday;
-
-
-
-
+    @ViewById(R.id.driverSwitch)
+    Switch driverSwitch;
+    @ViewById(R.id.driverTitle)
+    TextView driverTitle;
+    @ViewById(R.id.driverMake)
+    TextView MakeHeader;
+    @ViewById(R.id.driverModel)
+    TextView ModelHeader;
+    @ViewById(R.id.driverSeats)
+    TextView SeatsHeader;
+    @ViewById(R.id.driverYear)
+    TextView YearHeader;
+    @ViewById(R.id.reg_carMake)
+    EditText carMake;
+    @ViewById(R.id.reg_carModel)
+    EditText carModel;
+    @ViewById(R.id.reg_numSeats)
+    EditText numOfSeats;
+    @ViewById(R.id.reg_carYear)
+    EditText carYear;
 
 
     @Inject
@@ -124,53 +140,52 @@ public class registerActivity extends ActionBarBaseActivity {
             }
         });
 
+        driverSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                switchDriver(isChecked);
+            }
+        });
+
 
     }
 
-    public void onSwitchClicked(View view) {
-
-        TextView driverTitle = (TextView)registerActivity.this.findViewById(R.id.driverTitle);
-        TextView MakeHeader = (TextView)registerActivity.this.findViewById(R.id.driverMake);
-        TextView ModelHeader = (TextView)registerActivity.this.findViewById(R.id.driverModel);
-        TextView SeatsHeader = (TextView)registerActivity.this.findViewById(R.id.driverSeats);
-        TextView YearHeader = (TextView)registerActivity.this.findViewById(R.id.driverYear);
-
-        EditText carMake = (EditText)registerActivity.this.findViewById(R.id.reg_carMake);
-        EditText carModel = (EditText)registerActivity.this.findViewById(R.id.reg_carModel);
-        EditText numOfSeats = (EditText)registerActivity.this.findViewById(R.id.reg_numSeats);
-        EditText carYear = (EditText)registerActivity.this.findViewById(R.id.reg_carYear);
-
-
-        // Is the toggle on?
-        boolean on = ((Switch) view).isChecked();
-
+    private void switchDriver( boolean on){
         if(on){
 
-            driverTitle.setVisibility(view.VISIBLE);
-            MakeHeader.setVisibility(view.VISIBLE);
-            ModelHeader.setVisibility(view.VISIBLE);
-            SeatsHeader.setVisibility(view.VISIBLE);
-            YearHeader.setVisibility(view.VISIBLE);
+            driverTitle.setVisibility(View.VISIBLE);
+            MakeHeader.setVisibility(View.VISIBLE);
+            ModelHeader.setVisibility(View.VISIBLE);
+            SeatsHeader.setVisibility(View.VISIBLE);
+            YearHeader.setVisibility(View.VISIBLE);
 
-            carMake.setVisibility(view.VISIBLE);
-            carModel.setVisibility(view.VISIBLE);
-            numOfSeats.setVisibility(view.VISIBLE);
-            carYear.setVisibility(view.VISIBLE);
+            carMake.setVisibility(View.VISIBLE);
+            carModel.setVisibility(View.VISIBLE);
+            numOfSeats.setVisibility(View.VISIBLE);
+            carYear.setVisibility(View.VISIBLE);
 
 
 
         }else{
-            driverTitle.setVisibility(view.GONE);
-            MakeHeader.setVisibility(view.GONE);
-            ModelHeader.setVisibility(view.GONE);
-            SeatsHeader.setVisibility(view.GONE);
-            YearHeader.setVisibility(view.GONE);
+            driverTitle.setVisibility(View.GONE);
+            MakeHeader.setVisibility(View.GONE);
+            ModelHeader.setVisibility(View.GONE);
+            SeatsHeader.setVisibility(View.GONE);
+            YearHeader.setVisibility(View.GONE);
 
-            carMake.setVisibility(view.GONE);
-            carModel.setVisibility(view.GONE);
-            numOfSeats.setVisibility(view.GONE);
-            carYear.setVisibility(view.GONE);
+            carMake.setVisibility(View.GONE);
+            carModel.setVisibility(View.GONE);
+            numOfSeats.setVisibility(View.GONE);
+            carYear.setVisibility(View.GONE);
         }
+    }
+
+    public void onSwitchClicked(View view) {
+
+        // Is the toggle on?
+        boolean on = ((Switch) view).isChecked();
+        switchDriver(on);
+
     }
 
 
