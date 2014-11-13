@@ -20,6 +20,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.location.Address;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
@@ -37,12 +38,16 @@ import dagger.ObjectGraph;
  */
 public class CustomGoogleMap extends com.google.android.gms.maps.SupportMapFragment{
     DefaultFragment fragment;
-    public CustomGoogleMap(){}
+    public CustomGoogleMap(){super();}
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         GoogleMap map = this.getMap();
+        if(fragment == null){
+            Log.e("com.ridesharing.CustomGoogleMap:", "fragment is null.");
+            return;
+        }
         fragment.map = map;
         if (map != null) {
             if(fragment.locationService.getLastBestLocation() != null){

@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.database.MatrixCursor;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.IBinder;
 import android.support.v4.view.MenuItemCompat;
@@ -35,6 +36,7 @@ import com.ridesharing.Service.UserService;
 import com.ridesharing.R;
 import com.ridesharing.ui.ActionBarBaseActivity;
 import com.ridesharing.ui.login.LoginActivity_;
+import com.ridesharing.ui.user.destinationFragment;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Background;
@@ -49,7 +51,7 @@ import javax.inject.Inject;
 
 @EActivity(R.layout.activity_main)
 public class MainActivity extends ActionBarBaseActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks, destinationFragment.OnFragmentInteractionListener {
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -125,6 +127,10 @@ public class MainActivity extends ActionBarBaseActivity
             fragmentManager.beginTransaction()
                     .replace(R.id.container, DefaultFragment.newInstance(position + 1, "Home Page"))
                     .commit();
+        } else if(position == 1){
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, destinationFragment.newInstance(position + 1, "Destination"))
+                    .commit();
         }else {
             fragmentManager.beginTransaction()
                     .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
@@ -178,7 +184,7 @@ public class MainActivity extends ActionBarBaseActivity
                     hideKeyboard();
                     final SearchView search = (SearchView) currentmenu.findItem(R.id.action_search).getActionView();
                     search.onActionViewCollapsed();
-                    Toast.makeText(activity, "Search for: " + s, Toast.LENGTH_LONG);
+                    Toast.makeText(activity, "Search for: " + s, Toast.LENGTH_LONG).show();
                     return true;
                 }
 
@@ -234,6 +240,11 @@ public class MainActivity extends ActionBarBaseActivity
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
     }
 
     /**
