@@ -39,6 +39,7 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.plus.Plus;
+import com.google.android.gms.plus.model.people.Person;
 import com.ridesharing.Entity.Result;
 import com.ridesharing.Entity.ResultType;
 import com.ridesharing.Entity.User;
@@ -75,13 +76,6 @@ import javax.inject.Inject;
 @EActivity(R.layout.activity_login)
 public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<Cursor>,OnClickListener{
     private static final int AUTH_CODE_REQUEST_CODE = 2000;
-    /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
-    };
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -242,13 +236,11 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
         }
     }
     private boolean isEmailValid(String email) {
-        //TODO: Replace this with your own logic
-        return email.contains("@");
+        return (email != "");
     }
 
     private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
-        return password.length() > 4;
+        return password.length() >= 6;
     }
 
     /**
@@ -369,8 +361,12 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
 
     @Override
     protected void onPlusClientRevokeAccess() {
-        // TODO: Access to the user's G+ account has been revoked.  Per the developer terms, delete
         // any stored user data here.
+        String email = Plus.AccountApi.getAccountName(getGoogleApiClient());
+        Person currentPerson = Plus.PeopleApi.getCurrentPerson(getGoogleApiClient());
+        String personName = currentPerson.getDisplayName();
+        Person.Image personPhoto = currentPerson.getImage();
+        String birthday = currentPerson.getBirthday();
     }
 
     @Override

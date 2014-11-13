@@ -18,6 +18,10 @@ package com.ridesharing.network;
 
 import android.util.Log;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -60,12 +64,13 @@ public class RestHelper<I, R> {
         RestTemplate restTemplate = new RestTemplate();
 
         // Add the Jackson and String message converters
-        restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+        //restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
         // Add the Gson message converter
         restTemplate.getMessageConverters().add(new GsonHttpMessageConverter());
 
         // Make the HTTP GET request, marshaling the response from JSON to an array of Events
         ResponseEntity<R> responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, output );
+        Log.v("com.ridesharing: Post: ", new Gson().toJson(requestEntity.getBody()));
         List<String> cookieList = responseEntity.getHeaders().get("Set-Cookie");
         if(cookieList != null && cookieList.size() > 0) {
             cookie = responseEntity.getHeaders().get("Set-Cookie").get(0);

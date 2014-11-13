@@ -36,13 +36,11 @@ public class User {
     private String sessionKey;
 	
 	public User(String username, String password) {
-		super();
 		this.username = username;
 		this.password = password;
 	}
 
     public User( String username, String password, String email, String firstname, String lastname, Date birthday, String address, String address2, String city, String state, String zipcode, String phone, String photoURL) {
-        this.photoURL = photoURL;
         this.username = username;
         this.password = password;
         this.email = email;
@@ -55,6 +53,23 @@ public class User {
         this.state = state;
         this.zipcode = zipcode;
         this.phone = phone;
+        this.photoURL = photoURL;
+    }
+
+    public User(User user){
+        this.username = user.username;
+        this.password = user.password;
+        this.email = user.email;
+        this.firstname = user.firstname;
+        this.lastname = user.lastname;
+        this.birthday = user.birthday;
+        this.address = user.address;
+        this.address2 = user.address2;
+        this.city = user.city;
+        this.state = user.state;
+        this.zipcode = user.zipcode;
+        this.phone = user.phone;
+        this.photoURL = user.photoURL;
     }
 
     public int getId() {

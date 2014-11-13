@@ -39,16 +39,31 @@ import dagger.Provides;
     library = true
 )
 public class ServiceModule {
-    @Provides @Singleton public UserService provideUserService(){
 
-        return new UserServiceImpl();
-    }
 
     @Provides @Singleton public AuthenticationService provideAuthenticationService(){
         return new AuthenticationServiceImpl();
     }
 
+    @Provides @Singleton public DriverService provideDriverService(){
+        return new DriverServiceImpl();
+    }
+
     @Provides @Singleton public SearchPlaceService provideSearchPlaceService(Application app){
         return new SearchPlaceServiceImpl(app);
     }
+
+    @Provides @Singleton public UserService provideUserService(){
+        return new UserServiceImpl();
+    }
+
+    @Provides @Singleton public VehicleService provideVehicleService(){
+        return new VehicleServiceImpl();
+    }
+
+    @Provides @Singleton public WishService provideWishService(){
+        return new WishServiceImpl();
+    }
+
+
 }

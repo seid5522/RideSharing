@@ -16,19 +16,28 @@
  */
 package com.ridesharing.Entity;
 
+import java.util.Date;
+
 /**
  * @Package com.ridesharing.Entity
  * @Author wensheng
  * @Date 2014/11/11.
  */
-public class Driver {
-    private int id;
+public class Driver extends User {
+    private int Did;
     private int uid;
-    private String drlicense;
+    private Vehicle vehicle;
 
-    public Driver(int uid, String drlicense) {
+    public Driver(String username, String password, String email, String firstname, String lastname, Date birthday, String address, String address2, String city, String state, String zipcode, String phone, String photoURL, int uid, Vehicle vehicle) {
+        super(username, password, email, firstname, lastname, birthday, address, address2, city, state, zipcode, phone, photoURL);
         this.uid = uid;
-        this.drlicense = drlicense;
+        this.vehicle = vehicle;
+    }
+
+    public Driver(User user, int uid, Vehicle vehicle){
+        super(user);
+        this.uid = uid;
+        this.vehicle = vehicle;
     }
 
     public int getUid() {
@@ -40,18 +49,18 @@ public class Driver {
     }
 
     public int getId() {
-        return id;
+        return Did;
     }
 
     public void setId(int id) {
-        this.id = id;
+        this.Did = id;
     }
 
-    public String getDrlicense() {
-        return drlicense;
+    public Vehicle getVehicle() {
+        return vehicle;
     }
 
-    public void setDrlicense(String drlicense) {
-        this.drlicense = drlicense;
+    public void setVehicle(Vehicle vehicle) {
+        this.vehicle = vehicle;
     }
 }

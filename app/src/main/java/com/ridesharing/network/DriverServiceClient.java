@@ -19,6 +19,7 @@ package com.ridesharing.network;
 import com.ridesharing.App;
 import com.ridesharing.Entity.Driver;
 import com.ridesharing.Entity.Result;
+import com.ridesharing.Entity.ResultType;
 
 /**
  * @Package com.ridesharing.network
@@ -35,11 +36,11 @@ public class DriverServiceClient {
     }
 
     public static Result add(Driver driver){
-        return base(driver, "add");
+        return base(driver, "register");
     }
 
     public static Result update(Driver driver){
-        return base(driver, "update");
+        return new Result(ResultType.Error, "Function not support.");
     }
 
     public static Result remove(Driver driver){

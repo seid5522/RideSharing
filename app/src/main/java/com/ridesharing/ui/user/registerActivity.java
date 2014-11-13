@@ -9,10 +9,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import android.widget.*;
+
+import com.ridesharing.Entity.Driver;
 import com.ridesharing.Entity.Result;
 import com.ridesharing.Entity.ResultType;
 import com.ridesharing.Entity.User;
+import com.ridesharing.Entity.Vehicle;
 import com.ridesharing.R;
+import com.ridesharing.Service.DriverService;
 import com.ridesharing.Service.UserService;
 import com.ridesharing.ui.ActionBarBaseActivity;
 
@@ -94,6 +98,8 @@ public class registerActivity extends ActionBarBaseActivity {
 
     @Inject
     UserService userService;
+    @Inject
+    DriverService driverService;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,17 +125,16 @@ public class registerActivity extends ActionBarBaseActivity {
 
             public void onClick(View arg0) {
                 try {
-                    User user = new User(username.getText().toString(), password.getText().toString(), email.getText().toString(), firstname.getText().toString(), lastname.getText().toString(),
-                            getDateFromDatePicker(birthday), address.getText().toString(), address2.getText().toString(),
-                            city.getText().toString(),state.getText().toString(), zip.getText().toString(), phone.getText().toString(), ""
-                            );
-                    register(user);
-
-                    User driver = new User(username.getText().toString(), password.getText().toString(), email.getText().toString(), firstname.getText().toString(), lastname.getText().toString(),
+                    User user;
+                    user = new User(username.getText().toString(), password.getText().toString(), email.getText().toString(), firstname.getText().toString(), lastname.getText().toString(),
                             getDateFromDatePicker(birthday), address.getText().toString(), address2.getText().toString(),
                             city.getText().toString(),state.getText().toString(), zip.getText().toString(), phone.getText().toString(), ""
                     );
-                    register(driver);
+                    if(driverSwitch.isChecked()){
+                        user = new Driver(user, -1, new Vehicle(-1, carMake.getText().toString(), carModel.getText().toString(), Integer.parseInt(carYear.getText().toString()), Integer.parseInt(numOfSeats.getText().toString())));
+                    }
+
+                    register(user);
                 }
                 catch (Exception e){
                     e.printStackTrace();
@@ -246,7 +251,12 @@ public class registerActivity extends ActionBarBaseActivity {
 
     @Background
     public void register(User user){
-       Result result =  userService.Register(user);
+        Result result = new Result(ResultType.Error, "No response");
+        if(user instanceof Driver) {
+            result = driverService.add((Driver)user);
+        }else if(user instanceof User){
+            result = userService.Register(user);
+        }
        if(result.getType() == ResultType.Success){
            finish();
        }else{
@@ -256,7 +266,8 @@ public class registerActivity extends ActionBarBaseActivity {
 
     @UiThread
     public void showError(String msg){
-        Toast toast = Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT);
+        Toast toast = Toast.makeText(this, msg, Toast.LENGTH_SHORT);
+        toast.show();
     }
 
     @Override

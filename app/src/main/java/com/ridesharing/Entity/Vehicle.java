@@ -27,8 +27,8 @@ public class Vehicle {
      * driver's id number
      */
     private int did;
-    private String Maker;
-    private String Model;
+    private String maker;
+    private String model;
     private int year;
     /**
      * number of passengers;
@@ -37,8 +37,8 @@ public class Vehicle {
 
     public Vehicle(int did, String maker, String model, int year, int riderNum) {
         this.did = did;
-        Maker = maker;
-        Model = model;
+        this.maker = maker;
+        this.model = model;
         this.year = year;
         this.riderNum = riderNum;
     }
@@ -60,19 +60,19 @@ public class Vehicle {
     }
 
     public String getMaker() {
-        return Maker;
+        return maker;
     }
 
     public void setMaker(String maker) {
-        Maker = maker;
+        this.maker = maker;
     }
 
     public String getModel() {
-        return Model;
+        return model;
     }
 
     public void setModel(String model) {
-        Model = model;
+        this.model = model;
     }
 
     public int getYear() {
