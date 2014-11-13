@@ -102,7 +102,14 @@ public class MainActivity extends ActionBarBaseActivity
 
     @Background
     public void authUser(){
-        if(!authService.isAuthorized(userService.getUser())){
+        boolean isAuth = false;
+        try {
+            isAuth = authService.isAuthorized(userService.getUser());
+        }
+        catch (Exception e){
+            Log.e("com.ridesharing.mainActivity", e.toString());
+        }
+        if(!isAuth){
             Intent login = new Intent(getApplicationContext(), LoginActivity_.class);
             login.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(login);

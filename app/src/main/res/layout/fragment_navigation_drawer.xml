@@ -6,35 +6,53 @@
     tools:context=".NavigationDrawerFragment">
 
     <LinearLayout
-        android:id="@+id/statebar"
-        android:orientation="horizontal"
+        android:id="@+id/profilebar"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="150px" android:weightSum="2">
+        android:layout_height="250px"
+        android:gravity="center"
+        android:layout_centerHorizontal="true">
+        <de.hdodenhof.circleimageview.CircleImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/profile_image"
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:src="@drawable/passenger"
+            app:border_width="2dp"
+            app:border_color="#FF000000"/>
+        <LinearLayout
+            android:id="@+id/statebar"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="80px" android:weightSum="2">
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="New Button"
-            android:layout_weight="1"
-            android:id="@+id/button" />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/history"
+                android:layout_weight="1"
+                android:id="@+id/button" />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="logout"
-            android:layout_weight="1"
-            android:id="@+id/button2" />
-    </LinearLayout>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/logout"
+                android:layout_weight="1"
+                android:id="@+id/button2" />
+        </LinearLayout>
+
+
+        </LinearLayout>
+
 
     <ListView
-    android:id="@+id/nav_listview"
-        android:layout_below="@id/statebar"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:choiceMode="singleChoice"
-    android:divider="@android:color/transparent"
-    android:dividerHeight="0dp"
-
- />
+        android:id="@+id/nav_listview"
+        android:layout_below="@id/profilebar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:choiceMode="singleChoice"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="0dp"
+     />
 
 </RelativeLayout>

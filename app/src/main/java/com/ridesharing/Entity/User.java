@@ -16,6 +16,8 @@
  */
 package com.ridesharing.Entity;
 
+import com.ridesharing.crypto.MD5;
+
 import java.util.Date;
 
 public class User {
@@ -37,12 +39,14 @@ public class User {
 	
 	public User(String username, String password) {
 		this.username = username;
-		this.password = password;
+        MD5 md5 = new MD5();
+		this.password = md5.EncryptToString(password);
 	}
 
     public User( String username, String password, String email, String firstname, String lastname, Date birthday, String address, String address2, String city, String state, String zipcode, String phone, String photoURL) {
         this.username = username;
-        this.password = password;
+        MD5 md5 = new MD5();
+        this.password = md5.EncryptToString(password);
         this.email = email;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -93,7 +97,8 @@ public class User {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        MD5 md5 = new MD5();
+        this.password = md5.EncryptToString(password);
     }
 
     public String getEmail() {
