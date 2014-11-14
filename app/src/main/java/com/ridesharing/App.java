@@ -17,16 +17,9 @@
 package com.ridesharing;
 
 import android.app.Application;
-import android.content.Intent;
-
-import com.ridesharing.Service.LocationService;
-import com.ridesharing.Service.LocationServiceImpl_;
-import com.ridesharing.Service.ServiceModule;
 
 import java.util.Arrays;
 import java.util.List;
-
-import javax.inject.Inject;
 
 import dagger.ObjectGraph;
 

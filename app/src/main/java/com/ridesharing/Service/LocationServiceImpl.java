@@ -174,7 +174,6 @@ public class LocationServiceImpl extends Service implements LocationService {
     }
 
     public static Address getLocationFromAddress(Context context, String strAddress) {
-
         Geocoder coder = new Geocoder(context);
         List<Address> address;
         Address p1 = null;

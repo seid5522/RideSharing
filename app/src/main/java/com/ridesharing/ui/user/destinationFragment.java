@@ -78,7 +78,7 @@ public class destinationFragment extends Fragment {
      */
     // TODO: Rename and change types and number of parameters
     public static destinationFragment newInstance(Integer param1, String param2) {
-        destinationFragment fragment = new destinationFragment();
+        destinationFragment fragment = new destinationFragment_();
         Bundle args = new Bundle();
         args.putInt(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);

@@ -8,7 +8,19 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.BitmapShader;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.Shader;
+import android.graphics.Typeface;
 import android.location.Address;
 import android.location.Location;
 import android.os.Build;
@@ -28,9 +40,11 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.ridesharing.Entity.ELocation;
 import com.ridesharing.R;
 import com.ridesharing.Service.LocationService;
 import com.ridesharing.Service.LocationServiceImpl_;
@@ -54,7 +68,6 @@ public class DefaultFragment extends Fragment {
     private String name;
     private CustomGoogleMap mapFragment;
     private MainActivity mainActivity;
-    protected GoogleMap map;
 
     @ViewById(R.id.maploading_progress)
     ProgressBar progressBar;
@@ -176,26 +189,106 @@ public class DefaultFragment extends Fragment {
 
     @UiThread
     protected void showMainMap(){
-        mapFragment = new CustomGoogleMap();
-        mapFragment.setFragment(this);
+        mapFragment = CustomGoogleMap.newInstance(this);
         getFragmentManager()
                 .beginTransaction()
                 .replace(R.id.Main_Map, mapFragment)
                 .commit();
         showProgress(false);
+        stopLocationService();
     }
 
     @UiThread
-    protected void addMapMarker(String name, LatLng latlng){
+    protected void addMarkerToMap(){
+        //decide location
+        if(locationService.getLastBestLocation() != null){
+            location = locationService.getLastBestLocation();
+        }else if(locationService.getLastLocation() != null){
+            location = locationService.getLastLocation();
+        }else{
+            location = locationService.getLastKnowLocation();
+        }
+
+        LatLng clatlng = new LatLng(location.getLatitude(), location.getLongitude());
+        GoogleMap map = mapFragment.getMap();
+        Bitmap.Config conf = Bitmap.Config.ARGB_8888;
+        Bitmap bmp = Bitmap.createBitmap(80, 80, conf);
+        Canvas canvas1 = new Canvas(bmp);
+
+        // paint defines the text color,
+        // stroke width, size
+        Paint color = new Paint();
+        color.setTextSize(10);
+        color.setColor(Color.RED);
+        color.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+
+        //modify canvas
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(),
+                R.drawable.passenger);
+        bitmap = Bitmap.createScaledBitmap(bitmap, 80, 80, true);
+        bitmap = getCroppedBitmap(bitmap, 80);
+        canvas1.drawBitmap(bitmap, 0, 0, null);
+        canvas1.drawText("Michael", 20, 70, color);
+/*
+ from internet (You also must download the image from an background thread (you could use AsyncTask for that)
+ URL url = new URL(user_image_url);
+HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+conn.setDoInput(true);
+conn.connect();
+InputStream is = conn.getInputStream();
+bmImg = BitmapFactory.decodeStream(is); */
+        Marker currentMarker = map.addMarker(
+                new MarkerOptions()
+                        .position(clatlng)
+                        .title("Current Location")
+        );
+        currentMarker.setIcon(BitmapDescriptorFactory.fromBitmap(bmp));
+        currentMarker.showInfoWindow();
+
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(clatlng, 15));
+        Address addr = LocationServiceImpl_.getLocationFromAddress(getActivity(), "5600 City Ave, Philadelphia, PA");
+        addMapMarker("School", new LatLng(addr.getLatitude(), addr.getLongitude()));
+    }
+
+    public static Bitmap getCroppedBitmap(Bitmap bmp, int radius) {
+        Bitmap sbmp;
+        if(bmp.getWidth() != radius || bmp.getHeight() != radius)
+            sbmp = Bitmap.createScaledBitmap(bmp, radius, radius, false);
+        else
+            sbmp = bmp;
+        Bitmap output = Bitmap.createBitmap(sbmp.getWidth(),
+                sbmp.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(output);
+
+        final int color = 0xffa19774;
+        final Paint paint = new Paint();
+        final Rect rect = new Rect(0, 0, sbmp.getWidth(), sbmp.getHeight());
+
+        paint.setAntiAlias(true);
+        paint.setFilterBitmap(true);
+        paint.setDither(true);
+        canvas.drawARGB(0, 0, 0, 0);
+        paint.setColor(Color.parseColor("#BAB399"));
+        canvas.drawCircle(sbmp.getWidth() / 2+0.7f, sbmp.getHeight() / 2+0.7f,
+                sbmp.getWidth() / 2+0.1f, paint);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(sbmp, rect, rect, paint);
+
+
+        return output;
+    }
+
+    @UiThread
+    protected void addMapMarker(String name, LatLng latlng) {
+        final GoogleMap map = mapFragment.getMap();
         map.addMarker(
                 new MarkerOptions()
                         .position(latlng)
                         .title(name)
-        ).showInfoWindow();
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, 15));
-        map.setOnMapClickListener(new GoogleMap.OnMapClickListener(){
+        );
+        map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
-            public void onMapClick(com.google.android.gms.maps.model.LatLng latLng){
+            public void onMapClick(com.google.android.gms.maps.model.LatLng latLng) {
                 cardView.setVisibility(View.GONE);
             }
         });
@@ -204,55 +297,60 @@ public class DefaultFragment extends Fragment {
             public void onInfoWindowClick(Marker marker) {
                 Projection projection = map.getProjection();
                 LatLng markerLocation = marker.getPosition();
-                Point screenPosition = projection.toScreenLocation(markerLocation);
-                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
 
-                int maxWidth = mainMap.getWidth();
-                int maxHeight = mainMap.getHeight();
-
-                int width = 400;
-                int height = 300;
-                int left = 0, top = 0, right = 0, bottom = 0;
-                if(screenPosition.x - width < 0){//left
-                    left = screenPosition.x + 50;
-                }
-                if( screenPosition.y + height> maxHeight){//bottom
-                    top = maxHeight - height - 50;
-                }
-                if(screenPosition.y - height < 0 ){//top
-                    top = screenPosition.y + 50;
-                }
-                if(screenPosition.x + width > maxWidth){//right
-                    left = maxWidth - width - 50;
-                }
-
-                if(left == 0) {
-                    left = screenPosition.x - 200;
-                }
-                if(top == 0) {
-                    top = screenPosition.y - 300;
-                }
-
-                right = maxWidth - left - width;
-                bottom = maxHeight - top - height;
-
-                params.setMargins(left, top, right, bottom);
                 //Create a Card
                 Card card = new Card(getActivity());
 
                 //Create a CardHeader
                 CardHeader header = new CardHeader(getActivity());
-                card.setTitle("My Title");
+                card.setTitle("Loading...");
+
                 //Add Header to card
                 card.addCardHeader(header);
                 cardView.setCard(card);
-                cardView.setLayoutParams(params);
+                cardView.setLayoutParams(calcBestPosition(projection, markerLocation));
                 cardView.setVisibility(View.VISIBLE);
                 //setting animation
-                Animation animation =  AnimationUtils.loadAnimation(getActivity(), R.anim.card_alpha);
+                Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.card_alpha);
                 cardView.setAnimation(animation);
             }
-        } );
+        });
+    }
+
+    private RelativeLayout.LayoutParams calcBestPosition(Projection projection, LatLng markerLocation){
+        Point screenPosition = projection.toScreenLocation(markerLocation);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        int maxWidth = mapFragment.getView().getWidth();
+        int maxHeight = mapFragment.getView().getHeight();
+
+        int width = 400;
+        int height = 300;
+        int left = 0, top = 0, right = 0, bottom = 0;
+        if (screenPosition.x - width < 0) {//left
+            left = screenPosition.x + 50;
+        }
+        if (screenPosition.y + height > maxHeight) {//bottom
+            top = maxHeight - height - 50;
+        }
+        if (screenPosition.y - height < 0) {//top
+            top = screenPosition.y + 50;
+        }
+        if (screenPosition.x + width > maxWidth) {//right
+            left = maxWidth - width - 50;
+        }
+
+        if (left == 0) {
+            left = screenPosition.x - 200;
+        }
+        if (top == 0) {
+            top = screenPosition.y - 300;
+        }
+
+        right = maxWidth - left - width;
+        bottom = maxHeight - top - height;
+
+        params.setMargins(left, top, right, bottom);
+        return params;
     }
 
     @Override
