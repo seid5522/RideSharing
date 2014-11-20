@@ -17,6 +17,7 @@
 package com.ridesharing.Service;
 
 import com.ridesharing.Entity.Result;
+import com.ridesharing.Entity.ResultData;
 import com.ridesharing.Entity.ResultType;
 import com.ridesharing.Entity.User;
 import com.ridesharing.network.AuthServiceClient;
@@ -28,9 +29,9 @@ import com.ridesharing.network.AuthServiceClient;
  */
 public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
-    public boolean isAuthorized(User user) {
-        Result result = AuthServiceClient.isAuthorized(user);
-        if(result.getType() == ResultType.Success && result.getMessage().equals("true")){
+    public boolean isAuthorized() {
+        ResultData<Boolean> result = AuthServiceClient.isAuthorized();
+        if(result.getType() == ResultType.Success && result.getData()){
             return true;
         }
         return false;

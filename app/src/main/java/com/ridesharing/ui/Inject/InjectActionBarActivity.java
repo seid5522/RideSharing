@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.ridesharing.ui;
+package com.ridesharing.ui.Inject;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -23,6 +23,7 @@ import android.view.inputmethod.InputMethodManager;
 
 import com.ridesharing.App;
 import com.ridesharing.Service.ServiceModule;
+import com.ridesharing.ui.Inject.Injector;
 
 import java.util.Arrays;
 import java.util.List;
@@ -34,7 +35,7 @@ import dagger.ObjectGraph;
  * @Author wensheng
  * @Date 2014/10/26.
  */
-public class ActionBarBaseActivity extends ActionBarActivity {
+public class InjectActionBarActivity extends ActionBarActivity implements Injector {
     private ObjectGraph activityGraph;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +57,11 @@ public class ActionBarBaseActivity extends ActionBarActivity {
         super.onDestroy();
     }
 
+    @Override
+    public final ObjectGraph getObjectGraph() {
+        return activityGraph;
+    }
+
     /**
      * A list of modules to use for the individual activity graph. Subclasses can override this
      * method to provide additional modules provided they call and include the modules returned by
@@ -66,6 +72,7 @@ public class ActionBarBaseActivity extends ActionBarActivity {
     }
 
     /** Inject the supplied {@code object} using the activity-specific graph. */
+    @Override
     public void inject(Object object) {
         activityGraph.inject(object);
     }

@@ -20,6 +20,8 @@ import com.ridesharing.App;
 import com.ridesharing.Entity.Result;
 import com.ridesharing.Entity.Vehicle;
 
+import org.springframework.core.ParameterizedTypeReference;
+
 /**
  * @Package com.ridesharing.network
  * @Author wensheng
@@ -30,7 +32,7 @@ public class VehicleServiceClient {
 
     private static Result base(Vehicle vehicle, String type){
         String url = BASE_URL + "?type=" + type;
-        RestHelper<Vehicle, Result> helper = new RestHelper<>(url, vehicle, Result.class);
+        RestHelper<Vehicle, Result> helper = new RestHelper<>(url, vehicle, new ParameterizedTypeReference<Result>() {});
         return helper.execute();
     }
 

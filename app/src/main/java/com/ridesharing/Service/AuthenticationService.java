@@ -26,7 +26,7 @@ import com.ridesharing.network.UserServiceClient;
  * @Date 2014/11/3.
  */
 public interface AuthenticationService {
-    public boolean isAuthorized(User user);
+    public boolean isAuthorized();
     public Result Login(User user);
     public void Logout(User user);
 }

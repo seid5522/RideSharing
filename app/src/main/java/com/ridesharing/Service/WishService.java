@@ -19,11 +19,13 @@ package com.ridesharing.Service;
 import com.ridesharing.Entity.Result;
 import com.ridesharing.Entity.Wish;
 
+import java.util.ArrayList;
+
 /**
  * @Package com.ridesharing.Service
  * @Author wensheng
  * @Date 2014/11/11.
  */
 public interface WishService extends EntityService<Wish> {
-    public Result search(Wish wish);
+    public ArrayList<Wish> search(Wish wish);
 }

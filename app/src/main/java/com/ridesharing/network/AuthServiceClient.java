@@ -16,12 +16,12 @@
  */
 package com.ridesharing.network;
 
-import android.content.res.Resources;
-
 import com.ridesharing.App;
 import com.ridesharing.Entity.Result;
+import com.ridesharing.Entity.ResultData;
 import com.ridesharing.Entity.User;
-import com.ridesharing.R;
+
+import org.springframework.core.ParameterizedTypeReference;
 
 /**
  * @Package com.ridesharing.network
@@ -33,7 +33,7 @@ public class AuthServiceClient {
 
     private static Result base(User user, String type){
         String url = BASE_URL + "?type=" + type;
-        RestHelper<User, Result> helper = new RestHelper<>(url, user, Result.class);
+        RestHelper<User, Result> helper = new RestHelper<>(url, user, new ParameterizedTypeReference<Result>() {});
         return helper.execute();
     }
 
@@ -41,8 +41,11 @@ public class AuthServiceClient {
         return base(user, "login");
     }
 
-    public static Result isAuthorized(User user){
-        return base(user, "isAuth");
+    public static ResultData<Boolean> isAuthorized(){
+        String url = BASE_URL + "?type=isAuth";
+        ResultData<Boolean> result = new ResultData<>();
+        RestHelper<String, ResultData<Boolean>> helper = new RestHelper<>(url, "", new ParameterizedTypeReference<ResultData<Boolean>>() {});
+        return helper.execute();
     }
 
     public static Result logout(User user){

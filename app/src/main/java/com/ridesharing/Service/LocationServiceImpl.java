@@ -190,4 +190,20 @@ public class LocationServiceImpl extends Service implements LocationService {
         return p1;
     }
 
+    public static Address getLocationFromLatLng(Context context, double latitude, double longitude){
+        Geocoder coder = new Geocoder(context);
+        List<Address> address;
+        Address p1 = null;
+        try {
+            address = coder.getFromLocation(latitude, longitude, 1);
+            if (address == null) {
+                return null;
+            }
+            p1 = address.get(0);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return  p1;
+    }
+
 }

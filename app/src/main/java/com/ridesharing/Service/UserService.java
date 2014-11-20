@@ -19,6 +19,8 @@ package com.ridesharing.Service;
 import com.ridesharing.Entity.Result;
 import com.ridesharing.Entity.User;
 
+import java.util.Hashtable;
+
 /**
  * @Package com.ridesharing.Service
  * @Author wensheng
@@ -27,7 +29,10 @@ import com.ridesharing.Entity.User;
 public interface UserService {
     public Result Register(User user);
     public User getUser();
+    public Hashtable<Integer, User> getUserTables();
     public void setUser(User user);
     public User fetchSelfInfo();
     public User fetchOtherInfo(int id);
+    public boolean isDriver();
+    public void setDriver(boolean isDriver);
 }

@@ -16,10 +16,13 @@
  */
 package com.ridesharing.Entity;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.ridesharing.crypto.MD5;
 
 import java.util.Date;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class User {
 	private int id;
 	private String username;
@@ -36,8 +39,15 @@ public class User {
     private String phone;
     private String photoURL;
     private String sessionKey;
-	
-	public User(String username, String password) {
+
+    //dummy constructor for json de-serialize
+    public User() {}
+
+    public User(int id) {
+        this.id = id;
+    }
+
+    public User(String username, String password) {
 		this.username = username;
         MD5 md5 = new MD5();
 		this.password = md5.EncryptToString(password);

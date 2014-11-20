@@ -18,6 +18,7 @@ package com.ridesharing.Service;
 
 import com.ridesharing.Entity.Driver;
 import com.ridesharing.Entity.Result;
+import com.ridesharing.Entity.ResultData;
 import com.ridesharing.network.DriverServiceClient;
 
 /**
@@ -50,5 +51,16 @@ public class DriverServiceImpl implements DriverService {
     @Override
     public Result update(Driver driver) {
         return DriverServiceClient.update(driver);
+    }
+
+    @Override
+    public boolean isDirver(){
+        ResultData<Boolean> result = DriverServiceClient.isDriver();
+        return result.getData();
+    }
+
+    @Override
+    public Driver fetchSelfInfo(){
+        return DriverServiceClient.fetchSelfInfo().getData();
     }
 }

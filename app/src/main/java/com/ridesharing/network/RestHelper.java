@@ -19,9 +19,12 @@ package com.ridesharing.network;
 import android.util.Log;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.gson.Gson;
 
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -41,12 +44,11 @@ import java.util.Set;
  */
 public class RestHelper<I, R> {
     private String url;
-
     private I input;
-    private Class<R> output;
+    private ParameterizedTypeReference<R> output;
     private static String cookie;
 
-    public RestHelper(String url, I input, Class<R> output){
+    public RestHelper(String url, I input, ParameterizedTypeReference<R> output){
         this.url = url;
         this.input = input;
         this.output = output;
@@ -59,18 +61,23 @@ public class RestHelper<I, R> {
         if(cookie != null){
             requestHeaders.add("Cookie", cookie);
         }
-        HttpEntity<I> requestEntity = new HttpEntity<I>(input, requestHeaders);
+        HttpEntity<String> requestEntity = new HttpEntity<String>(new Gson().toJson(input), requestHeaders);
         // Create a new RestTemplate instance
         RestTemplate restTemplate = new RestTemplate();
 
         // Add the Jackson and String message converters
-        //restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+        //MappingJackson2HttpMessageConverter jackson2HttpMessageConverter = new MappingJackson2HttpMessageConverter();
+        //ObjectMapper objectMapper = new ObjectMapper();
+        //objectMapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
+        //jackson2HttpMessageConverter.setObjectMapper(objectMapper);
+        //restTemplate.getMessageConverters().add(5, jackson2HttpMessageConverter);
         // Add the Gson message converter
         restTemplate.getMessageConverters().add(new GsonHttpMessageConverter());
 
         // Make the HTTP GET request, marshaling the response from JSON to an array of Events
         ResponseEntity<R> responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, output );
-        Log.v("com.ridesharing: Post: ", new Gson().toJson(requestEntity.getBody()));
+        Log.v("com.ridesharing: URL:" , url);
+        Log.v("com.ridesharing: Post: ", requestEntity.getBody());
         List<String> cookieList = responseEntity.getHeaders().get("Set-Cookie");
         if(cookieList != null && cookieList.size() > 0) {
             cookie = responseEntity.getHeaders().get("Set-Cookie").get(0);

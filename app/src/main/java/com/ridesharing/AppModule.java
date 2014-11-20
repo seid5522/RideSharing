@@ -20,6 +20,7 @@ import android.app.Application;
 
 import com.ridesharing.Service.ServiceModule;
 import com.ridesharing.ui.login.LoginActivity_;
+import com.ridesharing.ui.main.DefaultFragment_;
 import com.ridesharing.ui.main.MainActivity_;
 import com.ridesharing.ui.user.registerActivity_;
 
@@ -38,7 +39,8 @@ import dagger.Provides;
         injects = {
                 MainActivity_.class,
                 LoginActivity_.class,
-                registerActivity_.class
+                registerActivity_.class,
+                DefaultFragment_.class
         },
         includes = {
                 ServiceModule.class

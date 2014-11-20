@@ -2,20 +2,16 @@ package com.ridesharing.ui.main;
 
 import android.app.Activity;
 import android.app.SearchManager;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.database.MatrixCursor;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.IBinder;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,17 +20,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.GoogleMap;
 import com.ridesharing.Service.AuthenticationService;
-import com.ridesharing.Service.LocationService;
-import com.ridesharing.Service.LocationServiceImpl_;
 import com.ridesharing.Service.SearchPlaceService;
 import com.ridesharing.Service.UserService;
 import com.ridesharing.R;
-import com.ridesharing.ui.ActionBarBaseActivity;
+import com.ridesharing.ui.Inject.InjectActionBarActivity;
 import com.ridesharing.ui.login.LoginActivity_;
 import com.ridesharing.ui.user.destinationFragment;
 
@@ -42,15 +35,13 @@ import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.FragmentById;
-import org.androidannotations.annotations.ViewById;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
 @EActivity(R.layout.activity_main)
-public class MainActivity extends ActionBarBaseActivity
+public class MainActivity extends InjectActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks, destinationFragment.OnFragmentInteractionListener {
 
     /**
@@ -68,6 +59,7 @@ public class MainActivity extends ActionBarBaseActivity
     @Inject UserService userService;
     @Inject AuthenticationService authService;
     @Inject SearchPlaceService searchPlaceService;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,7 +98,7 @@ public class MainActivity extends ActionBarBaseActivity
     public void authUser(){
         boolean isAuth = false;
         try {
-            isAuth = authService.isAuthorized(userService.getUser());
+            isAuth = authService.isAuthorized();
         }
         catch (Exception e){
             Log.e("com.ridesharing.mainActivity", e.toString());
@@ -159,6 +151,15 @@ public class MainActivity extends ActionBarBaseActivity
         actionBar.setTitle(mTitle);
     }
 
+    public void quickSearch(String address){
+        Fragment fragment = (Fragment) getSupportFragmentManager().findFragmentById(R.id.container);
+        if(fragment instanceof DefaultFragment){
+            DefaultFragment defaultFragment = (DefaultFragment)fragment;
+            defaultFragment.searchWishListByAddr(address);
+            //defaultFragment.addMapMarker("Destination", new LatLng(addr.getLatitude(), addr.getLongitude()));
+        }
+    }
+
 
 
 
@@ -184,7 +185,8 @@ public class MainActivity extends ActionBarBaseActivity
                     hideKeyboard();
                     final SearchView search = (SearchView) currentmenu.findItem(R.id.action_search).getActionView();
                     search.onActionViewCollapsed();
-                    Toast.makeText(activity, "Search for: " + s, Toast.LENGTH_LONG).show();
+                    quickSearch(s);
+                    Toast.makeText(activity, "filter for: " + s, Toast.LENGTH_LONG).show();
                     return true;
                 }
 

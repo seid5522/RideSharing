@@ -1,5 +1,13 @@
 package com.ridesharing.Entity;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.ridesharing.Json.CustomJsonDateDeserializer;
+
+import java.io.IOException;
 import java.util.Date;
 
 /**
@@ -18,9 +26,9 @@ public class Wish {
     /**
      * join users' ids
      */
-    private String joinIds;
+    private String joinids;
     private String fromName;
-    private String fromAdrr;
+    private String fromAddr;
     private String fromCity;
     private String fromZipCode;
     private double fromlat;
@@ -31,14 +39,19 @@ public class Wish {
     private String toZipCode;
     private double tolat;
     private double tolng;
+    @JsonDeserialize(using = CustomJsonDateDeserializer.class)
     private Date createTime;
+    @JsonDeserialize(using = CustomJsonDateDeserializer.class)
     private Date startTime;
     private double price;
-    private int status;
+    private WishType type;
+    private StatusType status;
 
-    public Wish(int uid, String fromAdrr, String fromCity, String fromZipCode, double fromlat, double fromlng, String toAddr, String toCity, String toZipCode, double tolat, double tolng, Date startTime, double price, int status) {
+    public Wish() {}
+
+    public Wish(int uid, String fromAddr, String fromCity, String fromZipCode, double fromlat, double fromlng, String toAddr, String toCity, String toZipCode, double tolat, double tolng, Date startTime, double price,WishType type, StatusType status) {
         this.uid = uid;
-        this.fromAdrr = fromAdrr;
+        this.fromAddr = fromAddr;
         this.fromCity = fromCity;
         this.fromZipCode = fromZipCode;
         this.fromlat = fromlat;
@@ -50,9 +63,18 @@ public class Wish {
         this.tolng = tolng;
         this.startTime = startTime;
         this.price = price;
+        this.type = type;
         this.status = status;
     }
-
+/*
+    @JsonCreator
+    public static Wish Create(String jsonString) throws JsonParseException, JsonMappingException, IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        Wish wish = null;
+        wish = mapper.readValue(jsonString, Wish.class);
+        return wish;
+    }
+*/
     public int getId() {
         return id;
     }
@@ -77,12 +99,12 @@ public class Wish {
         this.did = did;
     }
 
-    public String getJoinIds() {
-        return joinIds;
+    public String getJoinids() {
+        return joinids;
     }
 
-    public void setJoinIds(String joinIds) {
-        this.joinIds = joinIds;
+    public void setJoinids(String joinids) {
+        this.joinids = joinids;
     }
 
     public String getFromName() {
@@ -93,12 +115,12 @@ public class Wish {
         this.fromName = fromName;
     }
 
-    public String getFromAdrr() {
-        return fromAdrr;
+    public String getFromAddr() {
+        return fromAddr;
     }
 
-    public void setFromAdrr(String fromAdrr) {
-        this.fromAdrr = fromAdrr;
+    public void setFromAddr(String fromAddr) {
+        this.fromAddr = fromAddr;
     }
 
     public String getFromCity() {
@@ -205,11 +227,19 @@ public class Wish {
         this.price = price;
     }
 
-    public int getStatus() {
+    public WishType getType() {
+        return type;
+    }
+
+    public void setType(WishType type) {
+        this.type = type;
+    }
+
+    public StatusType getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(StatusType status) {
         this.status = status;
     }
 }

@@ -20,6 +20,8 @@ import com.ridesharing.Entity.Result;
 import com.ridesharing.Entity.User;
 import com.ridesharing.network.UserServiceClient;
 
+import java.util.Hashtable;
+
 /**
  * @Package com.ridesharing.Service
  * @Author wensheng
@@ -27,8 +29,10 @@ import com.ridesharing.network.UserServiceClient;
  */
 public class UserServiceImpl implements UserService {
     private User user;
+    private boolean isDriver;
+    private Hashtable<Integer, User> userHashtable;
     public UserServiceImpl(){
-
+        isDriver = false;userHashtable = new Hashtable<>();
     }
 
     public Result Register(User user){
@@ -44,9 +48,24 @@ public class UserServiceImpl implements UserService {
     }
 
     public User fetchSelfInfo(){
-        return null;
+        return UserServiceClient.fetchSelfInfo().getData();
     }
     public User fetchOtherInfo(int id){
-        return null;
+        User user = new User(id);
+        return UserServiceClient.fetchOtherInfo(user).getData();
+    }
+
+    @Override
+    public boolean isDriver() {
+        return isDriver;
+    }
+
+    @Override
+    public void setDriver(boolean isDriver) {
+        this.isDriver = isDriver;
+    }
+
+    public Hashtable<Integer, User> getUserTables(){
+        return userHashtable;
     }
 }

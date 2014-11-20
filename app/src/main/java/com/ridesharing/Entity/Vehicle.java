@@ -35,6 +35,8 @@ public class Vehicle {
      */
     private int riderNum;
 
+    public Vehicle() {}
+
     public Vehicle(int did, String maker, String model, int year, int riderNum) {
         this.did = did;
         this.maker = maker;

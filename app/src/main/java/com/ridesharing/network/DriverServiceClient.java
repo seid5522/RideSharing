@@ -19,7 +19,10 @@ package com.ridesharing.network;
 import com.ridesharing.App;
 import com.ridesharing.Entity.Driver;
 import com.ridesharing.Entity.Result;
+import com.ridesharing.Entity.ResultData;
 import com.ridesharing.Entity.ResultType;
+
+import org.springframework.core.ParameterizedTypeReference;
 
 /**
  * @Package com.ridesharing.network
@@ -31,7 +34,7 @@ public class DriverServiceClient {
 
     private static Result base(Driver driver, String type){
         String url = BASE_URL + "?type=" + type;
-        RestHelper<Driver, Result> helper = new RestHelper<>(url, driver, Result.class);
+        RestHelper<Driver, Result> helper = new RestHelper<>(url, driver, new ParameterizedTypeReference<Result>() {});
         return helper.execute();
     }
 
@@ -45,5 +48,19 @@ public class DriverServiceClient {
 
     public static Result remove(Driver driver){
         return base(driver, "remove");
+    }
+
+    public static ResultData<Boolean> isDriver(){
+        String url = BASE_URL + "?type=isDriver";
+        ResultData<Boolean> result = new ResultData<>();
+        RestHelper<String, ResultData<Boolean>> helper = new RestHelper<>(url, "", new ParameterizedTypeReference<ResultData<Boolean>>() {});
+        return helper.execute();
+    }
+
+    public static ResultData<Driver> fetchSelfInfo(){
+        String url = BASE_URL + "?type=info";
+        ResultData<Driver> result = new ResultData<>();
+        RestHelper<String, ResultData<Driver>> helper = new RestHelper<>(url, "", new ParameterizedTypeReference<ResultData<Driver>>() {});
+        return helper.execute();
     }
 }

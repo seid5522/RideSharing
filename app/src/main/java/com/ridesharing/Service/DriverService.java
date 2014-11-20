@@ -26,4 +26,6 @@ import com.ridesharing.Entity.Driver;
 public interface DriverService extends EntityService<Driver> {
     public Driver getDriver();
     public void setDriver(Driver driver);
+    public boolean isDirver();
+    public Driver fetchSelfInfo();
 }

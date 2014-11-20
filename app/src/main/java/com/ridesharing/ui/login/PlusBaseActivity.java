@@ -11,13 +11,13 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.plus.Plus;
-import com.ridesharing.ui.ActionBarBaseActivity;
+import com.ridesharing.ui.Inject.InjectActionBarActivity;
 
 
 /**
  * A base class to wrap communication with the Google Play Services GoogleApiClient.
  */
-public abstract class PlusBaseActivity extends ActionBarBaseActivity
+public abstract class PlusBaseActivity extends InjectActionBarActivity
         implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
 

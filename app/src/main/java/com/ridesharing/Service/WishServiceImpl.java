@@ -16,9 +16,14 @@
  */
 package com.ridesharing.Service;
 
+import android.util.Log;
+
 import com.ridesharing.Entity.Result;
+import com.ridesharing.Entity.ResultDataWishList;
 import com.ridesharing.Entity.Wish;
 import com.ridesharing.network.WishServiceClient;
+
+import java.util.ArrayList;
 
 /**
  * @Package com.ridesharing.Service
@@ -27,8 +32,10 @@ import com.ridesharing.network.WishServiceClient;
  */
 public class WishServiceImpl implements WishService {
     @Override
-    public Result search(Wish wish) {
-        return WishServiceClient.search(wish);
+    public ArrayList<Wish> search(Wish wish) {
+        ResultDataWishList res = WishServiceClient.search(wish);
+        Log.v("com.ridesharing: ", res.getMessage());
+        return res.getData();
     }
 
     @Override

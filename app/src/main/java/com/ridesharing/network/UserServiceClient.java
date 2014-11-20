@@ -18,8 +18,10 @@ package com.ridesharing.network;
 
 import com.ridesharing.App;
 import com.ridesharing.Entity.Result;
+import com.ridesharing.Entity.ResultData;
 import com.ridesharing.Entity.User;
-import com.ridesharing.R;
+
+import org.springframework.core.ParameterizedTypeReference;
 
 /**
  * @Package com.ridesharing.network
@@ -31,7 +33,7 @@ public class UserServiceClient {
 
     private static Result base(User user, String type){
         String url = BASE_URL + "?type=" + type;
-        RestHelper<User, Result> helper = new RestHelper<>(url, user, Result.class);
+        RestHelper<User, Result> helper = new RestHelper<>(url, user, new ParameterizedTypeReference<Result>() {});
         return helper.execute();
     }
 
@@ -45,5 +47,19 @@ public class UserServiceClient {
 
     public static Result update(User user){
         return base(user, "update");
+    }
+
+    public static ResultData<User> fetchSelfInfo(){
+        String url = BASE_URL + "?type=info";
+        ResultData<User> result = new ResultData<>();
+        RestHelper<String, ResultData<User>> helper = new RestHelper<>(url, "", new ParameterizedTypeReference<ResultData<User>>() {});
+        return helper.execute();
+    }
+
+    public static ResultData<User> fetchOtherInfo(User user){
+        String url = BASE_URL + "?type=info";
+        ResultData<User> result = new ResultData<>();
+        RestHelper<User, ResultData<User>> helper = new RestHelper<>(url, user, new ParameterizedTypeReference<ResultData<User>>() {});
+        return helper.execute();
     }
 }

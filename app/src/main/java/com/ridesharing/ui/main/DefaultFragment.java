@@ -45,28 +45,41 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.ridesharing.Entity.ELocation;
+import com.ridesharing.Entity.StatusType;
+import com.ridesharing.Entity.User;
+import com.ridesharing.Entity.Wish;
+import com.ridesharing.Entity.WishType;
 import com.ridesharing.R;
 import com.ridesharing.Service.LocationService;
 import com.ridesharing.Service.LocationServiceImpl_;
+import com.ridesharing.Service.UserService;
+import com.ridesharing.Service.WishService;
+import com.ridesharing.ui.Inject.InjectFragment;
 
 import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
+
+import java.util.ArrayList;
+import java.util.Date;
+
+import javax.inject.Inject;
 
 import it.gmariotti.cardslib.library.internal.Card;
 import it.gmariotti.cardslib.library.internal.CardHeader;
 import it.gmariotti.cardslib.library.view.CardView;
 
 @EFragment(R.layout.fragment_default)
-public class DefaultFragment extends Fragment {
+public class DefaultFragment extends InjectFragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String POSITION = "position";
     private static final String NAME = "name";
 
     private int position;
     private String name;
-    private CustomGoogleMap mapFragment;
+    protected CustomGoogleMap mapFragment;
     private MainActivity mainActivity;
 
     @ViewById(R.id.maploading_progress)
@@ -81,6 +94,11 @@ public class DefaultFragment extends Fragment {
     protected Location location;
     protected LocationService locationService;
     protected boolean mlocationServiceBound;
+
+    @Inject
+    UserService userService;
+    @Inject
+    WishService wishService;
 
     /**
      * Use this factory method to create a new instance of
@@ -198,6 +216,45 @@ public class DefaultFragment extends Fragment {
         stopLocationService();
     }
 
+    @Background
+    public void searchWishListByAddr(String toAddress){
+        Address from = LocationServiceImpl_.getLocationFromLatLng(getActivity(), location.getLatitude(), location.getLongitude());
+        Address to = LocationServiceImpl_.getLocationFromAddress(getActivity(), toAddress);
+        int uid = userService.getUser().getId();
+        WishType type = userService.isDriver()? WishType.Offer: WishType.Request;
+        Wish wish = new Wish(uid, from.getAddressLine(0), from.getAddressLine(1), from.getPostalCode(), from.getLatitude(), from.getLongitude(),
+                to.getAddressLine(0), to.getAddressLine(1), to.getPostalCode(), to.getLatitude(), to.getLongitude(), new Date(System.currentTimeMillis()), 0, type, StatusType.INITIAL);
+        ArrayList<Wish> lists = wishService.search(wish);
+        for(Wish otherWish: lists){
+            if(!userService.getUserTables().containsKey(otherWish.getUid())){
+                User user = userService.fetchOtherInfo(otherWish.getUid());
+                userService.getUserTables().put(user.getId(), user);
+            }
+        }
+        showMarkerOnMap(lists);
+    }
+
+    @UiThread
+    public void showMarkerOnMap(ArrayList<Wish> lists){
+        GoogleMap map = mapFragment.getMap();
+        map.clear();
+        LatLng clatlng = new LatLng(location.getLatitude(), location.getLongitude());
+        Marker currentMarker = map.addMarker(
+                new MarkerOptions()
+                        .position(clatlng)
+                        .title("Current Location")
+        );
+        currentMarker.showInfoWindow();
+        for(Wish otherWish: lists){
+            LatLng latLng = new LatLng(otherWish.getFromlat(), otherWish.getFromlng());
+            map.addMarker(
+                    new MarkerOptions()
+                            .position(clatlng)
+                            .title(userService.getUserTables().get(otherWish.getUid()).getUsername())
+            );
+        }
+    }
+
     @UiThread
     protected void addMarkerToMap(){
         //decide location
@@ -242,12 +299,16 @@ bmImg = BitmapFactory.decodeStream(is); */
                         .position(clatlng)
                         .title("Current Location")
         );
-        currentMarker.setIcon(BitmapDescriptorFactory.fromBitmap(bmp));
+       // currentMarker.setIcon(BitmapDescriptorFactory.fromBitmap(bmp));
         currentMarker.showInfoWindow();
 
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(clatlng, 15));
-        Address addr = LocationServiceImpl_.getLocationFromAddress(getActivity(), "5600 City Ave, Philadelphia, PA");
-        addMapMarker("School", new LatLng(addr.getLatitude(), addr.getLongitude()));
+        /*
+        if(mainActivity.userService.isDriver()) {
+            Address addr = LocationServiceImpl_.getLocationFromAddress(getActivity(), "5600 City Ave, Philadelphia, PA");
+            addMapMarker("School", new LatLng(addr.getLatitude(), addr.getLongitude()));
+        }
+        */
     }
 
     public static Bitmap getCroppedBitmap(Bitmap bmp, int radius) {

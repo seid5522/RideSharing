@@ -1,9 +1,6 @@
 package com.ridesharing.ui.user;
 
-import android.app.Activity;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,10 +15,8 @@ import com.ridesharing.Entity.Vehicle;
 import com.ridesharing.R;
 import com.ridesharing.Service.DriverService;
 import com.ridesharing.Service.UserService;
-import com.ridesharing.ui.ActionBarBaseActivity;
+import com.ridesharing.ui.Inject.InjectActionBarActivity;
 
-import android.app.Activity;
-import android.os.Bundle;
 import android.view.View;
 
 import org.androidannotations.annotations.AfterViews;
@@ -30,8 +25,6 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -44,7 +37,7 @@ import javax.inject.Inject;
  * @Date 2014/11/8.
  */
 @EActivity(R.layout.activity_register)
-public class registerActivity extends ActionBarBaseActivity {
+public class registerActivity extends InjectActionBarActivity {
 
     @ViewById(R.id.btnRegister)
     Button btnRegister;

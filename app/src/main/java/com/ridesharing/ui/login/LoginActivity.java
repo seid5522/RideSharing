@@ -22,7 +22,6 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
@@ -45,13 +44,13 @@ import com.ridesharing.Entity.ResultType;
 import com.ridesharing.Entity.User;
 import com.ridesharing.R;
 import com.ridesharing.Service.AuthenticationService;
+import com.ridesharing.Service.DriverService;
 import com.ridesharing.Service.UserService;
 import com.ridesharing.ui.main.MainActivity_;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.EActivity;
-import org.androidannotations.annotations.SystemService;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 
@@ -103,7 +102,8 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
     AuthenticationService authService;
     @Inject
     UserService userService;
-
+    @Inject
+    DriverService driverService;
 
 
 
@@ -489,7 +489,16 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
 
             User user = new User(mEmail, mPassword);
             Result result = authService.Login(user);
-            userService.setUser(user);
+            if(result.getType() == ResultType.Success) {
+                boolean isDriver = driverService.isDirver();
+                userService.setDriver(isDriver);
+                if(isDriver){
+                    userService.setUser(driverService.fetchSelfInfo());
+                }else{
+                    userService.setUser(userService.fetchSelfInfo());
+                }
+
+            }
             return (result.getType() == ResultType.Success);
 
         }
