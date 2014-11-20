@@ -20,6 +20,8 @@ import android.app.Application;
 
 import java.util.Arrays;
 import java.util.List;
+import org.acra.*;
+import org.acra.annotation.*;
 
 import dagger.ObjectGraph;
 
@@ -28,6 +30,10 @@ import dagger.ObjectGraph;
  * @Author wensheng
  * @Date 2014/10/25.
  */
+@ReportsCrashes(
+        formKey = "", // This is required for backward compatibility but not used
+        formUri = "http://maxwell.sju.edu/~wy590204/rest/report.php"
+)
 public class App extends Application {
     private ObjectGraph applicationGraph;
     public static String BaseURL;

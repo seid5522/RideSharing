@@ -246,7 +246,7 @@ public class DefaultFragment extends InjectFragment {
         Marker currentMarker = map.addMarker(
                 new MarkerOptions()
                         .position(clatlng)
-                        .title("Start Location")
+                        .title("Current Location")
         );
         currentMarker.showInfoWindow();
 
