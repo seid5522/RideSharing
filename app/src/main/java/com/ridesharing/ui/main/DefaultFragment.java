@@ -35,6 +35,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -238,21 +239,26 @@ public class DefaultFragment extends InjectFragment {
     public void showMarkerOnMap(ArrayList<Wish> lists){
         GoogleMap map = mapFragment.getMap();
         map.clear();
+
         LatLng clatlng = new LatLng(location.getLatitude(), location.getLongitude());
+
         Marker currentMarker = map.addMarker(
                 new MarkerOptions()
                         .position(clatlng)
-                        .title("Current Location")
+                        .title("Start Location")
         );
         currentMarker.showInfoWindow();
+
         for(Wish otherWish: lists){
             LatLng latLng = new LatLng(otherWish.getFromlat(), otherWish.getFromlng());
+            String name = userService.getUserTables().get(otherWish.getUid()).getUsername();
             map.addMarker(
                     new MarkerOptions()
-                            .position(clatlng)
-                            .title(userService.getUserTables().get(otherWish.getUid()).getUsername())
+                            .position(latLng)
+                            .title(name)
             );
         }
+        Toast.makeText(getActivity(), String.format("find {0} records.", lists.size()), Toast.LENGTH_LONG).show();
     }
 
     @UiThread

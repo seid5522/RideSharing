@@ -50,11 +50,11 @@ public class Driver extends User {
         this.uid = uid;
     }
 
-    public int getId() {
+    public int getDId() {
         return Did;
     }
 
-    public void setId(int id) {
+    public void setDId(int id) {
         this.Did = id;
     }
 

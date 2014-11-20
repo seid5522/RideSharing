@@ -57,6 +57,7 @@ public class RestHelper<I, R> {
     public R execute(){
         // Set the Content-Type header
         HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.set("Connection", "Close");
         requestHeaders.setContentType(new MediaType("application","json"));
         if(cookie != null){
             requestHeaders.add("Cookie", cookie);
