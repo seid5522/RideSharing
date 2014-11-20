@@ -37,6 +37,12 @@ public class UserServiceClient {
         return helper.execute(false);
     }
 
+    public static ResultData<Boolean> isRegister(String email){
+        String url = BASE_URL + "?type=isregister&email=" + email;
+        RestHelper<String, ResultData<Boolean>> helper = new RestHelper<>(url, "", new ParameterizedTypeReference<ResultData<Boolean>>() {});
+        return helper.execute(false);
+    }
+
     public static Result register(User user){
         return base(user, "register");
     }

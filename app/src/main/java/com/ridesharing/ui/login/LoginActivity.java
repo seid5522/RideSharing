@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 
+import android.app.AlertDialog;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -28,6 +29,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.auth.GoogleAuthException;
@@ -50,14 +52,19 @@ import com.ridesharing.ui.main.MainActivity_;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Background;
+import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -97,6 +104,12 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
     View mLoginFormView;
     @ViewById(R.id.link_to_register)
     TextView registerLink;
+    @ViewById(R.id.link_need_password)
+    LinearLayout linkPassword;
+    @ViewById(R.id.link_message)
+    TextView linkMessage;
+    @ViewById(R.id.link_password)
+    TextView linkPasswordTextView;
 
     @Inject
     AuthenticationService authService;
@@ -105,7 +118,7 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
     @Inject
     DriverService driverService;
 
-
+    private boolean logout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -116,7 +129,8 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
 
 
         // Listening to register new account link
-
+        Intent intent = getIntent();
+        logout = intent.getBooleanExtra("logout", false);
     }
 
     @Override
@@ -346,17 +360,138 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
         mSignOutButtons.setVisibility(connected ? View.VISIBLE : View.GONE);
         mPlusSignInButton.setVisibility(connected ? View.GONE : View.VISIBLE);
         mEmailLoginFormView.setVisibility(connected ? View.GONE : View.VISIBLE);
-/*
+
         if(getGoogleApiClient().isConnected()){
+            if(logout){
+                signOut();
+                logout = false;
+                return;
+            }
             String email = Plus.AccountApi.getAccountName(getGoogleApiClient());
+            checkRegistration(email);
             //getPlusAuthorizationCode();
-            User user = new User(email, "");
+        }
+    }
+
+    @Background
+    public void checkRegistration(String email){
+        if(userService.isRegister(email)){
+            Person person = Plus.PeopleApi.getCurrentPerson(getGoogleApiClient());
+            User user = new User();
+            user.setUsername(email);
+            user.setSessionKey(person.getId());
+            Result result = authService.SocialLogin(user);
+            if(result.getType() == ResultType.Success){
+                boolean isDriver = driverService.isDirver();
+                userService.setDriver(isDriver);
+                if(isDriver){
+                    userService.setUser(driverService.fetchSelfInfo());
+                }else{
+                    userService.setUser(userService.fetchSelfInfo());
+                }
+                goToMainActivity();
+            }else{
+                showLinkPassword();
+            }
+        }else{
+            Person person = Plus.PeopleApi.getCurrentPerson(getGoogleApiClient());
+            String uname = person.getNickname();
+            Date birthday = null;
+            try {
+                birthday = new SimpleDateFormat("yyyy-MM-dd, ", Locale.ENGLISH).parse(person.getBirthday());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            String firstname = person.getName().getGivenName();
+            String lastname = person.getName().getFamilyName();
+            String address = "";
+            String address2 = "";
+            String city = "";
+            String state = "";
+            String zipcode = "";
+            String phone ="";
+            String ImageURL = "";
+            String SessionKey = "";
+            if(person.hasPlacesLived()){
+                Person.PlacesLived lived = person.getPlacesLived().get(0);
+                city = lived.getValue();
+            }
+            if(person.hasCurrentLocation()){
+                address = person.getCurrentLocation();
+            }
+
+            User user = new User(uname, email, firstname, lastname, birthday, address, address2, city, state, zipcode, phone, ImageURL, SessionKey);
+            Result result = userService.Register(user);
+            if(result.getType() == ResultType.Success){
+                Result resultSocial = authService.SocialLogin(user);
+                if(resultSocial.getType() == ResultType.Success) {
+                    boolean isDriver = driverService.isDirver();
+                    userService.setDriver(isDriver);
+                    if (isDriver) {
+                        userService.setUser(driverService.fetchSelfInfo());
+                    } else {
+                        userService.setUser(userService.fetchSelfInfo());
+                    }
+                }else{
+                    showError(this, resultSocial.getMessage());
+                }
+            }else{
+                showError(this, result.getMessage());
+            }
+        }
+    }
+
+    public static void showError(Context context, String errorMessage){
+        new AlertDialog.Builder(context)
+                .setTitle("Error")
+                .setMessage(errorMessage)
+                .setNegativeButton("OK", null)
+                .show();
+    }
+
+    @Click(R.id.buttonLink)
+    void linkPasswordBtnClicked() {
+        String email = Plus.AccountApi.getAccountName(getGoogleApiClient());
+        Person person = Plus.PeopleApi.getCurrentPerson(getGoogleApiClient());
+        String sessionId = person.getId();
+        String password =  linkPasswordTextView.getText().toString();
+
+        User user = new User();
+        user.setUsername(email);
+        user.setPassword(password);
+        user.setSessionKey(sessionId);
+        linkAccount(user);
+
+    }
+
+    @Background
+    public void linkAccount(User user){
+        Result result = authService.Link(user);
+        if(result.getType() == ResultType.Success){
             userService.setUser(user);
-            Intent main = new Intent(getApplicationContext(), MainActivity.class);
-            main.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(main);
-            finish();
-        }*/
+            goToMainActivity();
+        }else{
+            showLinkPasswordError(result);
+        }
+    }
+
+    @UiThread
+    public void showLinkPasswordError(Result result){
+        linkPasswordTextView.setError(result.getMessage());
+    }
+
+    @UiThread
+    public void showLinkPassword(){
+        linkMessage.setVisibility(View.VISIBLE);
+        linkPassword.setVisibility(View.VISIBLE);
+    }
+
+    @UiThread
+    public void goToMainActivity(){
+        Intent main = new Intent(getApplicationContext(), MainActivity_.class);
+        main.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(main);
+        finish();
     }
 
     @Override
@@ -509,10 +644,7 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
             showProgress(false);
 
             if (success) {
-                Intent main = new Intent(getApplicationContext(), MainActivity_.class);
-                main.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(main);
-                finish();
+                goToMainActivity();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();

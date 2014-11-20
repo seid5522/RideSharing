@@ -1,5 +1,6 @@
 package com.ridesharing.ui.main;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.app.Activity;
 import android.support.v7.app.ActionBar;
@@ -19,20 +20,35 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.plus.Plus;
 import com.ridesharing.R;
+import com.ridesharing.Service.AuthenticationService;
+import com.ridesharing.Service.UserService;
+import com.ridesharing.ui.Inject.InjectFragment;
+import com.ridesharing.ui.login.LoginActivity;
+import com.ridesharing.ui.login.LoginActivity_;
+
+import org.androidannotations.annotations.Background;
+import org.androidannotations.annotations.EFragment;
+import org.androidannotations.annotations.UiThread;
 
 import java.util.List;
+
+import javax.inject.Inject;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
  * See the <a href="https://developer.android.com/design/patterns/navigation-drawer.html#Interaction">
  * design guidelines</a> for a complete explanation of the behaviors implemented here.
  */
-public class NavigationDrawerFragment extends Fragment {
+@EFragment(R.layout.fragment_navigation_drawer)
+public class NavigationDrawerFragment extends InjectFragment {
 
     /**
      * Remember the position of the selected item.
@@ -58,10 +74,16 @@ public class NavigationDrawerFragment extends Fragment {
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerListView;
     private View mFragmentContainerView;
+    private Button btnlogout;
 
     private int mCurrentSelectedPosition = 0;
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
+
+    @Inject
+    UserService userService;
+    @Inject
+    AuthenticationService authenticationService;
 
     public NavigationDrawerFragment() {
     }
@@ -114,7 +136,29 @@ public class NavigationDrawerFragment extends Fragment {
                         getString(R.string.title_section3),
                 }));
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
+        btnlogout =(Button)layout.findViewById(R.id.Btnlogout);
+        btnlogout.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                logout();
+            }
+        });
         return layout;
+    }
+
+    @Background
+    public void logout(){
+        authenticationService.Logout();
+        toLoginScreen();
+    }
+
+    @UiThread
+    public void toLoginScreen(){
+        Intent main = new Intent(getActivity().getApplicationContext(), LoginActivity_.class);
+        main.putExtra("logout", true);
+        main.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(main);
+        getActivity().finish();
     }
 
     public boolean isDrawerOpen() {

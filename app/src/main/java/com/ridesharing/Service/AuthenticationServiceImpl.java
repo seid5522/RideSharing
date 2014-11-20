@@ -42,8 +42,20 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return AuthServiceClient.login(user);
     }
 
+
+
     @Override
-    public void Logout(User user){
-        AuthServiceClient.logout(user);
+    public void Logout(){
+        AuthServiceClient.logout();
+    }
+
+    @Override
+    public Result SocialLogin(User user) {
+        return AuthServiceClient.socialLogin(user);
+    }
+
+    @Override
+    public Result Link(User user) {
+        return AuthServiceClient.link(user);
     }
 }

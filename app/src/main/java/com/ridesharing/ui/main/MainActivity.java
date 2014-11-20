@@ -47,7 +47,7 @@ public class MainActivity extends InjectActionBarActivity
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
-    @FragmentById(R.id.navigation_drawer)
+    //@FragmentById(R.id.navigation_drawer)
     protected NavigationDrawerFragment mNavigationDrawerFragment;
 
     /**
@@ -65,6 +65,7 @@ public class MainActivity extends InjectActionBarActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.activity_main);
+
         if(userService.getUser() == null){
             Intent login = new Intent(getApplicationContext(), LoginActivity_.class);
             login.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -77,6 +78,8 @@ public class MainActivity extends InjectActionBarActivity
 
     @AfterViews
     public void initial(){
+        mNavigationDrawerFragment = (NavigationDrawerFragment)
+                getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         if(userService.getUser() != null){
 
             mTitle = getTitle();

@@ -16,6 +16,7 @@
  */
 package com.ridesharing.Service;
 
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.ridesharing.Entity.Result;
 import com.ridesharing.Entity.User;
 
@@ -35,4 +36,5 @@ public interface UserService {
     public User fetchOtherInfo(int id);
     public boolean isDriver();
     public void setDriver(boolean isDriver);
+    public Boolean isRegister(String email);
 }

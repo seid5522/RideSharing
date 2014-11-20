@@ -53,6 +53,22 @@ public class User {
 		this.password = md5.EncryptToString(password);
 	}
 
+    public User(String username, String email, String firstname, String lastname, Date birthday, String address, String address2, String city, String state, String zipcode, String phone, String photoURL, String sessionKey) {
+        this.username = username;
+        this.email = email;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.birthday = birthday;
+        this.address = address;
+        this.address2 = address2;
+        this.city = city;
+        this.state = state;
+        this.zipcode = zipcode;
+        this.phone = phone;
+        this.photoURL = photoURL;
+        this.sessionKey = sessionKey;
+    }
+
     public User( String username, String password, String email, String firstname, String lastname, Date birthday, String address, String address2, String city, String state, String zipcode, String phone, String photoURL) {
         this.username = username;
         MD5 md5 = new MD5();

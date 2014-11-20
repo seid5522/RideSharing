@@ -16,6 +16,7 @@
  */
 package com.ridesharing.Service;
 
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.ridesharing.Entity.Result;
 import com.ridesharing.Entity.User;
 import com.ridesharing.network.UserServiceClient;
@@ -31,6 +32,7 @@ public class UserServiceImpl implements UserService {
     private User user;
     private boolean isDriver;
     private Hashtable<Integer, User> userHashtable;
+    private GoogleApiClient mGoogleApiClient;
     public UserServiceImpl(){
         isDriver = false;userHashtable = new Hashtable<>();
     }
@@ -65,7 +67,17 @@ public class UserServiceImpl implements UserService {
         this.isDriver = isDriver;
     }
 
+    @Override
+    public Boolean isRegister(String email) {
+        return UserServiceClient.isRegister(email).getData();
+    }
+
+    @Override
     public Hashtable<Integer, User> getUserTables(){
         return userHashtable;
+    }
+
+    public void setUserHashtable(Hashtable<Integer, User> userHashtable) {
+        this.userHashtable = userHashtable;
     }
 }

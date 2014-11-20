@@ -48,7 +48,18 @@ public class AuthServiceClient {
         return helper.execute(false);
     }
 
-    public static Result logout(User user){
-        return base(user, "logout");
+    public static Result logout(){
+        String url = BASE_URL + "?type=logout";
+        ResultData<Boolean> result = new ResultData<>();
+        RestHelper<String, Result> helper = new RestHelper<>(url, "", new ParameterizedTypeReference<Result>() {});
+        return helper.execute(false);
+    }
+
+    public static Result link(User user){
+        return base(user, "link");
+    }
+
+    public static Result socialLogin(User user){
+        return base(user, "sociallogin");
     }
 }

@@ -16,5 +16,6 @@
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_register">Register</string>
     <string name="action_search">Search</string>
-
+    <string name="social_link">Link</string>
+    <string name="link_message">Your email already registered.For society, please type your password to bind your account. </string>
 </resources>

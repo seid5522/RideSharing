@@ -35,6 +35,32 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="32dp"/>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/link_message"
+                android:id="@+id/link_message"
+                android:visibility="gone"/>
+
+            <LinearLayout
+                android:id="@+id/link_need_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <EditText
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword"
+                    android:id="@+id/link_password" />
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/social_link"
+                    android:id="@+id/buttonLink"/>
+
+            </LinearLayout>
             <LinearLayout
                 android:id="@+id/plus_sign_out_buttons"
                 android:layout_width="match_parent"
