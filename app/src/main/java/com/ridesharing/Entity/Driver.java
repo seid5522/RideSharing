@@ -16,6 +16,8 @@
  */
 package com.ridesharing.Entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.Date;
 
 /**
@@ -24,8 +26,11 @@ import java.util.Date;
  * @Date 2014/11/11.
  */
 public class Driver extends User {
+    @JsonProperty("Did")
     private int Did;
+
     private int uid;
+
     private Vehicle vehicle;
 
     public Driver(){}
@@ -42,20 +47,24 @@ public class Driver extends User {
         this.vehicle = vehicle;
     }
 
+    public Driver(int Did) {
+        this.Did = Did;
+    }
+
+    public int getDid() {
+        return Did;
+    }
+
+    public void setDid(int did) {
+        Did = did;
+    }
+
     public int getUid() {
         return uid;
     }
 
     public void setUid(int uid) {
         this.uid = uid;
-    }
-
-    public int getDId() {
-        return Did;
-    }
-
-    public void setDId(int id) {
-        this.Did = id;
     }
 
     public Vehicle getVehicle() {

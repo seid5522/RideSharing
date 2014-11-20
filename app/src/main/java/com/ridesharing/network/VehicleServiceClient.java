@@ -33,7 +33,7 @@ public class VehicleServiceClient {
     private static Result base(Vehicle vehicle, String type){
         String url = BASE_URL + "?type=" + type;
         RestHelper<Vehicle, Result> helper = new RestHelper<>(url, vehicle, new ParameterizedTypeReference<Result>() {});
-        return helper.execute();
+        return helper.execute(false);
     }
 
     public static Result add(Vehicle vehicle){

@@ -34,7 +34,7 @@ public class AuthServiceClient {
     private static Result base(User user, String type){
         String url = BASE_URL + "?type=" + type;
         RestHelper<User, Result> helper = new RestHelper<>(url, user, new ParameterizedTypeReference<Result>() {});
-        return helper.execute();
+        return helper.execute(false);
     }
 
     public static Result login(User user){
@@ -45,7 +45,7 @@ public class AuthServiceClient {
         String url = BASE_URL + "?type=isAuth";
         ResultData<Boolean> result = new ResultData<>();
         RestHelper<String, ResultData<Boolean>> helper = new RestHelper<>(url, "", new ParameterizedTypeReference<ResultData<Boolean>>() {});
-        return helper.execute();
+        return helper.execute(false);
     }
 
     public static Result logout(User user){

@@ -186,7 +186,7 @@ public class MainActivity extends InjectActionBarActivity
                     final SearchView search = (SearchView) currentmenu.findItem(R.id.action_search).getActionView();
                     search.onActionViewCollapsed();
                     quickSearch(s);
-                    Toast.makeText(activity, "filter for: " + s, Toast.LENGTH_LONG).show();
+                    Toast.makeText(activity, "filter for: " + s, Toast.LENGTH_SHORT).show();
                     return true;
                 }
 

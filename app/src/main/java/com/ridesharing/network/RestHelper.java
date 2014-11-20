@@ -54,15 +54,23 @@ public class RestHelper<I, R> {
         this.output = output;
     }
 
-    public R execute(){
+    public R execute(boolean closeConnection){
         // Set the Content-Type header
         HttpHeaders requestHeaders = new HttpHeaders();
-        requestHeaders.set("Connection", "Close");
+        if(closeConnection)
+            requestHeaders.set("Connection", "Close");
         requestHeaders.setContentType(new MediaType("application","json"));
         if(cookie != null){
             requestHeaders.add("Cookie", cookie);
         }
-        HttpEntity<String> requestEntity = new HttpEntity<String>(new Gson().toJson(input), requestHeaders);
+        HttpEntity<I> requestEntity = new HttpEntity<I>(input, requestHeaders);
+        Log.v("com.ridesharing: URL:" , url);
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            Log.v("com.ridesharing: Post: ", mapper.writeValueAsString(input));
+        } catch (JsonProcessingException e) {
+            Log.e("com.ridesharing: Error: ", e.getMessage());
+        }
         // Create a new RestTemplate instance
         RestTemplate restTemplate = new RestTemplate();
 
@@ -77,8 +85,6 @@ public class RestHelper<I, R> {
 
         // Make the HTTP GET request, marshaling the response from JSON to an array of Events
         ResponseEntity<R> responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, output );
-        Log.v("com.ridesharing: URL:" , url);
-        Log.v("com.ridesharing: Post: ", requestEntity.getBody());
         List<String> cookieList = responseEntity.getHeaders().get("Set-Cookie");
         if(cookieList != null && cookieList.size() > 0) {
             cookie = responseEntity.getHeaders().get("Set-Cookie").get(0);

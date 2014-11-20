@@ -35,7 +35,7 @@ public class DriverServiceClient {
     private static Result base(Driver driver, String type){
         String url = BASE_URL + "?type=" + type;
         RestHelper<Driver, Result> helper = new RestHelper<>(url, driver, new ParameterizedTypeReference<Result>() {});
-        return helper.execute();
+        return helper.execute(false);
     }
 
     public static Result add(Driver driver){
@@ -54,13 +54,13 @@ public class DriverServiceClient {
         String url = BASE_URL + "?type=isDriver";
         ResultData<Boolean> result = new ResultData<>();
         RestHelper<String, ResultData<Boolean>> helper = new RestHelper<>(url, "", new ParameterizedTypeReference<ResultData<Boolean>>() {});
-        return helper.execute();
+        return helper.execute(false);
     }
 
     public static ResultData<Driver> fetchSelfInfo(){
         String url = BASE_URL + "?type=info";
         ResultData<Driver> result = new ResultData<>();
         RestHelper<String, ResultData<Driver>> helper = new RestHelper<>(url, "", new ParameterizedTypeReference<ResultData<Driver>>() {});
-        return helper.execute();
+        return helper.execute(true);
     }
 }

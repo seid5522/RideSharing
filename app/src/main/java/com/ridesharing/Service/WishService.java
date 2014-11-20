@@ -28,4 +28,5 @@ import java.util.ArrayList;
  */
 public interface WishService extends EntityService<Wish> {
     public ArrayList<Wish> search(Wish wish);
+    public ArrayList<Wish> fetchAll(Wish wish, int distance);
 }

@@ -2,10 +2,12 @@ package com.ridesharing.network;
 
 import com.ridesharing.App;
 import com.ridesharing.Entity.Result;
-import com.ridesharing.Entity.ResultDataWishList;
+import com.ridesharing.Entity.ResultData;
 import com.ridesharing.Entity.Wish;
 
 import org.springframework.core.ParameterizedTypeReference;
+
+import java.util.ArrayList;
 
 /**
  * Created by wensheng on 2014/11/10.
@@ -16,14 +18,21 @@ public class WishServiceClient {
     private static Result base(String type, Wish wish){
         String url = BASE_URL + "?type=" + type;
         RestHelper<Wish, Result> helper = new RestHelper<>(url, wish, new ParameterizedTypeReference<Result>() {});
-        return helper.execute();
+        return helper.execute(false);
     }
 
-    public static ResultDataWishList search(Wish wish){
+    public static ResultData<ArrayList<Wish>> search(Wish wish){
         String url = BASE_URL + "?type=search";
-        ResultDataWishList res = new ResultDataWishList();
-        RestHelper<Wish, ResultDataWishList> helper = new RestHelper<>(url, wish, new ParameterizedTypeReference<ResultDataWishList>() {});
-        return helper.execute();
+        ResultData<ArrayList<Wish>> res = new ResultData<ArrayList<Wish>>();
+        RestHelper<Wish, ResultData<ArrayList<Wish>>> helper = new RestHelper<>(url, wish, new ParameterizedTypeReference<ResultData<ArrayList<Wish>>>() {});
+        return helper.execute(true);
+    }
+
+    public static ResultData<ArrayList<Wish>> fetchAll(Wish wish, int distance){
+        String url = BASE_URL + "?type=all&distance=" + distance;
+        ResultData<ArrayList<Wish>> res = new ResultData<ArrayList<Wish>>();
+        RestHelper<Wish, ResultData<ArrayList<Wish>>> helper = new RestHelper<>(url, wish, new ParameterizedTypeReference<ResultData<ArrayList<Wish>>>() {});
+        return helper.execute(true);
     }
 
     public static Result add(Wish wish){

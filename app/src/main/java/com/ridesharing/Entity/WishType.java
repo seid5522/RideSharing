@@ -18,6 +18,7 @@ package com.ridesharing.Entity;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -40,6 +41,7 @@ public enum WishType {
         this.value = value;
     }
 
+    @JsonValue
     public int getValue(){
         return value;
     }

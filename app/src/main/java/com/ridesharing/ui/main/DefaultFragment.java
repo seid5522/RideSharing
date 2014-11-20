@@ -52,6 +52,7 @@ import com.ridesharing.Entity.Wish;
 import com.ridesharing.Entity.WishType;
 import com.ridesharing.R;
 import com.ridesharing.Service.LocationService;
+import com.ridesharing.Service.LocationServiceImpl;
 import com.ridesharing.Service.LocationServiceImpl_;
 import com.ridesharing.Service.UserService;
 import com.ridesharing.Service.WishService;
@@ -249,16 +250,41 @@ public class DefaultFragment extends InjectFragment {
         );
         currentMarker.showInfoWindow();
 
+        if(lists.size() > 0){
+            Wish w = lists.get(0);
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(clatlng, 14));
+        }
         for(Wish otherWish: lists){
             LatLng latLng = new LatLng(otherWish.getFromlat(), otherWish.getFromlng());
             String name = userService.getUserTables().get(otherWish.getUid()).getUsername();
+            float hue = BitmapDescriptorFactory.HUE_BLUE;//rider
+            if(otherWish.getType() == WishType.Offer){
+                hue = BitmapDescriptorFactory.HUE_GREEN;//driver
+            }
             map.addMarker(
                     new MarkerOptions()
                             .position(latLng)
                             .title(name)
+                            .icon(BitmapDescriptorFactory.defaultMarker(hue))
             );
         }
-        Toast.makeText(getActivity(), String.format("find {0} records.", lists.size()), Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity(), String.format("find %d record(s).", lists.size()), Toast.LENGTH_LONG).show();
+    }
+
+    @Background
+    public void loadWishList(){
+        Wish wish = new Wish();
+        wish.setFromlat(location.getLatitude());
+        wish.setFromlng(location.getLongitude());
+        wish.setType(WishType.Request);
+        ArrayList<Wish> lists = wishService.fetchAll(wish, 10);
+        for(Wish otherWish: lists){
+            if(!userService.getUserTables().containsKey(otherWish.getUid())){
+                User user = userService.fetchOtherInfo(otherWish.getUid());
+                userService.getUserTables().put(user.getId(), user);
+            }
+        }
+        showMarkerOnMap(lists);
     }
 
     @UiThread
@@ -274,6 +300,7 @@ public class DefaultFragment extends InjectFragment {
 
         LatLng clatlng = new LatLng(location.getLatitude(), location.getLongitude());
         GoogleMap map = mapFragment.getMap();
+        /*
         Bitmap.Config conf = Bitmap.Config.ARGB_8888;
         Bitmap bmp = Bitmap.createBitmap(80, 80, conf);
         Canvas canvas1 = new Canvas(bmp);
@@ -292,6 +319,7 @@ public class DefaultFragment extends InjectFragment {
         bitmap = getCroppedBitmap(bitmap, 80);
         canvas1.drawBitmap(bitmap, 0, 0, null);
         canvas1.drawText("Michael", 20, 70, color);
+        */
 /*
  from internet (You also must download the image from an background thread (you could use AsyncTask for that)
  URL url = new URL(user_image_url);
@@ -309,6 +337,7 @@ bmImg = BitmapFactory.decodeStream(is); */
         currentMarker.showInfoWindow();
 
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(clatlng, 15));
+        loadWishList();
         /*
         if(mainActivity.userService.isDriver()) {
             Address addr = LocationServiceImpl_.getLocationFromAddress(getActivity(), "5600 City Ave, Philadelphia, PA");

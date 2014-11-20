@@ -34,7 +34,7 @@ public class UserServiceClient {
     private static Result base(User user, String type){
         String url = BASE_URL + "?type=" + type;
         RestHelper<User, Result> helper = new RestHelper<>(url, user, new ParameterizedTypeReference<Result>() {});
-        return helper.execute();
+        return helper.execute(false);
     }
 
     public static Result register(User user){
@@ -53,13 +53,13 @@ public class UserServiceClient {
         String url = BASE_URL + "?type=info";
         ResultData<User> result = new ResultData<>();
         RestHelper<String, ResultData<User>> helper = new RestHelper<>(url, "", new ParameterizedTypeReference<ResultData<User>>() {});
-        return helper.execute();
+        return helper.execute(true);
     }
 
     public static ResultData<User> fetchOtherInfo(User user){
         String url = BASE_URL + "?type=info";
         ResultData<User> result = new ResultData<>();
         RestHelper<User, ResultData<User>> helper = new RestHelper<>(url, user, new ParameterizedTypeReference<ResultData<User>>() {});
-        return helper.execute();
+        return helper.execute(true);
     }
 }

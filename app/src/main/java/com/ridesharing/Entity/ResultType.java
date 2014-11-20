@@ -16,6 +16,7 @@
  */
 package com.ridesharing.Entity;
 
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.google.gson.annotations.SerializedName;
 
 public enum ResultType {
@@ -41,7 +42,8 @@ public enum ResultType {
 	private ResultType(int value){
 		this.value = value;
 	}
-	
+
+    @JsonValue
 	public int getValue(){
 		return value;
 	}
