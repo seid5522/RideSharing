@@ -26,8 +26,8 @@ import java.util.Date;
  * @Date 2014/11/11.
  */
 public class Driver extends User {
-    @JsonProperty("Did")
-    private int Did;
+    @JsonProperty("did")
+    private int did;
 
     private int uid;
 
@@ -48,15 +48,15 @@ public class Driver extends User {
     }
 
     public Driver(int Did) {
-        this.Did = Did;
+        this.did = Did;
     }
 
     public int getDid() {
-        return Did;
+        return did;
     }
 
     public void setDid(int did) {
-        Did = did;
+        this.did = did;
     }
 
     public int getUid() {

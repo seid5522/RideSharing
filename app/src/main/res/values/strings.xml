@@ -18,4 +18,8 @@
     <string name="action_search">Search</string>
     <string name="social_link">Link</string>
     <string name="link_message">Your email already registered.For society, please type your password to bind your account. </string>
+    <string name="offer">Offer</string>
+    <string name="request">Request</string>
+    <string name="currentLocation">Current Location</string>
+    <string name="findRecords">find %d record(s).</string>
 </resources>

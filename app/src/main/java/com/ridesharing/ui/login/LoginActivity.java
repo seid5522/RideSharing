@@ -395,12 +395,16 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
             }
         }else{
             Person person = Plus.PeopleApi.getCurrentPerson(getGoogleApiClient());
-            String uname = person.getNickname();
+            String uname = email;
             Date birthday = null;
+            String strBirthday = "1981-01-01";
+            if(person.hasBirthday() && !person.getBirthday().equals("")){
+                strBirthday = person.getBirthday();
+            }
             try {
-                birthday = new SimpleDateFormat("yyyy-MM-dd, ", Locale.ENGLISH).parse(person.getBirthday());
+                birthday = new SimpleDateFormat("yyyy-MM-dd", Locale.US).parse(strBirthday);
             } catch (ParseException e) {
-                e.printStackTrace();
+                Log.e("com.ridesharing error: ", e.getMessage());
             }
             String firstname = person.getName().getGivenName();
             String lastname = person.getName().getFamilyName();
@@ -411,7 +415,7 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
             String zipcode = "";
             String phone ="";
             String ImageURL = "";
-            String SessionKey = "";
+            String SessionKey = person.getId();
             if(person.hasPlacesLived()){
                 Person.PlacesLived lived = person.getPlacesLived().get(0);
                 city = lived.getValue();
@@ -425,13 +429,10 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
             if(result.getType() == ResultType.Success){
                 Result resultSocial = authService.SocialLogin(user);
                 if(resultSocial.getType() == ResultType.Success) {
-                    boolean isDriver = driverService.isDirver();
+                    boolean isDriver = false;
                     userService.setDriver(isDriver);
-                    if (isDriver) {
-                        userService.setUser(driverService.fetchSelfInfo());
-                    } else {
-                        userService.setUser(userService.fetchSelfInfo());
-                    }
+                    userService.setUser(userService.fetchSelfInfo());
+                    goToMainActivity();
                 }else{
                     showError(this, resultSocial.getMessage());
                 }
@@ -441,7 +442,8 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
         }
     }
 
-    public static void showError(Context context, String errorMessage){
+    @UiThread
+    public void showError(Context context, String errorMessage){
         new AlertDialog.Builder(context)
                 .setTitle("Error")
                 .setMessage(errorMessage)

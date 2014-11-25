@@ -24,6 +24,7 @@ import com.ridesharing.Entity.Wish;
 import com.ridesharing.network.WishServiceClient;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 /**
  * @Package com.ridesharing.Service
@@ -31,6 +32,11 @@ import java.util.ArrayList;
  * @Date 2014/11/11.
  */
 public class WishServiceImpl implements WishService {
+    private Hashtable<String, Wish> wishHashtable;
+
+    public WishServiceImpl(){
+        wishHashtable = new Hashtable<>();
+    }
     @Override
     public ArrayList<Wish> search(Wish wish) {
         ResultData<ArrayList<Wish>> res = WishServiceClient.search(wish);
@@ -58,5 +64,10 @@ public class WishServiceImpl implements WishService {
     @Override
     public Result update(Wish wish) {
         return WishServiceClient.update(wish);
+    }
+
+    @Override
+    public Hashtable<String, Wish> getWishHashtable(){
+        return wishHashtable;
     }
 }

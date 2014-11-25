@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="name">Name: </string>
+    <string name="type">Type: </string>
+    <string name="to">To: </string>
+    <string name="join">Join</string>
+</resources>

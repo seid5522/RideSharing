@@ -39,6 +39,7 @@ public class User {
     private String phone;
     private String photoURL;
     private String sessionKey;
+    MD5 md5 = new MD5();
 
     //dummy constructor for json de-serialize
     public User() {}
@@ -49,7 +50,6 @@ public class User {
 
     public User(String username, String password) {
 		this.username = username;
-        MD5 md5 = new MD5();
 		this.password = md5.EncryptToString(password);
 	}
 
@@ -66,7 +66,7 @@ public class User {
         this.zipcode = zipcode;
         this.phone = phone;
         this.photoURL = photoURL;
-        this.sessionKey = sessionKey;
+        this.sessionKey = md5.EncryptToString(sessionKey);
     }
 
     public User( String username, String password, String email, String firstname, String lastname, Date birthday, String address, String address2, String city, String state, String zipcode, String phone, String photoURL) {
@@ -123,7 +123,6 @@ public class User {
     }
 
     public void setPassword(String password) {
-        MD5 md5 = new MD5();
         this.password = md5.EncryptToString(password);
     }
 
@@ -220,6 +219,6 @@ public class User {
     }
 
     public void setSessionKey(String sessionKey) {
-        this.sessionKey = sessionKey;
+        this.sessionKey = md5.EncryptToString(sessionKey);
     }
 }

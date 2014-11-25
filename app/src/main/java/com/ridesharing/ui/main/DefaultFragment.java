@@ -35,6 +35,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -232,13 +233,15 @@ public class DefaultFragment extends InjectFragment {
                 User user = userService.fetchOtherInfo(otherWish.getUid());
                 userService.getUserTables().put(user.getId(), user);
             }
+            User user = userService.getUserTables().get(otherWish.getUid());
+            wishService.getWishHashtable().put(user.getUsername(), otherWish);
         }
         showMarkerOnMap(lists);
     }
 
     @UiThread
     public void showMarkerOnMap(ArrayList<Wish> lists){
-        GoogleMap map = mapFragment.getMap();
+        final GoogleMap map = mapFragment.getMap();
         map.clear();
 
         LatLng clatlng = new LatLng(location.getLatitude(), location.getLongitude());
@@ -246,7 +249,7 @@ public class DefaultFragment extends InjectFragment {
         Marker currentMarker = map.addMarker(
                 new MarkerOptions()
                         .position(clatlng)
-                        .title("Current Location")
+                        .title(getText(R.string.currentLocation).toString())
         );
         currentMarker.showInfoWindow();
 
@@ -268,7 +271,8 @@ public class DefaultFragment extends InjectFragment {
                             .icon(BitmapDescriptorFactory.defaultMarker(hue))
             );
         }
-        Toast.makeText(getActivity(), String.format("find %d record(s).", lists.size()), Toast.LENGTH_LONG).show();
+        map.setInfoWindowAdapter(new MarkerWindowAdapter(wishService, userService,this));
+        Toast.makeText(getActivity(), String.format(getText(R.string.findRecords).toString(), lists.size()), Toast.LENGTH_LONG).show();
     }
 
     @Background
@@ -283,12 +287,14 @@ public class DefaultFragment extends InjectFragment {
                 User user = userService.fetchOtherInfo(otherWish.getUid());
                 userService.getUserTables().put(user.getId(), user);
             }
+            User user = userService.getUserTables().get(otherWish.getUid());
+            wishService.getWishHashtable().put(user.getUsername(), otherWish);
         }
         showMarkerOnMap(lists);
     }
 
     @UiThread
-    protected void addMarkerToMap(){
+    protected void addCurrentLocationToMap(){
         //decide location
         if(locationService.getLastBestLocation() != null){
             location = locationService.getLastBestLocation();
@@ -372,81 +378,6 @@ bmImg = BitmapFactory.decodeStream(is); */
 
 
         return output;
-    }
-
-    @UiThread
-    protected void addMapMarker(String name, LatLng latlng) {
-        final GoogleMap map = mapFragment.getMap();
-        map.addMarker(
-                new MarkerOptions()
-                        .position(latlng)
-                        .title(name)
-        );
-        map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-            @Override
-            public void onMapClick(com.google.android.gms.maps.model.LatLng latLng) {
-                cardView.setVisibility(View.GONE);
-            }
-        });
-        map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
-            @Override
-            public void onInfoWindowClick(Marker marker) {
-                Projection projection = map.getProjection();
-                LatLng markerLocation = marker.getPosition();
-
-                //Create a Card
-                Card card = new Card(getActivity());
-
-                //Create a CardHeader
-                CardHeader header = new CardHeader(getActivity());
-                card.setTitle("Loading...");
-
-                //Add Header to card
-                card.addCardHeader(header);
-                cardView.setCard(card);
-                cardView.setLayoutParams(calcBestPosition(projection, markerLocation));
-                cardView.setVisibility(View.VISIBLE);
-                //setting animation
-                Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.card_alpha);
-                cardView.setAnimation(animation);
-            }
-        });
-    }
-
-    private RelativeLayout.LayoutParams calcBestPosition(Projection projection, LatLng markerLocation){
-        Point screenPosition = projection.toScreenLocation(markerLocation);
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        int maxWidth = mapFragment.getView().getWidth();
-        int maxHeight = mapFragment.getView().getHeight();
-
-        int width = 400;
-        int height = 300;
-        int left = 0, top = 0, right = 0, bottom = 0;
-        if (screenPosition.x - width < 0) {//left
-            left = screenPosition.x + 50;
-        }
-        if (screenPosition.y + height > maxHeight) {//bottom
-            top = maxHeight - height - 50;
-        }
-        if (screenPosition.y - height < 0) {//top
-            top = screenPosition.y + 50;
-        }
-        if (screenPosition.x + width > maxWidth) {//right
-            left = maxWidth - width - 50;
-        }
-
-        if (left == 0) {
-            left = screenPosition.x - 200;
-        }
-        if (top == 0) {
-            top = screenPosition.y - 300;
-        }
-
-        right = maxWidth - left - width;
-        bottom = maxHeight - top - height;
-
-        params.setMargins(left, top, right, bottom);
-        return params;
     }
 
     @Override

@@ -45,6 +45,8 @@ public class App extends Application {
         //LocationServiceImpl_.intent(this).start();
         applicationGraph = ObjectGraph.create(getModules().toArray());
         BaseURL = getString(R.string.serverURL);
+
+        ACRA.init(this);
     }
 
     @Override

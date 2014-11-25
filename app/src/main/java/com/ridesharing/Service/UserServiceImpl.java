@@ -32,9 +32,10 @@ public class UserServiceImpl implements UserService {
     private User user;
     private boolean isDriver;
     private Hashtable<Integer, User> userHashtable;
-    private GoogleApiClient mGoogleApiClient;
+
     public UserServiceImpl(){
-        isDriver = false;userHashtable = new Hashtable<>();
+        isDriver = false;
+        userHashtable = new Hashtable<>();
     }
 
     public Result Register(User user){

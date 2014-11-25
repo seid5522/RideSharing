@@ -20,6 +20,7 @@ import com.ridesharing.Entity.Result;
 import com.ridesharing.Entity.Wish;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 /**
  * @Package com.ridesharing.Service
@@ -29,4 +30,5 @@ import java.util.ArrayList;
 public interface WishService extends EntityService<Wish> {
     public ArrayList<Wish> search(Wish wish);
     public ArrayList<Wish> fetchAll(Wish wish, int distance);
+    public Hashtable<String, Wish> getWishHashtable();
 }
