@@ -12,6 +12,8 @@
     <color name="alto">#d3d3d3</color>
     <color name="mantis">#73be5b</color>
     <color name="sulu">#a3eb8c</color>
+    <color name="card_title">@android:color/holo_blue_dark</color>
+    <color name="card_header">#707070</color>
 
     <style name="CodeFont" parent="@android:style/TextAppearance.Medium">
         <item name="android:layout_width">fill_parent</item>
@@ -46,5 +48,15 @@
     <style name="MyActionBarTabText"
         parent="@android:style/Widget.Holo.ActionBar.TabText">
         <item name="android:textColor">@color/sugar_kane</item>
+    </style>
+
+    <!-- Style for Cards -->
+    <style name="card.content_outer_layout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:minHeight">@dimen/card_base_empty_height</item>
+        <item name="android:layout_marginTop">@dimen/card_content_outer_view_margin_top</item>
+        <item name="android:layout_marginBottom">@dimen/card_content_outer_view_margin_bottom</item>
+        <item name="android:layout_marginLeft">@dimen/card_content_outer_view_margin_left</item>
+        <item name="android:layout_marginRight">@dimen/card_content_outer_view_margin_right</item>
     </style>
 </resources>

@@ -21,22 +21,27 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.Shader;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Address;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.Fragment;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.view.ViewGroup.LayoutParams;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -58,6 +63,7 @@ import com.ridesharing.Service.LocationServiceImpl_;
 import com.ridesharing.Service.UserService;
 import com.ridesharing.Service.WishService;
 import com.ridesharing.ui.Inject.InjectFragment;
+import com.ridesharing.ui.cards.CustomerDetailCard;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Background;
@@ -91,6 +97,8 @@ public class DefaultFragment extends InjectFragment {
     FrameLayout mainMap;
     @ViewById(R.id.infoCard)
     CardView cardView;
+
+    PopupWindow mPopupWindow;
 
     /** Defines callbacks for service binding, passed to bindService() */
     private ServiceConnection mConnection;
@@ -129,6 +137,12 @@ public class DefaultFragment extends InjectFragment {
             position = getArguments().getInt(POSITION);
             name = getArguments().getString(NAME);
         }
+
+        View popupView = getActivity().getLayoutInflater().inflate(R.layout.layout_marker_popup_window, null);
+        mPopupWindow = new PopupWindow(popupView, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, true);
+        mPopupWindow.setTouchable(true);
+        mPopupWindow.setOutsideTouchable(true);
+        mPopupWindow.setBackgroundDrawable(new BitmapDrawable(getResources(), (Bitmap) null));
 
         mConnection= new ServiceConnection() {
 
@@ -272,6 +286,31 @@ public class DefaultFragment extends InjectFragment {
             );
         }
         map.setInfoWindowAdapter(new MarkerWindowAdapter(wishService, userService,this));
+        map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                String title = marker.getTitle();
+                if(title.equals(getText(R.string.currentLocation))){
+                    return;
+                }
+                Wish wish = wishService.getWishHashtable().get(title);
+                if(wish != null) {
+                    User user = userService.getUserTables().get(wish.getUid());
+                    //Create a Card
+                    CustomerDetailCard card = new CustomerDetailCard(getActivity(), wish, user);
+                    CardView detailcard = (CardView) mPopupWindow.getContentView().findViewById(R.id.detailCard);
+                    if(detailcard.getCard() == null) {
+                        detailcard.setCard(card);
+                    }else{
+                        detailcard.replaceCard(card);
+                    }
+                    //setting animation
+                    Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.card_alpha);
+                    detailcard.setAnimation(animation);
+                    mPopupWindow.showAtLocation(mainMap, Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL, 0, 0);
+                }
+            }
+        });
         Toast.makeText(getActivity(), String.format(getText(R.string.findRecords).toString(), lists.size()), Toast.LENGTH_LONG).show();
     }
 
@@ -337,7 +376,7 @@ bmImg = BitmapFactory.decodeStream(is); */
         Marker currentMarker = map.addMarker(
                 new MarkerOptions()
                         .position(clatlng)
-                        .title("Current Location")
+                        .title(getText(R.string.currentLocation).toString())
         );
        // currentMarker.setIcon(BitmapDescriptorFactory.fromBitmap(bmp));
         currentMarker.showInfoWindow();

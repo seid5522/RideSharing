@@ -22,4 +22,9 @@
     <string name="request">Request</string>
     <string name="currentLocation">Current Location</string>
     <string name="findRecords">find %d record(s).</string>
+    <string name="homePage">Home Page</string>
+    <string name="destinationPage">Destination</string>
+    <string name="filterFor">filter for: </string>
+    <string name="driver">Driver</string>
+    <string name="rider">Rider</string>
 </resources>

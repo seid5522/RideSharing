@@ -120,11 +120,11 @@ public class MainActivity extends InjectActionBarActivity
         FragmentManager fragmentManager = getSupportFragmentManager();
         if(position == 0){
             fragmentManager.beginTransaction()
-                    .replace(R.id.container, DefaultFragment.newInstance(position + 1, "Home Page"))
+                    .replace(R.id.container, DefaultFragment.newInstance(position + 1, getString(R.string.homePage)))
                     .commit();
         } else if(position == 1){
             fragmentManager.beginTransaction()
-                    .replace(R.id.container, destinationFragment.newInstance(position + 1, "Destination"))
+                    .replace(R.id.container, destinationFragment.newInstance(position + 1, getString(R.string.destinationPage)))
                     .commit();
         }else {
             fragmentManager.beginTransaction()
@@ -189,7 +189,7 @@ public class MainActivity extends InjectActionBarActivity
                     final SearchView search = (SearchView) currentmenu.findItem(R.id.action_search).getActionView();
                     search.onActionViewCollapsed();
                     quickSearch(s);
-                    Toast.makeText(activity, "filter for: " + s, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, getString(R.string.filterFor) + s, Toast.LENGTH_SHORT).show();
                     return true;
                 }
 
