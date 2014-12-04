@@ -37,7 +37,7 @@ import javax.inject.Inject;
  * @Date 2014/11/8.
  */
 @EActivity(R.layout.activity_register)
-public class registerActivity extends InjectActionBarActivity {
+public class registerActivity extends InjectActionBarActivity  {
 
     @ViewById(R.id.btnRegister)
     Button btnRegister;

@@ -1,49 +1,29 @@
 package com.ridesharing.ui.user;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
 import android.app.Activity;
-import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
-import android.content.ServiceConnection;
-import android.graphics.Point;
-import android.location.Address;
-import android.location.Location;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.FrameLayout;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.Projection;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
+import android.widget.*;
 import com.ridesharing.R;
-import com.ridesharing.Service.LocationService;
-import com.ridesharing.Service.LocationServiceImpl_;
-
-import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EFragment;
-import org.androidannotations.annotations.UiThread;
-import org.androidannotations.annotations.ViewById;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-import it.gmariotti.cardslib.library.internal.Card;
-import it.gmariotti.cardslib.library.internal.CardHeader;
-import it.gmariotti.cardslib.library.view.CardView;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -56,7 +36,7 @@ import it.gmariotti.cardslib.library.view.CardView;
  */
 
 @EFragment(R.layout.fragment_destination)
-public class destinationFragment extends Fragment {
+public class destinationFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemSelectedListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -65,8 +45,11 @@ public class destinationFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
+    private AutoCompleteTextView fromDest;
+    private AutoCompleteTextView toDest;
     private OnFragmentInteractionListener mListener;
+    private String currLoc;
+    private String destLoc;
 
     /**
      * Use this factory method to create a new instance of
@@ -89,21 +72,223 @@ public class destinationFragment extends Fragment {
         // Required empty public constructor
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
+
+    public void onCreate(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
     }
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_destination, container, false);
+        View view = inflater.inflate(R.layout.fragment_destination, container, false);
+        Context context = super.getActivity();
+
+
+        final Spinner spinner = (Spinner) view.findViewById(R.id.options_spinner);
+
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(context,
+                R.array.options_array, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        spinner.setAdapter(adapter);
+
+
+        spinner.setOnItemSelectedListener(this);
+
+        fromDest = (AutoCompleteTextView) view.findViewById(R.id.fromDest);
+        toDest = (AutoCompleteTextView) view.findViewById(R.id.toDest);
+        final EditText date = (EditText) view.findViewById(R.id.dateDest);
+        final EditText time = (EditText) view.findViewById(R.id.timeDest);
+        final Switch amToggle = (Switch) view.findViewById(R.id.amToggle);
+        final EditText numPassengers = (EditText) view.findViewById(R.id.passengersDest);
+
+        fromDest.setAdapter(new PlacesAutoCompleteAdapter(context, R.layout.fragment_destination));
+
+        fromDest.setOnClickListener(this);
+        fromDest.requestFocus();
+
+        fromDest.setAdapter(new PlacesAutoCompleteAdapter(context, R.layout.list_item_autocomplete));
+
+        toDest.setOnClickListener(this);
+        toDest.requestFocus();
+        toDest.setAdapter(new PlacesAutoCompleteAdapter(context, R.layout.list_item_autocomplete));
+
+        Button sbm = (Button) view.findViewById(R.id.submitDest);
+        sbm.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                boolean toggle = amToggle.isChecked();
+                String toggleText;
+                if (toggle==true){
+                    toggleText = amToggle.getTextOn().toString();
+                }
+                else{
+                    toggleText = amToggle.getTextOff().toString();
+                }
+                //******  HERE's the PROBLEM  ********
+                Toast.makeText(getActivity(),spinner.getSelectedItem().toString(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(),toDest.getText(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(),fromDest.getText(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(),date.getText(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(),time.getText(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(),toggleText, Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(),numPassengers.getText(), Toast.LENGTH_LONG).show();
+
+            }
+        });
+
+
+
+    return view;
+
     }
+
+    public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+
+    }
+
+
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int pos, long l) {
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
+    }
+
+    @Override
+    public void onClick(View view) {
+
+    }
+
+
+
+
+    private static final String LOG_TAG = "FlockApp";
+
+    private static final String PLACES_API_BASE = "https://maps.googleapis.com/maps/api/place";
+    private static final String TYPE_AUTOCOMPLETE = "/autocomplete";
+    private static final String OUT_JSON = "/json";
+
+    private static final String API_KEY = "AIzaSyDDdXLw695vmtduvgnkP8EDBJ_nOs0CYkg";
+
+    private ArrayList<String> autocomplete(String input) {
+        ArrayList<String> resultList = null;
+
+        HttpURLConnection conn = null;
+        StringBuilder jsonResults = new StringBuilder();
+        try {
+            StringBuilder sb = new StringBuilder(PLACES_API_BASE + TYPE_AUTOCOMPLETE + OUT_JSON);
+            sb.append("?key=" + API_KEY);
+            sb.append("&components=country:us");
+            sb.append("&input=" + URLEncoder.encode(input, "utf8"));
+
+            URL url = new URL(sb.toString());
+            conn = (HttpURLConnection) url.openConnection();
+            InputStreamReader in = new InputStreamReader(conn.getInputStream());
+
+            // Load the results into a StringBuilder
+            int read;
+            char[] buff = new char[1024];
+            while ((read = in.read(buff)) != -1) {
+                jsonResults.append(buff, 0, read);
+            }
+        } catch (MalformedURLException e) {
+            Log.e(LOG_TAG, "Error processing Places API URL", e);
+            return resultList;
+        } catch (IOException e) {
+            Log.e(LOG_TAG, "Error connecting to Places API", e);
+            return resultList;
+        } finally {
+            if (conn != null) {
+                conn.disconnect();
+            }
+        }
+
+        try {
+            // Create a JSON object hierarchy from the results
+            JSONObject jsonObj = new JSONObject(jsonResults.toString());
+            JSONArray predsJsonArray = jsonObj.getJSONArray("predictions");
+
+            // Extract the Place descriptions from the results
+            resultList = new ArrayList<String>(predsJsonArray.length());
+            for (int i = 0; i < predsJsonArray.length(); i++) {
+                resultList.add(predsJsonArray.getJSONObject(i).getString("description"));
+            }
+        } catch (JSONException e) {
+            Log.e(LOG_TAG, "Cannot process JSON results", e);
+        }
+
+        return resultList;
+    }
+
+
+
+
+
+    private class PlacesAutoCompleteAdapter extends ArrayAdapter<String> implements Filterable {
+        private ArrayList<String> resultList;
+
+        public PlacesAutoCompleteAdapter(Context context, int textViewResourceId) {
+            super(context, textViewResourceId);
+        }
+
+        @Override
+        public int getCount() {
+            return resultList.size();
+        }
+
+        @Override
+        public String getItem(int index) {
+            return resultList.get(index);
+        }
+
+        @Override
+        public Filter getFilter() {
+            Filter filter = new Filter() {
+                @Override
+                protected FilterResults performFiltering(CharSequence constraint) {
+                    FilterResults filterResults = new FilterResults();
+                    if (constraint != null) {
+                        // Retrieve the autocomplete results.
+                        resultList = autocomplete(constraint.toString());
+
+                        // Assign the data to the FilterResults
+                        filterResults.values = resultList;
+                        filterResults.count = resultList.size();
+                    }
+                    return filterResults;
+                }
+
+                @Override
+                protected void publishResults(CharSequence constraint, FilterResults results) {
+                    if (results != null && results.count > 0) {
+                        notifyDataSetChanged();
+                    }
+                    else {
+                        notifyDataSetInvalidated();
+                    }
+                }};
+            return filter;
+        }
+    }
+
+
+
+
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -128,6 +313,11 @@ public class destinationFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
+
+
+
+
+
 
     /**
      * This interface must be implemented by activities that contain this

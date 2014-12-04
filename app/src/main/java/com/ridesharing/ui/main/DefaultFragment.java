@@ -21,27 +21,21 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.Shader;
 import android.graphics.Typeface;
-import android.graphics.drawable.BitmapDrawable;
 import android.location.Address;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.Fragment;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
-import android.view.ViewGroup.LayoutParams;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -63,7 +57,6 @@ import com.ridesharing.Service.LocationServiceImpl_;
 import com.ridesharing.Service.UserService;
 import com.ridesharing.Service.WishService;
 import com.ridesharing.ui.Inject.InjectFragment;
-import com.ridesharing.ui.cards.CustomerDetailCard;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Background;
@@ -97,8 +90,6 @@ public class DefaultFragment extends InjectFragment {
     FrameLayout mainMap;
     @ViewById(R.id.infoCard)
     CardView cardView;
-
-    PopupWindow mPopupWindow;
 
     /** Defines callbacks for service binding, passed to bindService() */
     private ServiceConnection mConnection;
@@ -137,12 +128,6 @@ public class DefaultFragment extends InjectFragment {
             position = getArguments().getInt(POSITION);
             name = getArguments().getString(NAME);
         }
-
-        View popupView = getActivity().getLayoutInflater().inflate(R.layout.layout_marker_popup_window, null);
-        mPopupWindow = new PopupWindow(popupView, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, true);
-        mPopupWindow.setTouchable(true);
-        mPopupWindow.setOutsideTouchable(true);
-        mPopupWindow.setBackgroundDrawable(new BitmapDrawable(getResources(), (Bitmap) null));
 
         mConnection= new ServiceConnection() {
 
@@ -247,15 +232,13 @@ public class DefaultFragment extends InjectFragment {
                 User user = userService.fetchOtherInfo(otherWish.getUid());
                 userService.getUserTables().put(user.getId(), user);
             }
-            User user = userService.getUserTables().get(otherWish.getUid());
-            wishService.getWishHashtable().put(user.getUsername(), otherWish);
         }
         showMarkerOnMap(lists);
     }
 
     @UiThread
     public void showMarkerOnMap(ArrayList<Wish> lists){
-        final GoogleMap map = mapFragment.getMap();
+        GoogleMap map = mapFragment.getMap();
         map.clear();
 
         LatLng clatlng = new LatLng(location.getLatitude(), location.getLongitude());
@@ -263,7 +246,7 @@ public class DefaultFragment extends InjectFragment {
         Marker currentMarker = map.addMarker(
                 new MarkerOptions()
                         .position(clatlng)
-                        .title(getText(R.string.currentLocation).toString())
+                        .title("Start Location")
         );
         currentMarker.showInfoWindow();
 
@@ -285,33 +268,7 @@ public class DefaultFragment extends InjectFragment {
                             .icon(BitmapDescriptorFactory.defaultMarker(hue))
             );
         }
-        map.setInfoWindowAdapter(new MarkerWindowAdapter(wishService, userService,this));
-        map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
-            @Override
-            public void onInfoWindowClick(Marker marker) {
-                String title = marker.getTitle();
-                if(title.equals(getText(R.string.currentLocation))){
-                    return;
-                }
-                Wish wish = wishService.getWishHashtable().get(title);
-                if(wish != null) {
-                    User user = userService.getUserTables().get(wish.getUid());
-                    //Create a Card
-                    CustomerDetailCard card = new CustomerDetailCard(getActivity(), wish, user);
-                    CardView detailcard = (CardView) mPopupWindow.getContentView().findViewById(R.id.detailCard);
-                    if(detailcard.getCard() == null) {
-                        detailcard.setCard(card);
-                    }else{
-                        detailcard.replaceCard(card);
-                    }
-                    //setting animation
-                    Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.card_alpha);
-                    detailcard.setAnimation(animation);
-                    mPopupWindow.showAtLocation(mainMap, Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL, 0, 0);
-                }
-            }
-        });
-        Toast.makeText(getActivity(), String.format(getText(R.string.findRecords).toString(), lists.size()), Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity(), String.format("find %d record(s).", lists.size()), Toast.LENGTH_LONG).show();
     }
 
     @Background
@@ -326,8 +283,6 @@ public class DefaultFragment extends InjectFragment {
                 User user = userService.fetchOtherInfo(otherWish.getUid());
                 userService.getUserTables().put(user.getId(), user);
             }
-            User user = userService.getUserTables().get(otherWish.getUid());
-            wishService.getWishHashtable().put(user.getUsername(), otherWish);
         }
         showMarkerOnMap(lists);
     }
@@ -376,7 +331,7 @@ bmImg = BitmapFactory.decodeStream(is); */
         Marker currentMarker = map.addMarker(
                 new MarkerOptions()
                         .position(clatlng)
-                        .title(getText(R.string.currentLocation).toString())
+                        .title("Current Location")
         );
        // currentMarker.setIcon(BitmapDescriptorFactory.fromBitmap(bmp));
         currentMarker.showInfoWindow();
@@ -417,6 +372,81 @@ bmImg = BitmapFactory.decodeStream(is); */
 
 
         return output;
+    }
+
+    @UiThread
+    protected void addMapMarker(String name, LatLng latlng) {
+        final GoogleMap map = mapFragment.getMap();
+        map.addMarker(
+                new MarkerOptions()
+                        .position(latlng)
+                        .title(name)
+        );
+        map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(com.google.android.gms.maps.model.LatLng latLng) {
+                cardView.setVisibility(View.GONE);
+            }
+        });
+        map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                Projection projection = map.getProjection();
+                LatLng markerLocation = marker.getPosition();
+
+                //Create a Card
+                Card card = new Card(getActivity());
+
+                //Create a CardHeader
+                CardHeader header = new CardHeader(getActivity());
+                card.setTitle("Loading...");
+
+                //Add Header to card
+                card.addCardHeader(header);
+                cardView.setCard(card);
+                cardView.setLayoutParams(calcBestPosition(projection, markerLocation));
+                cardView.setVisibility(View.VISIBLE);
+                //setting animation
+                Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.card_alpha);
+                cardView.setAnimation(animation);
+            }
+        });
+    }
+
+    private RelativeLayout.LayoutParams calcBestPosition(Projection projection, LatLng markerLocation){
+        Point screenPosition = projection.toScreenLocation(markerLocation);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        int maxWidth = mapFragment.getView().getWidth();
+        int maxHeight = mapFragment.getView().getHeight();
+
+        int width = 400;
+        int height = 300;
+        int left = 0, top = 0, right = 0, bottom = 0;
+        if (screenPosition.x - width < 0) {//left
+            left = screenPosition.x + 50;
+        }
+        if (screenPosition.y + height > maxHeight) {//bottom
+            top = maxHeight - height - 50;
+        }
+        if (screenPosition.y - height < 0) {//top
+            top = screenPosition.y + 50;
+        }
+        if (screenPosition.x + width > maxWidth) {//right
+            left = maxWidth - width - 50;
+        }
+
+        if (left == 0) {
+            left = screenPosition.x - 200;
+        }
+        if (top == 0) {
+            top = screenPosition.y - 300;
+        }
+
+        right = maxWidth - left - width;
+        bottom = maxHeight - top - height;
+
+        params.setMargins(left, top, right, bottom);
+        return params;
     }
 
     @Override
