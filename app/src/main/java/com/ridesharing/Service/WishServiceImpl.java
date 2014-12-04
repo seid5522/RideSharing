@@ -45,6 +45,13 @@ public class WishServiceImpl implements WishService {
     }
 
     @Override
+    public ArrayList<Wish> searchAndAdd(Wish wish){
+        ResultData<ArrayList<Wish>> res = WishServiceClient.searchAndAdd(wish);
+        Log.v("com.ridesharing: ", res.getMessage());
+        return res.getData();
+    }
+
+    @Override
     public ArrayList<Wish> fetchAll(Wish wish, int distance) {
         ResultData<ArrayList<Wish>> res = WishServiceClient.fetchAll(wish, distance);
         Log.v("com.ridesharing: ", res.getMessage());

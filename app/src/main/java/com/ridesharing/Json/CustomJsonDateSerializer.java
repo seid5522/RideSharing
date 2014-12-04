@@ -16,36 +16,24 @@
  */
 package com.ridesharing.Json;
 
-import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.SerializerProvider;
 
 import java.io.IOException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
  * @Package com.ridesharing.Json
  * @Author wensheng
- * @Date 2014/11/19.
+ * @Date 2014/12/4.
  */
-public class CustomJsonDateDeserializer extends JsonDeserializer<Date> {
+public class CustomJsonDateSerializer  extends JsonSerializer<Date> {
     @Override
-    public Date deserialize(JsonParser jsonparser,
-                            DeserializationContext deserializationcontext) throws IOException, JsonProcessingException {
-
+    public void serialize(Date value, JsonGenerator jgen, SerializerProvider provider) throws IOException, JsonProcessingException {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String date = jsonparser.getText();
-        if(date.equals("")){
-            return null;
-        }
-        try {
-            return format.parse(date);
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
-
+        jgen.writeString(format.format(value));
     }
 }

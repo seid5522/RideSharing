@@ -15,6 +15,7 @@ import com.ridesharing.Entity.Vehicle;
 import com.ridesharing.R;
 import com.ridesharing.Service.DriverService;
 import com.ridesharing.Service.UserService;
+import com.ridesharing.Utility.DataProcess;
 import com.ridesharing.ui.Inject.InjectActionBarActivity;
 
 import android.view.View;
@@ -120,7 +121,7 @@ public class registerActivity extends InjectActionBarActivity  {
                 try {
                     User user;
                     user = new User(username.getText().toString(), password.getText().toString(), email.getText().toString(), firstname.getText().toString(), lastname.getText().toString(),
-                            getDateFromDatePicker(birthday), address.getText().toString(), address2.getText().toString(),
+                            DataProcess.getDateFromDatePicker(birthday), address.getText().toString(), address2.getText().toString(),
                             city.getText().toString(),state.getText().toString(), zip.getText().toString(), phone.getText().toString(), ""
                     );
                     if(driverSwitch.isChecked()){
@@ -188,59 +189,7 @@ public class registerActivity extends InjectActionBarActivity  {
 
 
 
-    public static Date getDateFromDatePicker(DatePicker datePicker){
-        int day = datePicker.getDayOfMonth();
-        int month = datePicker.getMonth();
-        int year =  datePicker.getYear();
 
-        int month2 = Calendar.JANUARY;
-
-
-        switch(month){
-            case 1:
-                month2 = Calendar.JANUARY;
-                break;
-            case 2:
-                month2 = Calendar.FEBRUARY;
-                break;
-            case 3:
-                month2 = Calendar.MARCH;
-                break;
-            case 4:
-                month2 = Calendar.APRIL;
-                break;
-            case 5:
-                month2 = Calendar.MAY;
-                break;
-            case 6:
-                month2 = Calendar.JUNE;
-                break;
-            case 7:
-                month2 = Calendar.JULY;
-                break;
-            case 8:
-                month2 = Calendar.AUGUST;
-                break;
-            case 9:
-                month2 = Calendar.SEPTEMBER;
-                break;
-            case 10:
-                month2 = Calendar.OCTOBER;
-                break;
-            case 11:
-                month2 = Calendar.NOVEMBER;
-                break;
-            case 12:
-                month2 = Calendar.DECEMBER;
-                break;
-        }
-
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(year, month2, day);
-
-        return calendar.getTime();
-    }
 
     @Background
     public void register(User user){

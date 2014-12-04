@@ -32,7 +32,7 @@ import dagger.ObjectGraph;
  */
 @ReportsCrashes(
         formKey = "", // This is required for backward compatibility but not used
-        formUri = "http://maxwell.sju.edu/~wy590204/rest/report.php"
+        formUri = "http://54.149.37.27/rest/report.php"
 )
 public class App extends Application {
     private ObjectGraph applicationGraph;

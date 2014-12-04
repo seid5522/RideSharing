@@ -5,7 +5,9 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.ridesharing.Json.CustomJsonDateDeserializer;
+import com.ridesharing.Json.CustomJsonDateSerializer;
 
 import java.io.IOException;
 import java.util.Date;
@@ -39,17 +41,20 @@ public class Wish {
     private String toZipCode;
     private double tolat;
     private double tolng;
+    @JsonSerialize(using = CustomJsonDateSerializer.class)
     @JsonDeserialize(using = CustomJsonDateDeserializer.class)
     private Date createTime;
+    @JsonSerialize(using = CustomJsonDateSerializer.class)
     @JsonDeserialize(using = CustomJsonDateDeserializer.class)
     private Date startTime;
     private double price;
     private WishType type;
     private StatusType status;
+    private int numOfPassenger;
 
     public Wish() {}
 
-    public Wish(int uid, String fromAddr, String fromCity, String fromZipCode, double fromlat, double fromlng, String toAddr, String toCity, String toZipCode, double tolat, double tolng, Date startTime, double price,WishType type, StatusType status) {
+    public Wish(int uid, String fromAddr, String fromCity, String fromZipCode, double fromlat, double fromlng, String toAddr, String toCity, String toZipCode, double tolat, double tolng, Date startTime, double price,WishType type, int numOfPassenger ,StatusType status) {
         this.uid = uid;
         this.fromAddr = fromAddr;
         this.fromCity = fromCity;
@@ -65,6 +70,7 @@ public class Wish {
         this.price = price;
         this.type = type;
         this.status = status;
+        this.numOfPassenger = numOfPassenger;
     }
 /*
     @JsonCreator
@@ -241,5 +247,13 @@ public class Wish {
 
     public void setStatus(StatusType status) {
         this.status = status;
+    }
+
+    public int getNumOfPassenger() {
+        return numOfPassenger;
+    }
+
+    public void setNumOfPassenger(int numOfPassenger) {
+        this.numOfPassenger = numOfPassenger;
     }
 }

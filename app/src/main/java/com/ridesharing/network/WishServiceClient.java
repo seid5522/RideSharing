@@ -28,6 +28,13 @@ public class WishServiceClient {
         return helper.execute(true);
     }
 
+    public static ResultData<ArrayList<Wish>> searchAndAdd(Wish wish){
+        String url = BASE_URL + "?type=searchAndAdd";
+        ResultData<ArrayList<Wish>> res = new ResultData<ArrayList<Wish>>();
+        RestHelper<Wish, ResultData<ArrayList<Wish>>> helper = new RestHelper<>(url, wish, new ParameterizedTypeReference<ResultData<ArrayList<Wish>>>() {});
+        return helper.execute(true);
+    }
+
     public static ResultData<ArrayList<Wish>> fetchAll(Wish wish, int distance){
         String url = BASE_URL + "?type=all&distance=" + distance;
         ResultData<ArrayList<Wish>> res = new ResultData<ArrayList<Wish>>();

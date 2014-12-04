@@ -21,21 +21,27 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.Shader;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Address;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.Fragment;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
+import android.view.ViewGroup.LayoutParams;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -57,6 +63,7 @@ import com.ridesharing.Service.LocationServiceImpl_;
 import com.ridesharing.Service.UserService;
 import com.ridesharing.Service.WishService;
 import com.ridesharing.ui.Inject.InjectFragment;
+import com.ridesharing.ui.cards.CustomerDetailCard;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Background;
@@ -91,11 +98,15 @@ public class DefaultFragment extends InjectFragment {
     @ViewById(R.id.infoCard)
     CardView cardView;
 
+    PopupWindow mPopupWindow;
+
     /** Defines callbacks for service binding, passed to bindService() */
     private ServiceConnection mConnection;
     protected Location location;
     protected LocationService locationService;
     protected boolean mlocationServiceBound;
+    protected boolean backFromSearch;
+    protected ArrayList<Wish> searchlists;
 
     @Inject
     UserService userService;
@@ -116,6 +127,7 @@ public class DefaultFragment extends InjectFragment {
         args.putInt(POSITION, position);
         args.putString(NAME, name);
         fragment.setArguments(args);
+        fragment.backFromSearch = false;
         return fragment;
     }
     public DefaultFragment() {
@@ -129,6 +141,12 @@ public class DefaultFragment extends InjectFragment {
             name = getArguments().getString(NAME);
         }
 
+        View popupView = getActivity().getLayoutInflater().inflate(R.layout.layout_marker_popup_window, null);
+        mPopupWindow = new PopupWindow(popupView, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, true);
+        mPopupWindow.setTouchable(true);
+        mPopupWindow.setOutsideTouchable(true);
+        mPopupWindow.setBackgroundDrawable(new BitmapDrawable(getResources(), (Bitmap) null));
+
         mConnection= new ServiceConnection() {
 
             @Override
@@ -137,6 +155,8 @@ public class DefaultFragment extends InjectFragment {
                 // We've bound to LocalService, cast the IBinder and get LocalService instance
                 LocationServiceImpl_.LocationServiceBinder binder = (LocationServiceImpl_.LocationServiceBinder) service;
                 locationService = binder.getService();
+                //bind with location service at main activity
+                mainActivity.locationService = locationService;
                 mlocationServiceBound = true;
                 showMainMap();
             }
@@ -164,6 +184,14 @@ public class DefaultFragment extends InjectFragment {
     public void onStop() {
         super.onStop();
         stopLocationService();
+    }
+
+    public void setBackFromSearch(boolean backFromSearch) {
+        this.backFromSearch = backFromSearch;
+    }
+
+    public void setSearchlists(ArrayList<Wish> searchlists) {
+        this.searchlists = searchlists;
     }
 
     public void startLocationService(){
@@ -225,20 +253,22 @@ public class DefaultFragment extends InjectFragment {
         int uid = userService.getUser().getId();
         WishType type = userService.isDriver()? WishType.Offer: WishType.Request;
         Wish wish = new Wish(uid, from.getAddressLine(0), from.getAddressLine(1), from.getPostalCode(), from.getLatitude(), from.getLongitude(),
-                to.getAddressLine(0), to.getAddressLine(1), to.getPostalCode(), to.getLatitude(), to.getLongitude(), new Date(System.currentTimeMillis()), 0, type, StatusType.INITIAL);
+                to.getAddressLine(0), to.getAddressLine(1), to.getPostalCode(), to.getLatitude(), to.getLongitude(), new Date(System.currentTimeMillis()), 0, type, 0, StatusType.INITIAL);
         ArrayList<Wish> lists = wishService.search(wish);
         for(Wish otherWish: lists){
             if(!userService.getUserTables().containsKey(otherWish.getUid())){
                 User user = userService.fetchOtherInfo(otherWish.getUid());
                 userService.getUserTables().put(user.getId(), user);
             }
+            User user = userService.getUserTables().get(otherWish.getUid());
+            wishService.getWishHashtable().put(user.getUsername(), otherWish);
         }
         showMarkerOnMap(lists);
     }
 
     @UiThread
     public void showMarkerOnMap(ArrayList<Wish> lists){
-        GoogleMap map = mapFragment.getMap();
+        final GoogleMap map = mapFragment.getMap();
         map.clear();
 
         LatLng clatlng = new LatLng(location.getLatitude(), location.getLongitude());
@@ -246,7 +276,7 @@ public class DefaultFragment extends InjectFragment {
         Marker currentMarker = map.addMarker(
                 new MarkerOptions()
                         .position(clatlng)
-                        .title("Start Location")
+                        .title(getText(R.string.currentLocation).toString())
         );
         currentMarker.showInfoWindow();
 
@@ -268,21 +298,58 @@ public class DefaultFragment extends InjectFragment {
                             .icon(BitmapDescriptorFactory.defaultMarker(hue))
             );
         }
+        map.setInfoWindowAdapter(new MarkerWindowAdapter(wishService, userService,this));
+        map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                String title = marker.getTitle();
+                if (title.equals(getText(R.string.currentLocation))) {
+                    return;
+                }
+                Wish wish = wishService.getWishHashtable().get(title);
+                if (wish != null) {
+                    User user = userService.getUserTables().get(wish.getUid());
+                    //Create a Card
+                    CustomerDetailCard card = new CustomerDetailCard(getActivity(), wish, user);
+                    CardView detailcard = (CardView) mPopupWindow.getContentView().findViewById(R.id.detailCard);
+                    if (detailcard.getCard() == null) {
+                        detailcard.setCard(card);
+                    } else {
+                        detailcard.replaceCard(card);
+                    }
+                    //setting animation
+                    Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.card_alpha);
+                    detailcard.setAnimation(animation);
+                    mPopupWindow.showAtLocation(mainMap, Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL, 0, 0);
+                }
+            }
+        });
+        Toast.makeText(getActivity(), String.format(getText(R.string.findRecords).toString(), lists.size()), Toast.LENGTH_LONG).show();
         Toast.makeText(getActivity(), String.format("find %d record(s).", lists.size()), Toast.LENGTH_LONG).show();
     }
 
     @Background
     public void loadWishList(){
-        Wish wish = new Wish();
-        wish.setFromlat(location.getLatitude());
-        wish.setFromlng(location.getLongitude());
-        wish.setType(WishType.Request);
-        ArrayList<Wish> lists = wishService.fetchAll(wish, 10);
+        ArrayList<Wish> lists = null;
+        if(backFromSearch){
+            lists = this.searchlists;
+        }else{
+            Wish wish = new Wish();
+            wish.setFromlat(location.getLatitude());
+            wish.setFromlng(location.getLongitude());
+            wish.setType(WishType.Request);
+            lists = wishService.fetchAll(wish, 10);
+        }
+        if(lists == null){
+            return;
+        }
         for(Wish otherWish: lists){
             if(!userService.getUserTables().containsKey(otherWish.getUid())){
                 User user = userService.fetchOtherInfo(otherWish.getUid());
                 userService.getUserTables().put(user.getId(), user);
             }
+            User user = userService.getUserTables().get(otherWish.getUid());
+            wishService.getWishHashtable().put(user.getUsername(), otherWish);
         }
         showMarkerOnMap(lists);
     }
@@ -331,7 +398,7 @@ bmImg = BitmapFactory.decodeStream(is); */
         Marker currentMarker = map.addMarker(
                 new MarkerOptions()
                         .position(clatlng)
-                        .title("Current Location")
+                        .title(getText(R.string.currentLocation).toString())
         );
        // currentMarker.setIcon(BitmapDescriptorFactory.fromBitmap(bmp));
         currentMarker.showInfoWindow();

@@ -66,41 +66,35 @@ Date 2014/11/10.
                     android:id="@+id/fromDest"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:text="Current Location"
+                    android:text="@string/currentLocation"
                     android:hint="From:"
                     android:maxLines="1"
                     android:singleLine="true"
                     android:layout_gravity="center"/>
 
-            <EditText
-                    android:id="@+id/dateDest"
-                    android:layout_width="fill_parent"
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                >
+
+                <DatePicker
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:inputType="date"
-                    android:hint="Date:"
-                    />
+                    android:id="@+id/beginTimedatePicker"
+                    android:spinnersShown="true"
+                    android:calendarViewShown="false"
+                    android:layout_gravity="left"/>
+                <TimePicker
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/beginTimePicker"
+                    android:layout_marginLeft="40dp"
+                    android:layout_gravity="right"/>
+                </LinearLayout>
 
-            <GridLayout android:layout_width="263dp"
-                           android:layout_height="wrap_content" android:columnCount="2" android:rowCount="1"
-                           android:layout_gravity="left">
-
-                <EditText
-                        android:id="@+id/timeDest"
-                        android:layout_width="153dp"
-                        android:layout_height="55dp"
-                        android:inputType="time"
-                        android:hint="Time:"
-                        android:layout_gravity="left"/>
-                <Switch
-                        android:id="@+id/amToggle"
-                        android:layout_width="109dp"
-                        android:layout_height="41dp"
-                        android:textOn="P.M."
-                        android:textOff="A.M."
-                        android:text="New ToggleButton"
-                        android:layout_gravity="right"/>
-
-            </GridLayout>
 
             <EditText
                     android:id="@+id/passengersDest"

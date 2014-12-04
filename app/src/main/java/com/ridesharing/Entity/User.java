@@ -17,7 +17,10 @@
 package com.ridesharing.Entity;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.ridesharing.Json.CustomJsonDateDeserializer;
+import com.ridesharing.Json.CustomJsonDateSerializer;
 import com.ridesharing.crypto.MD5;
 
 import java.util.Date;
@@ -30,6 +33,8 @@ public class User {
     private String email;
 	private String firstname;
 	private String lastname;
+    @JsonSerialize(using = CustomJsonDateSerializer.class)
+    @JsonDeserialize(using = CustomJsonDateDeserializer.class)
 	private Date birthday;
 	private String address;
     private String address2;

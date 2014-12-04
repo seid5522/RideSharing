@@ -2,6 +2,8 @@ package com.ridesharing.ui.user;
 
 import android.app.Activity;
 import android.content.Context;
+import android.location.Address;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,8 +12,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
+
+import com.ridesharing.Entity.Wish;
+import com.ridesharing.Entity.WishType;
 import com.ridesharing.R;
+import com.ridesharing.Service.LocationService;
+import com.ridesharing.Service.LocationServiceImpl;
+import com.ridesharing.Utility.DataProcess;
+import com.ridesharing.ui.main.MainActivity;
+
 import org.androidannotations.annotations.EFragment;
+import org.androidannotations.annotations.ViewById;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,18 +33,12 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
-
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link destinationFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link destinationFragment#newInstance} factory method to
- * create an instance of this fragment.
- *
- */
 
 @EFragment(R.layout.fragment_destination)
 public class destinationFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemSelectedListener {
@@ -50,6 +55,12 @@ public class destinationFragment extends Fragment implements View.OnClickListene
     private OnFragmentInteractionListener mListener;
     private String currLoc;
     private String destLoc;
+    private MainActivity activity;
+
+    @ViewById(R.id.beginTimedatePicker)
+    DatePicker beginTimedatePicker;
+    @ViewById(R.id.beginTimePicker)
+    TimePicker beginTimePicker;
 
     /**
      * Use this factory method to create a new instance of
@@ -95,7 +106,7 @@ public class destinationFragment extends Fragment implements View.OnClickListene
         final Spinner spinner = (Spinner) view.findViewById(R.id.options_spinner);
 
         // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(context,
+        final ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(context,
                 R.array.options_array, android.R.layout.simple_spinner_item);
         // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -107,9 +118,9 @@ public class destinationFragment extends Fragment implements View.OnClickListene
 
         fromDest = (AutoCompleteTextView) view.findViewById(R.id.fromDest);
         toDest = (AutoCompleteTextView) view.findViewById(R.id.toDest);
-        final EditText date = (EditText) view.findViewById(R.id.dateDest);
-        final EditText time = (EditText) view.findViewById(R.id.timeDest);
-        final Switch amToggle = (Switch) view.findViewById(R.id.amToggle);
+        //final EditText date = (EditText) view.findViewById(R.id.dateDest);
+        //final EditText time = (EditText) view.findViewById(R.id.timeDest);
+        //final Switch amToggle = (Switch) view.findViewById(R.id.amToggle);
         final EditText numPassengers = (EditText) view.findViewById(R.id.passengersDest);
 
         fromDest.setAdapter(new PlacesAutoCompleteAdapter(context, R.layout.fragment_destination));
@@ -126,6 +137,49 @@ public class destinationFragment extends Fragment implements View.OnClickListene
         Button sbm = (Button) view.findViewById(R.id.submitDest);
         sbm.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                Wish wish = new Wish();
+                WishType type = WishType.Request;
+                type = WishType.Offer;
+                if(spinner.getSelectedItemPosition() == 0){
+                    type = WishType.Request;
+                }
+                //set type
+                wish.setType(type);
+                //set time
+                Date time =  DataProcess.getDateFromDatePickerAndTimePicer(beginTimedatePicker, beginTimePicker);
+                wish.setStartTime(time);
+
+                String fromDestAddr = fromDest.getText().toString();
+                if(fromDestAddr.equals(getText(R.string.currentLocation))){
+                    //decide location
+                    LocationService locationService = activity.getLocationService();
+                    Location location = null;
+                    if(activity.getLocationService().getLastBestLocation() != null){
+                        location = locationService.getLastBestLocation();
+                    }else if(locationService.getLastLocation() != null){
+                        location = locationService.getLastLocation();
+                    }else{
+                        location = locationService.getLastKnowLocation();
+                    }
+                    Address address =  LocationServiceImpl.getLocationFromLatLng(activity, location.getLatitude(),location.getLongitude());
+                    wish.setFromlng(location.getLongitude());
+                    wish.setFromlat(location.getLatitude());
+                    wish.setFromAddr(address.getAddressLine(0));
+                }else{
+                    Address address = LocationServiceImpl.getLocationFromAddress(activity, fromDestAddr);
+                    wish.setFromAddr(address.getAddressLine(0));
+                    wish.setFromlat(address.getLatitude());
+                    wish.setFromlng(address.getLongitude());
+                }
+
+                String toDestAddr = toDest.getText().toString();
+                Address address = LocationServiceImpl.getLocationFromAddress(activity, toDestAddr);
+                wish.setToAddr(toDest.getText().toString());
+                wish.setTolat(address.getLatitude());
+                wish.setTolng(address.getLongitude());
+                wish.setNumOfPassenger(Integer.parseInt(numPassengers.getText().toString()));
+                mListener.processAdvancedSearch(wish);
+                /*
                 boolean toggle = amToggle.isChecked();
                 String toggleText;
                 if (toggle==true){
@@ -133,15 +187,15 @@ public class destinationFragment extends Fragment implements View.OnClickListene
                 }
                 else{
                     toggleText = amToggle.getTextOff().toString();
-                }
+                }*/
                 //******  HERE's the PROBLEM  ********
-                Toast.makeText(getActivity(),spinner.getSelectedItem().toString(), Toast.LENGTH_LONG).show();
-                Toast.makeText(getActivity(),toDest.getText(), Toast.LENGTH_LONG).show();
-                Toast.makeText(getActivity(),fromDest.getText(), Toast.LENGTH_LONG).show();
-                Toast.makeText(getActivity(),date.getText(), Toast.LENGTH_LONG).show();
-                Toast.makeText(getActivity(),time.getText(), Toast.LENGTH_LONG).show();
-                Toast.makeText(getActivity(),toggleText, Toast.LENGTH_LONG).show();
-                Toast.makeText(getActivity(),numPassengers.getText(), Toast.LENGTH_LONG).show();
+                //Toast.makeText(getActivity(),spinner.getSelectedItem().toString(), Toast.LENGTH_LONG).show();
+                //Toast.makeText(getActivity(),toDest.getText(), Toast.LENGTH_LONG).show();
+                //Toast.makeText(getActivity(),fromDest.getText(), Toast.LENGTH_LONG).show();
+               // Toast.makeText(getActivity(),date.getText(), Toast.LENGTH_LONG).show();
+               // Toast.makeText(getActivity(),time.getText(), Toast.LENGTH_LONG).show();
+               // Toast.makeText(getActivity(),toggleText, Toast.LENGTH_LONG).show();
+                //Toast.makeText(getActivity(),numPassengers.getText(), Toast.LENGTH_LONG).show();
 
             }
         });
@@ -306,6 +360,7 @@ public class destinationFragment extends Fragment implements View.OnClickListene
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
         }
+        this.activity = (MainActivity)activity;
     }
 
     @Override
@@ -330,8 +385,8 @@ public class destinationFragment extends Fragment implements View.OnClickListene
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
+        public void processAdvancedSearch(Wish wish);
     }
 
 }

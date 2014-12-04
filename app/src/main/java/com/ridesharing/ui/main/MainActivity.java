@@ -23,10 +23,13 @@ import android.support.v4.widget.DrawerLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.GoogleMap;
+import com.ridesharing.Entity.Wish;
 import com.ridesharing.Service.AuthenticationService;
+import com.ridesharing.Service.LocationService;
 import com.ridesharing.Service.SearchPlaceService;
 import com.ridesharing.Service.UserService;
 import com.ridesharing.R;
+import com.ridesharing.Service.WishService;
 import com.ridesharing.ui.Inject.InjectActionBarActivity;
 import com.ridesharing.ui.login.LoginActivity_;
 import com.ridesharing.ui.user.destinationFragment;
@@ -35,7 +38,9 @@ import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.FragmentById;
+import org.androidannotations.annotations.UiThread;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -59,7 +64,9 @@ public class MainActivity extends InjectActionBarActivity
     @Inject UserService userService;
     @Inject AuthenticationService authService;
     @Inject SearchPlaceService searchPlaceService;
-
+    protected LocationService locationService;
+    @Inject
+    WishService wishService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +96,10 @@ public class MainActivity extends InjectActionBarActivity
                     R.id.navigation_drawer,
                     (DrawerLayout) findViewById(R.id.drawer_layout));
         }
+    }
+
+    public LocationService getLocationService() {
+        return locationService;
     }
 
     @Override
@@ -250,6 +261,25 @@ public class MainActivity extends InjectActionBarActivity
     @Override
     public void onFragmentInteraction(Uri uri) {
 
+    }
+
+    @Background
+    @Override
+    public void processAdvancedSearch(Wish wish){
+        ArrayList<Wish> lists = wishService.searchAndAdd(wish);
+        //back to home page
+        backToHomePage(lists);
+    }
+
+    @UiThread
+    public void backToHomePage(ArrayList<Wish> lists){
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        DefaultFragment fragment = DefaultFragment.newInstance(1, getString(R.string.homePage));
+        fragment.setBackFromSearch(true);
+        fragment.setSearchlists(lists);
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, fragment)
+                .commit();
     }
 
     /**
