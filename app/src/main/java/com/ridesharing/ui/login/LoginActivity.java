@@ -424,7 +424,7 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
                 address = person.getCurrentLocation();
             }
 
-            User user = new User(uname, email, firstname, lastname, birthday, address, address2, city, state, zipcode, phone, ImageURL, SessionKey);
+            User user = new User(uname, email, firstname, lastname, birthday, address, address2, city, state, zipcode, phone, ImageURL, SessionKey, "");
             Result result = userService.Register(user);
             if(result.getType() == ResultType.Success){
                 Result resultSocial = authService.SocialLogin(user);

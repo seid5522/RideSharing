@@ -30,10 +30,10 @@ import dagger.ObjectGraph;
  * @Author wensheng
  * @Date 2014/10/25.
  */
-@ReportsCrashes(
-        formKey = "", // This is required for backward compatibility but not used
-        formUri = "http://54.149.37.27/rest/report.php"
-)
+//@ReportsCrashes(
+//        formKey = "", // This is required for backward compatibility but not used
+//        formUri = "http://54.149.37.27/rest/report.php"
+//)
 public class App extends Application {
     private ObjectGraph applicationGraph;
     public static String BaseURL;

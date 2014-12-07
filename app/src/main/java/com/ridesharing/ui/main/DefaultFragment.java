@@ -130,6 +130,7 @@ public class DefaultFragment extends InjectFragment {
         fragment.backFromSearch = false;
         return fragment;
     }
+
     public DefaultFragment() {
     }
 
@@ -310,7 +311,7 @@ public class DefaultFragment extends InjectFragment {
                 if (wish != null) {
                     User user = userService.getUserTables().get(wish.getUid());
                     //Create a Card
-                    CustomerDetailCard card = new CustomerDetailCard(getActivity(), wish, user);
+                    CustomerDetailCard card = new CustomerDetailCard(getActivity(), wish, user, userService.getUser(), userService.isDriver(), mPopupWindow);
                     CardView detailcard = (CardView) mPopupWindow.getContentView().findViewById(R.id.detailCard);
                     if (detailcard.getCard() == null) {
                         detailcard.setCard(card);
@@ -324,7 +325,6 @@ public class DefaultFragment extends InjectFragment {
                 }
             }
         });
-        Toast.makeText(getActivity(), String.format(getText(R.string.findRecords).toString(), lists.size()), Toast.LENGTH_LONG).show();
         Toast.makeText(getActivity(), String.format("find %d record(s).", lists.size()), Toast.LENGTH_LONG).show();
     }
 

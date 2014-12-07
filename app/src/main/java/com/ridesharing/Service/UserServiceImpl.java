@@ -81,4 +81,11 @@ public class UserServiceImpl implements UserService {
     public void setUserHashtable(Hashtable<Integer, User> userHashtable) {
         this.userHashtable = userHashtable;
     }
+
+    @Override
+    public void updateDevice(User user){
+        User u = new User(user.getId());
+        u.setDeviceId(user.getDeviceId());
+        UserServiceClient.updateDevice(u);
+    }
 }

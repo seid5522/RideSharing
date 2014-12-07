@@ -14,28 +14,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.ridesharing.Service;
+package com.ridesharing.Utility;
 
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.ridesharing.Entity.Result;
-import com.ridesharing.Entity.User;
-
-import java.util.Hashtable;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 /**
- * @Package com.ridesharing.Service
+ * @Package com.ridesharing.Utility
  * @Author wensheng
- * @Date 2014/10/23.
+ * @Date 2014/12/6.
  */
-public interface UserService {
-    public Result Register(User user);
-    public User getUser();
-    public Hashtable<Integer, User> getUserTables();
-    public void setUser(User user);
-    public User fetchSelfInfo();
-    public User fetchOtherInfo(int id);
-    public void updateDevice(User user);
-    public boolean isDriver();
-    public void setDriver(boolean isDriver);
-    public Boolean isRegister(String email);
+public class Utils {
+    public static void CopyStream(InputStream is, OutputStream os)
+    {
+        final int buffer_size=1024;
+        try
+        {
+            byte[] bytes=new byte[buffer_size];
+            for(;;)
+            {
+                int count=is.read(bytes, 0, buffer_size);
+                if(count==-1)
+                    break;
+                os.write(bytes, 0, count);
+            }
+        }
+        catch(Exception ex){}
+    }
 }

@@ -17,13 +17,20 @@
 package com.ridesharing.ui.Inject;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.ridesharing.App;
 import com.ridesharing.Service.ServiceModule;
 import com.ridesharing.ui.Inject.Injector;
+import com.ridesharing.ui.main.BaseActionBarActivity;
 
 import java.util.Arrays;
 import java.util.List;
@@ -35,7 +42,7 @@ import dagger.ObjectGraph;
  * @Author wensheng
  * @Date 2014/10/26.
  */
-public class InjectActionBarActivity extends ActionBarActivity implements Injector {
+public class InjectActionBarActivity extends BaseActionBarActivity implements Injector {
     private ObjectGraph activityGraph;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
@@ -75,10 +82,5 @@ public class InjectActionBarActivity extends ActionBarActivity implements Inject
     @Override
     public void inject(Object object) {
         activityGraph.inject(object);
-    }
-
-    protected void hideKeyboard() {
-        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
     }
 }

@@ -48,6 +48,7 @@ public class Wish {
     @JsonDeserialize(using = CustomJsonDateDeserializer.class)
     private Date startTime;
     private double price;
+    private String imageURL;
     private WishType type;
     private StatusType status;
     private int numOfPassenger;
@@ -255,5 +256,13 @@ public class Wish {
 
     public void setNumOfPassenger(int numOfPassenger) {
         this.numOfPassenger = numOfPassenger;
+    }
+
+    public String getImageURL() {
+        return imageURL;
+    }
+
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
     }
 }

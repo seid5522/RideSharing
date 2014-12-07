@@ -16,26 +16,18 @@
  */
 package com.ridesharing.Service;
 
-import com.google.android.gms.common.api.GoogleApiClient;
+import com.ridesharing.Entity.Request;
 import com.ridesharing.Entity.Result;
-import com.ridesharing.Entity.User;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 
 /**
  * @Package com.ridesharing.Service
  * @Author wensheng
- * @Date 2014/10/23.
+ * @Date 2014/12/7.
  */
-public interface UserService {
-    public Result Register(User user);
-    public User getUser();
-    public Hashtable<Integer, User> getUserTables();
-    public void setUser(User user);
-    public User fetchSelfInfo();
-    public User fetchOtherInfo(int id);
-    public void updateDevice(User user);
-    public boolean isDriver();
-    public void setDriver(boolean isDriver);
-    public Boolean isRegister(String email);
+public interface RequestService extends EntityService<Request> {
+    public Hashtable<String, Request> getRequestHashtable();
+    public ArrayList<Request> fetchAll();
 }

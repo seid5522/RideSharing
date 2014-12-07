@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.database.MatrixCursor;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -22,7 +25,11 @@ import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.maps.GoogleMap;
+import com.ridesharing.Entity.User;
 import com.ridesharing.Entity.Wish;
 import com.ridesharing.Service.AuthenticationService;
 import com.ridesharing.Service.LocationService;
@@ -40,6 +47,7 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.FragmentById;
 import org.androidannotations.annotations.UiThread;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,6 +76,10 @@ public class MainActivity extends InjectActionBarActivity
     @Inject
     WishService wishService;
 
+
+
+    GoogleCloudMessaging gcm;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,6 +107,18 @@ public class MainActivity extends InjectActionBarActivity
             mNavigationDrawerFragment.setUp(
                     R.id.navigation_drawer,
                     (DrawerLayout) findViewById(R.id.drawer_layout));
+
+            // Check device for Play Services APK. If check succeeds, proceed with GCM registration.
+            if (checkPlayServices()) {
+                gcm = GoogleCloudMessaging.getInstance(this);
+                String regid = getRegistrationId(getApplicationContext());
+
+                if (regid.isEmpty()) {
+                    registerInBackground(regid);
+                }
+            } else {
+                Log.i(TAG, "No valid Google Play Services APK found.");
+            }
         }
     }
 
@@ -106,6 +130,7 @@ public class MainActivity extends InjectActionBarActivity
     public void onResume(){
         super.onResume();
         authUser();
+        checkPlayServices();
     }
 
     @Background
@@ -125,6 +150,48 @@ public class MainActivity extends InjectActionBarActivity
         }
     }
 
+    @Background
+    public void registerInBackground(String regid){
+        String msg = "";
+        Context context = getApplicationContext();
+        try {
+            if (gcm == null) {
+                gcm = GoogleCloudMessaging.getInstance(context);
+            }
+            regid = gcm.register(SENDER_ID);
+            msg = "Device registered, registration ID=" + regid;
+
+            // You should send the registration ID to your server over HTTP, so it
+            // can use GCM/HTTP or CCS to send messages to your app.
+            sendRegistrationIdToBackend(regid);
+
+            // For this demo: we don't need to send it because the device will send
+            // upstream messages to a server that echo back the message using the
+            // 'from' address in the message.
+
+            // Persist the regID - no need to register again.
+            storeRegistrationId(context, regid);
+        } catch (IOException ex) {
+            msg = "Error :" + ex.getMessage();
+            // If there is an error, don't just keep trying to register.
+            // Require the user to click a button again, or perform
+            // exponential back-off.
+        }
+        Log.v(TAG, msg);
+    }
+
+    /**
+     * Sends the registration ID to your server over HTTP, so it can use GCM/HTTP or CCS to send
+     * messages to your app. Not needed for this demo since the device sends upstream messages
+     * to a server that echoes back the message using the 'from' address in the message.
+     */
+    @Background
+    public void sendRegistrationIdToBackend(String regid) {
+        User user =  userService.getUser();
+        user.setDeviceId(regid);
+        userService.updateDevice(user);
+    }
+
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
@@ -137,9 +204,9 @@ public class MainActivity extends InjectActionBarActivity
             fragmentManager.beginTransaction()
                     .replace(R.id.container, destinationFragment.newInstance(position + 1, getString(R.string.destinationPage)))
                     .commit();
-        }else {
+        }else if(position == 2){
             fragmentManager.beginTransaction()
-                    .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
+                    .replace(R.id.container, RequestFragment.newInstance(position + 1, getString(R.string.requestPage)))
                     .commit();
         }
     }
@@ -206,11 +273,11 @@ public class MainActivity extends InjectActionBarActivity
 
                 @Override
                 public boolean onQueryTextChange(String s) {
-                    if(s.equals("")){
+                    if (s.equals("")) {
                         final SearchView search = (SearchView) currentmenu.findItem(R.id.action_search).getActionView();
-                        MatrixCursor cursor = new MatrixCursor(new String[] { "_id", "text" });
+                        MatrixCursor cursor = new MatrixCursor(new String[]{"_id", "text"});
                         search.setSuggestionsAdapter(new SearchPlaceAdapter(activity, cursor, null, search));
-                    }else {
+                    } else {
                         new SetupPlaceAutoCompleteTask(s).execute(null, null);
                     }
                     return true;
@@ -218,9 +285,11 @@ public class MainActivity extends InjectActionBarActivity
 
                 class SetupPlaceAutoCompleteTask extends AsyncTask<Void, Void, List<String>> {
                     private String input;
+
                     SetupPlaceAutoCompleteTask(String input) {
                         this.input = input;
                     }
+
                     @Override
                     protected List<String> doInBackground(Void... voids) {
                         return searchPlaceService.autocomplete(input);
@@ -228,11 +297,11 @@ public class MainActivity extends InjectActionBarActivity
 
                     @Override
                     protected void onPostExecute(List<String> items) {
-                        MatrixCursor cursor = new MatrixCursor(new String[] { "_id", "text" });
+                        MatrixCursor cursor = new MatrixCursor(new String[]{"_id", "text"});
 
-                         for (int i = 0; i < items.size(); i++) {
-                              cursor.addRow(new Object[]{ (Object)i, items.get(i)});
-                         }
+                        for (int i = 0; i < items.size(); i++) {
+                            cursor.addRow(new Object[]{(Object) i, items.get(i)});
+                        }
                         // SearchView
                         SearchManager manager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
 
@@ -280,46 +349,6 @@ public class MainActivity extends InjectActionBarActivity
         fragmentManager.beginTransaction()
                 .replace(R.id.container, fragment)
                 .commit();
-    }
-
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
-
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        public PlaceholderFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            return rootView;
-        }
-
-        @Override
-        public void onAttach(Activity activity) {
-            super.onAttach(activity);
-            ((MainActivity) activity).onSectionAttached(
-                    getArguments().getInt(ARG_SECTION_NUMBER));
-        }
     }
 
 }

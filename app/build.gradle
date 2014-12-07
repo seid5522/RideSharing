@@ -32,7 +32,7 @@ android {
     }
     buildTypes {
         release {
-            runProguard false
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.config
         }
@@ -58,7 +58,7 @@ android {
 
 apt {
     arguments {
-        androidManifestFile variant.processResources.manifestFile
+        androidManifestFile variant.outputs[0].processResources.manifestFile
         resourcePackageName "com.ridesharing"
     }
 }

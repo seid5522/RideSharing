@@ -7,7 +7,7 @@
     <string name="app_name">Flock</string>
     <string name="title_section1">Home</string>
     <string name="title_section2">Search</string>
-    <string name="title_section3">Section 3</string>
+    <string name="title_section3">Request</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_example">Example action</string>
@@ -25,9 +25,12 @@
     <string name="findRecords">find %d record(s).</string>
     <string name="homePage">Home Page</string>
     <string name="destinationPage">Destination</string>
+    <string name="requestPage">My Request</string>
     <string name="filterFor">filter for: </string>
     <string name="driver">Driver</string>
     <string name="rider">Rider</string>
     <string name="title_activity_destination">DestinationActivity</string>
-
+    <string name="flock_notification">Flock Notification</string>
+    <string name="send_request_success">Send request successfully.</string>
+    <string name="send_request_fail">Send request failed.</string>
 </resources>

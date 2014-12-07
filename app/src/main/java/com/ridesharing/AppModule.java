@@ -24,6 +24,7 @@ import com.ridesharing.ui.main.DefaultFragment_;
 import com.ridesharing.ui.main.MainActivity_;
 import com.ridesharing.ui.main.NavigationDrawerFragment;
 import com.ridesharing.ui.main.NavigationDrawerFragment_;
+import com.ridesharing.ui.main.RequestFragment_;
 import com.ridesharing.ui.user.registerActivity_;
 
 import javax.inject.Singleton;
@@ -43,7 +44,8 @@ import dagger.Provides;
                 LoginActivity_.class,
                 registerActivity_.class,
                 DefaultFragment_.class,
-                NavigationDrawerFragment_.class
+                NavigationDrawerFragment_.class,
+                RequestFragment_.class
         },
         includes = {
                 ServiceModule.class

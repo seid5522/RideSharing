@@ -19,18 +19,31 @@ package com.ridesharing.ui.cards;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.location.Address;
+import android.os.AsyncTask;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ridesharing.Entity.Driver;
+import com.ridesharing.Entity.Request;
+import com.ridesharing.Entity.RequestStatusType;
+import com.ridesharing.Entity.Result;
+import com.ridesharing.Entity.ResultType;
+import com.ridesharing.Entity.RoleType;
 import com.ridesharing.Entity.User;
 import com.ridesharing.Entity.Wish;
 import com.ridesharing.Entity.WishType;
 import com.ridesharing.R;
 import com.ridesharing.Service.LocationServiceImpl;
+import com.ridesharing.Service.RequestService;
+import com.ridesharing.Service.RequestServiceImpl;
 
 import org.w3c.dom.Text;
+
+import java.util.Date;
 
 import it.gmariotti.cardslib.library.internal.Card;
 import it.gmariotti.cardslib.library.internal.CardHeader;
@@ -44,18 +57,27 @@ import it.gmariotti.cardslib.library.internal.CardThumbnail;
 public class CustomerDetailCard extends Card {
     private Wish wishInfo;
     private User userInfo;
+    private User currentUserInfo;
+    private boolean isDriver;
+    private PopupWindow mPopupWindow;
 
-    public CustomerDetailCard(Context context, Wish wishInfo, User userInfo) {
+    public CustomerDetailCard(Context context, Wish wishInfo, User userInfo, User currentUserInfo, boolean isDriver, PopupWindow mPopupWindow) {
         super(context, R.layout.customer_detail_card_main);
         this.wishInfo = wishInfo;
         this.userInfo = userInfo;
+        this.currentUserInfo = currentUserInfo;
+        this.isDriver = isDriver;
+        this.mPopupWindow = mPopupWindow;
         init();
     }
 
-    public CustomerDetailCard(Context context, int innerLayout, Wish wishInfo, User userInfo) {
+    public CustomerDetailCard(Context context, int innerLayout, Wish wishInfo, User userInfo, User currentUserInfo, boolean isDriver, PopupWindow mPopupWindow) {
         super(context, innerLayout);
         this.wishInfo = wishInfo;
         this.userInfo = userInfo;
+        this.currentUserInfo = currentUserInfo;
+        this.isDriver = isDriver;
+        this.mPopupWindow = mPopupWindow;
         init();
     }
 
@@ -65,6 +87,11 @@ public class CustomerDetailCard extends Card {
         header.mName = userInfo.getFirstname() + " " + userInfo.getLastname();
         WishType type = wishInfo.getType();
         header.mSubName = (type == WishType.Request)? getContext().getString(R.string.rider) : getContext().getString(R.string.driver);
+        RoleType roleType = RoleType.PASSENGER;
+        if(wishInfo.getType() == WishType.Request && isDriver){
+            roleType = RoleType.DRIVER;
+        }
+        header.request = new Request(currentUserInfo.getId(), userInfo.getId(), wishInfo.getId(), roleType, new Date(System.currentTimeMillis()), RequestStatusType.STATUS_NOT_CONFIRM);
         addCardHeader(header);
 
         //Add Thumbnail
@@ -103,17 +130,6 @@ public class CustomerDetailCard extends Card {
         }
         toadd1.setText(toAddr);
         toadd2.setText(toAddr1);
-/*
-        TextView textMaker =(TextView)view.findViewById(R.id.textMaker);
-        TextView textModel =(TextView)view.findViewById(R.id.textModel);
-        TextView textYear =(TextView)view.findViewById(R.id.textYear);
-        TextView textSeats =(TextView)view.findViewById(R.id.textSeats);
-
-        if(userInfo instanceof Driver){
-            Driver driver = (Driver)userInfo;
-            textMaker.setText(driver.getVehicle().getMaker());
-        }
-        */
     }
 
     class CustomerDetailCardThumb extends CardThumbnail {
@@ -139,6 +155,7 @@ public class CustomerDetailCard extends Card {
     class CustomerDetailCardHeader extends CardHeader{
         String mName;
         String mSubName;
+        Request request;
 
         public CustomerDetailCardHeader(Context context, int innerLayout) {
             super(context, innerLayout);
@@ -146,12 +163,38 @@ public class CustomerDetailCard extends Card {
 
         @Override
         public void setupInnerViewElements(ViewGroup parent, View view) {
-
+            final Context context = this.getContext();
             TextView txName = (TextView) view.findViewById(R.id.text_birth1);
             TextView txSubName = (TextView) view.findViewById(R.id.text_birth2);
 
             txName.setText(mName);
             txSubName.setText(mSubName);
+
+            Button btnJoin = (Button)view.findViewById(R.id.btnJoin);
+            btnJoin.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View view) {
+                    new AsyncTask<Void, Void, Boolean>(){
+
+                        @Override
+                        protected Boolean doInBackground(Void... voids) {
+                            RequestService requestService = new RequestServiceImpl();
+                            Result result = requestService.add(request);
+                            return (result.getType() == ResultType.Success);
+                        }
+
+                        protected void onPostExecute(final Boolean success) {
+                            if(success){
+                                Toast.makeText(context, context.getText(R.string.send_request_success), Toast.LENGTH_SHORT).show();
+                            }else{
+                                Toast.makeText(context, context.getText(R.string.send_request_fail), Toast.LENGTH_SHORT).show();
+                            }
+                            mPopupWindow.dismiss();
+                        }
+                    }
+                    .execute();
+                }
+            });
         }
     }
 }

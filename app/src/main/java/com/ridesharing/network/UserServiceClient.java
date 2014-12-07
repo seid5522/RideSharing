@@ -68,4 +68,8 @@ public class UserServiceClient {
         RestHelper<User, ResultData<User>> helper = new RestHelper<>(url, user, new ParameterizedTypeReference<ResultData<User>>() {});
         return helper.execute(true);
     }
+
+    public static Result updateDevice(User user){
+        return base(user, "updateDevice");
+    }
 }

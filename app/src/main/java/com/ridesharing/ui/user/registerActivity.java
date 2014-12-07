@@ -1,5 +1,6 @@
 package com.ridesharing.ui.user;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -7,6 +8,7 @@ import android.view.MenuItem;
 
 import android.widget.*;
 
+import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.ridesharing.Entity.Driver;
 import com.ridesharing.Entity.Result;
 import com.ridesharing.Entity.ResultType;
@@ -26,6 +28,7 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -94,6 +97,7 @@ public class registerActivity extends InjectActionBarActivity  {
     UserService userService;
     @Inject
     DriverService driverService;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,7 +126,7 @@ public class registerActivity extends InjectActionBarActivity  {
                     User user;
                     user = new User(username.getText().toString(), password.getText().toString(), email.getText().toString(), firstname.getText().toString(), lastname.getText().toString(),
                             DataProcess.getDateFromDatePicker(birthday), address.getText().toString(), address2.getText().toString(),
-                            city.getText().toString(),state.getText().toString(), zip.getText().toString(), phone.getText().toString(), ""
+                            city.getText().toString(),state.getText().toString(), zip.getText().toString(), phone.getText().toString(), "", ""
                     );
                     if(driverSwitch.isChecked()){
                         user = new Driver(user, -1, new Vehicle(-1, carMake.getText().toString(), carModel.getText().toString(), Integer.parseInt(carYear.getText().toString()), Integer.parseInt(numOfSeats.getText().toString())));

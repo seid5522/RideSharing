@@ -35,8 +35,8 @@ public class Driver extends User {
 
     public Driver(){}
 
-    public Driver(String username, String password, String email, String firstname, String lastname, Date birthday, String address, String address2, String city, String state, String zipcode, String phone, String photoURL, int uid, Vehicle vehicle) {
-        super(username, password, email, firstname, lastname, birthday, address, address2, city, state, zipcode, phone, photoURL);
+    public Driver(String username, String password, String email, String firstname, String lastname, Date birthday, String address, String address2, String city, String state, String zipcode, String phone, String photoURL, String deviceId, int uid, Vehicle vehicle) {
+        super(username, password, email, firstname, lastname, birthday, address, address2, city, state, zipcode, phone, photoURL, deviceId);
         this.uid = uid;
         this.vehicle = vehicle;
     }
