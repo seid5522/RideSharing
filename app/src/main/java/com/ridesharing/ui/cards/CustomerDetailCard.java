@@ -116,8 +116,14 @@ public class CustomerDetailCard extends Card {
         String fromAddr1 = "";
         if(fromAddr == null || fromAddr.equals("")){
             Address address = LocationServiceImpl.getLocationFromLatLng(this.getContext(), wishInfo.getFromlat(), wishInfo.getFromlng());
-            fromAddr = address.getAddressLine(0);
-            fromAddr1 = address.getAddressLine(1);
+            if(address == null){
+                fromAddr = this.getContext().getText(R.string.not_available).toString();
+                fromAddr1 = "";
+            }else{
+                fromAddr = address.getAddressLine(0);
+                fromAddr1 = address.getAddressLine(1);
+            }
+
         }
         fromadd1.setText(fromAddr);
         fromadd2.setText(fromAddr1);
@@ -125,8 +131,13 @@ public class CustomerDetailCard extends Card {
         String toAddr1 = "";
         if(toAddr == null || toAddr.equals("")){
             Address address = LocationServiceImpl.getLocationFromLatLng(this.getContext(), wishInfo.getTolat(), wishInfo.getTolng());
-            toAddr = address.getAddressLine(0) + ", ";
-            toAddr1 = address.getAddressLine(1);
+            if(address == null){
+                toAddr = this.getContext().getText(R.string.not_available).toString();
+                toAddr1 = "";
+            }else{
+                toAddr = address.getAddressLine(0) + ", ";
+                toAddr1 = address.getAddressLine(1);
+            }
         }
         toadd1.setText(toAddr);
         toadd2.setText(toAddr1);

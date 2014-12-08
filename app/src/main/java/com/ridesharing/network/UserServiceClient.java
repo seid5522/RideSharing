@@ -57,14 +57,12 @@ public class UserServiceClient {
 
     public static ResultData<User> fetchSelfInfo(){
         String url = BASE_URL + "?type=info";
-        ResultData<User> result = new ResultData<>();
         RestHelper<String, ResultData<User>> helper = new RestHelper<>(url, "", new ParameterizedTypeReference<ResultData<User>>() {});
         return helper.execute(true);
     }
 
     public static ResultData<User> fetchOtherInfo(User user){
         String url = BASE_URL + "?type=info";
-        ResultData<User> result = new ResultData<>();
         RestHelper<User, ResultData<User>> helper = new RestHelper<>(url, user, new ParameterizedTypeReference<ResultData<User>>() {});
         return helper.execute(true);
     }

@@ -65,5 +65,9 @@ public class ServiceModule {
         return new WishServiceImpl();
     }
 
+    @Provides@Singleton public RequestService provideRequestService(){
+        return new RequestServiceImpl();
+    }
+
 
 }

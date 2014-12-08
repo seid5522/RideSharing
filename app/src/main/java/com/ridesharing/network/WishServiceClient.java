@@ -5,6 +5,7 @@ import com.ridesharing.Entity.Result;
 import com.ridesharing.Entity.ResultData;
 import com.ridesharing.Entity.Wish;
 
+import org.androidannotations.annotations.rest.Rest;
 import org.springframework.core.ParameterizedTypeReference;
 
 import java.util.ArrayList;
@@ -19,6 +20,12 @@ public class WishServiceClient {
         String url = BASE_URL + "?type=" + type;
         RestHelper<Wish, Result> helper = new RestHelper<>(url, wish, new ParameterizedTypeReference<Result>() {});
         return helper.execute(false);
+    }
+
+    public static ResultData<Wish> getSpecificWish(int wishId){
+        String url = BASE_URL + "?type=getWish&wishId=" + wishId;
+        RestHelper<String, ResultData<Wish>> helper = new RestHelper<>(url, "", new ParameterizedTypeReference<ResultData<Wish>>() {});
+        return helper.execute(true);
     }
 
     public static ResultData<ArrayList<Wish>> search(Wish wish){

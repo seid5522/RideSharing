@@ -59,6 +59,12 @@ public class WishServiceImpl implements WishService {
     }
 
     @Override
+    public Wish getSpecificWish(int wishId){
+        ResultData<Wish> res = WishServiceClient.getSpecificWish(wishId);
+        return res.getData();
+    }
+
+    @Override
     public Result add(Wish wish) {
         return WishServiceClient.add(wish);
     }

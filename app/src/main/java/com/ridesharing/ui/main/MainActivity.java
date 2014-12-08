@@ -336,6 +336,14 @@ public class MainActivity extends InjectActionBarActivity
     @Override
     public void processAdvancedSearch(Wish wish){
         ArrayList<Wish> lists = wishService.searchAndAdd(wish);
+        for(Wish otherWish: lists){
+            if(!userService.getUserTables().containsKey(otherWish.getUid())){
+                User user = userService.fetchOtherInfo(otherWish.getUid());
+                userService.getUserTables().put(user.getId(), user);
+            }
+            User user = userService.getUserTables().get(otherWish.getUid());
+            wishService.getWishHashtable().put(user.getUsername(), otherWish);
+        }
         //back to home page
         backToHomePage(lists);
     }

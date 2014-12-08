@@ -31,5 +31,6 @@ public interface WishService extends EntityService<Wish> {
     public ArrayList<Wish> search(Wish wish);
     public ArrayList<Wish> searchAndAdd(Wish wish);
     public ArrayList<Wish> fetchAll(Wish wish, int distance);
+    public Wish getSpecificWish(int wishId);
     public Hashtable<String, Wish> getWishHashtable();
 }

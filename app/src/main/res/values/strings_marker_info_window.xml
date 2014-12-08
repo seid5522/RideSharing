@@ -10,5 +10,6 @@
     <string name="maker">Maker: </string>
     <string name="model">Model: </string>
     <string name="year">Year: </string>
+    <string name="status">Status: </string>
     <string name="seatavailable">Seat Available: </string>
 </resources>

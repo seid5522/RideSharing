@@ -270,6 +270,9 @@ public class DefaultFragment extends InjectFragment {
     @UiThread
     public void showMarkerOnMap(ArrayList<Wish> lists){
         final GoogleMap map = mapFragment.getMap();
+        if(map == null){
+            return;
+        }
         map.clear();
 
         LatLng clatlng = new LatLng(location.getLatitude(), location.getLongitude());
