@@ -45,7 +45,9 @@ public class InjectFragment
         // expand the activity graph with the fragment-specific module(s)
         ObjectGraph appGraph = ((Injector) activity).getObjectGraph();
         List<Object> fragmentModules = getModules();
-        mObjectGraph = appGraph.plus(fragmentModules.toArray());
+        //if(fragmentModules != null){
+         mObjectGraph = appGraph.plus(fragmentModules.toArray());
+        //}
 
         // make sure it's the first time through; we don't want to re-inject a retained fragment that is going
         // through a detach/attach sequence.

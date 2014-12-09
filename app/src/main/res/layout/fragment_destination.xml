@@ -14,7 +14,7 @@ Date 2014/11/10.
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
                 android:paddingTop="@dimen/activity_vertical_margin"
-                tools:context=".ui.user.destinationFragment">
+                tools:context=".ui.main.DestinationFragment">
 
 
 

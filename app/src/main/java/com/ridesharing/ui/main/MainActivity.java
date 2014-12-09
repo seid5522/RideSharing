@@ -1,13 +1,9 @@
 package com.ridesharing.ui.main;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.database.MatrixCursor;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -18,18 +14,12 @@ import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
 import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.google.android.gms.maps.GoogleMap;
 import com.ridesharing.Entity.User;
 import com.ridesharing.Entity.Wish;
 import com.ridesharing.Service.AuthenticationService;
@@ -40,12 +30,10 @@ import com.ridesharing.R;
 import com.ridesharing.Service.WishService;
 import com.ridesharing.ui.Inject.InjectActionBarActivity;
 import com.ridesharing.ui.login.LoginActivity_;
-import com.ridesharing.ui.user.destinationFragment;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.EActivity;
-import org.androidannotations.annotations.FragmentById;
 import org.androidannotations.annotations.UiThread;
 
 import java.io.IOException;
@@ -56,7 +44,7 @@ import javax.inject.Inject;
 
 @EActivity(R.layout.activity_main)
 public class MainActivity extends InjectActionBarActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks, destinationFragment.OnFragmentInteractionListener {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks, DestinationFragment.OnFragmentInteractionListener {
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -213,7 +201,7 @@ public class MainActivity extends InjectActionBarActivity
                     .commit();
         } else if(position == 1){
             fragmentManager.beginTransaction()
-                    .replace(R.id.container, destinationFragment.newInstance(position + 1, getString(R.string.destinationPage)))
+                    .replace(R.id.container, DestinationFragment.newInstance(position + 1, getString(R.string.destinationPage)))
                     .commit();
         }else if(position == 2){
             fragmentManager.beginTransaction()
