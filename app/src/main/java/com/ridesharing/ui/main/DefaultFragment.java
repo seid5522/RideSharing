@@ -57,6 +57,7 @@ import com.ridesharing.Entity.User;
 import com.ridesharing.Entity.Wish;
 import com.ridesharing.Entity.WishType;
 import com.ridesharing.R;
+import com.ridesharing.Service.LocationFinishedListener;
 import com.ridesharing.Service.LocationService;
 import com.ridesharing.Service.LocationServiceImpl;
 import com.ridesharing.Service.LocationServiceImpl_;
@@ -159,7 +160,12 @@ public class DefaultFragment extends InjectFragment {
                 //bind with location service at main activity
                 mainActivity.locationService = locationService;
                 mlocationServiceBound = true;
-                showMainMap();
+                locationService.setLocationFinishedListener(new LocationFinishedListener() {
+                    @Override
+                    public void onFinished() {
+                        showMainMap();
+                    }
+                });
             }
 
             @Override
@@ -366,6 +372,11 @@ public class DefaultFragment extends InjectFragment {
             location = locationService.getLastLocation();
         }else{
             location = locationService.getLastKnowLocation();
+        }
+
+        if(location == null){
+            mainActivity.showError(getString(R.string.no_location_service));
+            return;
         }
 
         LatLng clatlng = new LatLng(location.getLatitude(), location.getLongitude());

@@ -60,6 +60,7 @@ Date 2014/11/10.
                     android:hint="To:"
                     android:maxLines="1"
                     android:singleLine="true"
+                    android:imeOptions="actionDone"
                     android:layout_gravity="center"/>
 
             <AutoCompleteTextView
@@ -70,6 +71,7 @@ Date 2014/11/10.
                     android:hint="From:"
                     android:maxLines="1"
                     android:singleLine="true"
+                    android:imeOptions="actionDone"
                     android:layout_gravity="center"/>
 
 
@@ -101,6 +103,7 @@ Date 2014/11/10.
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number"
+                    android:imeOptions="actionDone"
                     android:hint="#Passengers:"
                     />
          <Button

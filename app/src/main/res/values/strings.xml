@@ -33,8 +33,10 @@
     <string name="flock_notification">Flock Notification</string>
     <string name="send_request_success">Send request successfully.</string>
     <string name="send_request_fail">Send request failed.</string>
-    <string name="not_available">Waiting for Confirm</string>
+    <string name="not_available">Not Available</string>
+    <string name="wait_for_confirm">Waiting for Confirm</string>
     <string name="accept">Accepted</string>
     <string name="decline">Declined</string>
     <string name="noResult">No Result</string>
+    <string name="no_location_service">Please open your location service</string>
 </resources>

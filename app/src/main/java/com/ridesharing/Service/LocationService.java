@@ -16,4 +16,5 @@ public interface LocationService {
     public Location getLastLocation();
     public Location getLastBestLocation();
     public Location getLastKnowLocation();
+    public void setLocationFinishedListener(LocationFinishedListener locationFinishedListener);
 }

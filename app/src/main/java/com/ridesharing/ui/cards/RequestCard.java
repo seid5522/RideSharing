@@ -100,7 +100,7 @@ public class RequestCard  extends Card {
         final TextView textStatus = (TextView)view.findViewById(R.id.request_card_status_text);
         switch(request.getStatus()){
             case STATUS_NOT_CONFIRM:
-                textStatus.setText(this.getContext().getText(R.string.not_available));
+                textStatus.setText(this.getContext().getText(R.string.wait_for_confirm));
                 break;
             case STATUS_AGREE:
                 textStatus.setText(this.getContext().getText(R.string.accept));

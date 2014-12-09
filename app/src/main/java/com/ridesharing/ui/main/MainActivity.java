@@ -1,6 +1,7 @@
 package com.ridesharing.ui.main;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -150,6 +151,15 @@ public class MainActivity extends InjectActionBarActivity
         }
     }
 
+    public void showError( String errorMessage){
+        new AlertDialog.Builder(this)
+                .setTitle("Error")
+                .setMessage(errorMessage)
+                .setNegativeButton("OK", null)
+                .show();
+    }
+
+
     @Background
     public void registerInBackground(String regid){
         String msg = "";
@@ -196,6 +206,7 @@ public class MainActivity extends InjectActionBarActivity
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getSupportFragmentManager();
+        hideKeyboard();
         if(position == 0){
             fragmentManager.beginTransaction()
                     .replace(R.id.container, DefaultFragment.newInstance(position + 1, getString(R.string.homePage)))

@@ -98,7 +98,11 @@ public class CustomerDetailCard extends Card {
         CustomerDetailCardThumb thumbnail = new CustomerDetailCardThumb(getContext());
         float density = getContext().getResources().getDisplayMetrics().density;
         int size= (int)(125*density);
-        thumbnail.setUrlResource("https://lh5.googleusercontent.com/-squZd7FxR8Q/UyN5UrsfkqI/AAAAAAAAbAo/VoDHSYAhC_E/s"+size+"/new%2520profile%2520%25282%2529.jpg");
+        if(userInfo.getPhotoURL() == null || userInfo.getPhotoURL().equals("")){
+            thumbnail.setDrawableResource(R.drawable.image_not_available);
+        }else{
+            thumbnail.setUrlResource(userInfo.getPhotoURL());
+        }
         thumbnail.setErrorResource(R.drawable.ic_ic_error_loading);
         addCardThumbnail(thumbnail);
     }

@@ -52,6 +52,7 @@ public class LocationServiceImpl extends Service implements LocationService {
     @SystemService
     protected LocationManager locationManager;
     protected LocationListener locationListener;
+    protected LocationFinishedListener locationFinishedListener;
 
     public LocationServiceImpl(){
         mBinder = new LocationServiceBinder();
@@ -78,6 +79,9 @@ public class LocationServiceImpl extends Service implements LocationService {
                 Location fixLocation = getLastKnowLocation();
                 if(isBetterLocation(location, fixLocation)){
                     lastBestLocation = location;
+                }
+                if(locationFinishedListener != null && (getLastLocation() != null || getLastBestLocation() != null || getLastKnowLocation() != null )){
+                    locationFinishedListener.onFinished();
                 }
             }
 
@@ -228,5 +232,7 @@ public class LocationServiceImpl extends Service implements LocationService {
         return (rad * 180.0 / Math.PI);
     }
 
-
+    public void setLocationFinishedListener(LocationFinishedListener locationFinishedListener) {
+        this.locationFinishedListener = locationFinishedListener;
+    }
 }
