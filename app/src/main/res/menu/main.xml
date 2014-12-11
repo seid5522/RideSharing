@@ -6,6 +6,10 @@
         android:title="@string/action_settings"
         android:orderInCategory="100"
         app:showAsAction="never" />
+    <item android:id="@+id/action_changelanguage"
+        android:title="@string/action_changelanguage"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
     <item android:id="@+id/action_search"
         android:title="@string/action_search"
         app:showAsAction="withText|ifRoom"

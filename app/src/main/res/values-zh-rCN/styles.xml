@@ -1,0 +1,62 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="FlockBrightTheme"  parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:windowBackground">@color/sulu</item>
+        <item name="android:colorBackground">@color/sulu</item>
+    </style>
+
+    <!-- Flock Color Set Bright -->
+    <color name="sugar_kane">#fdfffd</color>
+    <color name="dream_scream">#6afa3c</color>
+    <color name="alto">#d3d3d3</color>
+    <color name="mantis">#73be5b</color>
+    <color name="sulu">#a3eb8c</color>
+    <color name="card_title">@android:color/holo_blue_dark</color>
+    <color name="card_header">#707070</color>
+
+    <style name="CodeFont" parent="@android:style/TextAppearance.Medium">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/sugar_kane</item>
+        <item name="android:typeface">monospace</item>
+    </style>
+
+    <!-- the theme applied to the application or activity -->
+    <style name="FlockActionBarTheme"
+        parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:actionBarStyle">@style/MyActionBar</item>
+        <item name="android:actionBarTabTextStyle">@style/MyActionBarTabText</item>
+        <item name="android:actionMenuTextColor">@color/sugar_kane</item>
+        <item name="android:windowActionBarOverlay">false</item>
+    </style>
+
+    <!-- ActionBar styles -->
+    <style name="MyActionBar"
+        parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
+        <item name="android:background">@drawable/actionbar_background</item>
+        <item name="android:titleTextStyle">@style/MyActionBarTitleText</item>
+    </style>
+
+    <!-- ActionBar title text -->
+    <style name="MyActionBarTitleText"
+        parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/sugar_kane</item>
+    </style>
+
+    <!-- ActionBar tabs text styles -->
+    <style name="MyActionBarTabText"
+        parent="@android:style/Widget.Holo.ActionBar.TabText">
+        <item name="android:textColor">@color/sugar_kane</item>
+    </style>
+
+    <!-- Style for Cards -->
+    <style name="card.content_outer_layout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:minHeight">@dimen/card_base_empty_height</item>
+        <item name="android:layout_marginTop">@dimen/card_content_outer_view_margin_top</item>
+        <item name="android:layout_marginBottom">@dimen/card_content_outer_view_margin_bottom</item>
+        <item name="android:layout_marginLeft">@dimen/card_content_outer_view_margin_left</item>
+        <item name="android:layout_marginRight">@dimen/card_content_outer_view_margin_right</item>
+    </style>
+</resources>

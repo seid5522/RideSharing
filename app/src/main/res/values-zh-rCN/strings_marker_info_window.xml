@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="name">Name: </string>
+    <string name="type">Type: </string>
+    <string name="to">To: </string>
+    <string name="join">Join</string>
+    <string name="from">From: </string>
+    <string name="time">Time: </string>
+    <string name="vehicle">Vehicle Info</string>
+    <string name="maker">Maker: </string>
+    <string name="model">Model: </string>
+    <string name="year">Year: </string>
+    <string name="status">Status: </string>
+    <string name="seatavailable">Seat Available: </string>
+</resources>

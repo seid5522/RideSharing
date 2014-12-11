@@ -1,5 +1,7 @@
 package com.ridesharing.ui.main;
 
+import java.util.Locale;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.SearchManager;
@@ -25,6 +27,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
 import android.widget.Toast;
+
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.content.DialogInterface;
+import android.util.DisplayMetrics;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -332,10 +339,79 @@ public class MainActivity extends InjectActionBarActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+        switch (id)
+        {
+            case R.id.action_settings:
+                return true;
+            case R.id.action_changelanguage:
+                /*
+                new AlertDialog.Builder(this)
+                        .setTitle("标题")
+                        .setMessage(config.locale.toString())
+                        .setPositiveButton("确定", null)
+                        .show();
+                new AlertDialog.Builder(this)
+                        .setTitle("标题")
+                        .setMessage(Locale.US.toString())
+                        .setPositiveButton("确定", null)
+                        .show();
+                        */
+                new AlertDialog.Builder(this)
+                        .setTitle(R.string.Select_Language)
+                        .setIcon(android.R.drawable.ic_dialog_info)
+                        .setSingleChoiceItems(new String[] {getText(R.string.Lan_English).toString(), getText(R.string.Lan_Chinese).toString()}, 0,
+                                new DialogInterface.OnClickListener() {
+
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        Resources resources = getResources();//获得res资源对象
+
+                                        Configuration config = resources.getConfiguration();//获得设置对象
+
+                                        DisplayMetrics dm = resources .getDisplayMetrics();//获得屏幕参数：主要是分辨率，像素等。
+                                        switch(which)
+                                        {
+                                            case 0://English
+                                                config.locale = Locale.ENGLISH;
+                                               break;
+                                            case 1://Chinese
+                                                config.locale = Locale.SIMPLIFIED_CHINESE;
+                                                break;
+                                            default:
+
+
+                                        }
+                                        resources.updateConfiguration(config, dm);
+                                        dialog.dismiss();
+                                    }
+                                }
+                        )
+                        .setNegativeButton(R.string.Cancel, null)
+                        .show();
+                /*
+                if (config.locale == Locale.US)
+                    config.locale = Locale.SIMPLIFIED_CHINESE; //简体中文
+                else
+                    config.locale = Locale.US; //English
+                    */
+
+
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                DefaultFragment fragment = DefaultFragment.newInstance(1, getString(R.string.homePage));
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, fragment)
+                        .commit();
+
+
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        /*
         if (id == R.id.action_settings) {
             return true;
         }
-        return super.onOptionsItemSelected(item);
+        */
+        //return super.onOptionsItemSelected(item);
     }
 
     @Override
