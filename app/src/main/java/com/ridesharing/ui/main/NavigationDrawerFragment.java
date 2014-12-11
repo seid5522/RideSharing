@@ -30,17 +30,22 @@ import com.google.android.gms.plus.Plus;
 import com.ridesharing.R;
 import com.ridesharing.Service.AuthenticationService;
 import com.ridesharing.Service.UserService;
+import com.ridesharing.Utility.ImageLoader;
 import com.ridesharing.ui.Inject.InjectFragment;
 import com.ridesharing.ui.login.LoginActivity;
 import com.ridesharing.ui.login.LoginActivity_;
 
+import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.UiThread;
+import org.androidannotations.annotations.ViewById;
 
 import java.util.List;
 
 import javax.inject.Inject;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -79,6 +84,9 @@ public class NavigationDrawerFragment extends InjectFragment {
     private int mCurrentSelectedPosition = 0;
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
+
+    @ViewById(R.id.profile_image)
+    CircleImageView imageview;
 
     @Inject
     UserService userService;
@@ -143,7 +151,24 @@ public class NavigationDrawerFragment extends InjectFragment {
                 logout();
             }
         });
+
         return layout;
+    }
+
+    @AfterViews
+    public void init(){
+        if(userService == null || userService.getUser() == null){
+            imageview.setImageDrawable(getResources().getDrawable(R.drawable.passenger));
+            return;
+        }
+        String url = userService.getUser().getPhotoURL();
+        if(url == null || url.equals("")){
+            imageview.setImageDrawable(getResources().getDrawable(R.drawable.passenger));
+        }else{
+            int loader = R.drawable.loading;
+            ImageLoader imgLoader = new ImageLoader(this.getActivity());
+            imgLoader.DisplayImage(url, loader, imageview);
+        }
     }
 
     @Background

@@ -90,8 +90,13 @@ public class MarkerWindowAdapter implements GoogleMap.InfoWindowAdapter {
             String toAddr1 = "";
             if(toAddr == null || toAddr.equals("")){
                 Address address = LocationServiceImpl.getLocationFromLatLng(fragment.getActivity(), wish.getTolat(), wish.getTolng());
-                toAddr = address.getAddressLine(0) + ", ";
-                toAddr1 = address.getAddressLine(1);
+                if(address == null){
+                    toAddr = view.getContext().getText(R.string.not_available).toString();
+                    toAddr1 = "";
+                }else{
+                    toAddr = address.getAddressLine(0) + ", ";
+                    toAddr1 = address.getAddressLine(1);
+                }
             }
             toadd1.setText(toAddr);
             toadd2.setText(toAddr1);
