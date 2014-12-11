@@ -4,7 +4,7 @@
     <string name="serverURL">http://54.149.37.27/rest/</string>
     <string name="googlemap_api_key">AIzaSyAdWM-HLsNvvTBzr9xFJsuT5qnqmlH3G7E</string>
     <string name="googleplace_api_key">AIzaSyDDdXLw695vmtduvgnkP8EDBJ_nOs0CYkg</string>
-    <string name="app_name">Flock</string>
+    <string name="app_name">快滴</string>
     <string name="title_section1">首页</string>
     <string name="title_section2">搜索</string>
     <string name="title_section3">请求</string>
@@ -22,7 +22,7 @@
     <string name="offer">提供载客</string>
     <string name="request">请求载客</string>
     <string name="currentLocation">当前地点</string>
-    <string name="findRecords">找到 %d 记录</string>
+    <string name="findRecords">找到 %d 条记录</string>
     <string name="homePage">首页</string>
     <string name="destinationPage">目的地</string>
     <string name="requestPage">我的请求记录</string>
@@ -30,7 +30,7 @@
     <string name="driver">司机</string>
     <string name="rider">乘客</string>
     <string name="title_activity_destination">目标行为</string>
-    <string name="flock_notification">Flock 提示</string>
+    <string name="flock_notification">快滴提示</string>
     <string name="send_request_success">成功发送请求。</string>
     <string name="send_request_fail">发送请求失败。</string>
     <string name="not_available">不可用</string>
@@ -41,7 +41,13 @@
     <string name="no_location_service">请打开您的本地服务</string>
     <string name="action_changelanguage">更改语言</string>
     <string name="Select_Language">选择语言</string>
-    <string name="Lan_English">英语</string>
+    <string name="Lan_English">English</string>
     <string name="Lan_Chinese">中文</string>
     <string name="Cancel">取消</string>
+    <string name="passengerHint">#乘客数量:</string>
+    <string name="toHint">到达:</string>
+    <string name="fromHint">出发:</string>
+    <string name="submit">提交</string>
+    <string name="simplified_chinese">中文简体</string>
+    <string name="no_account_sign_up">还没有账号？点这里注册！</string>
 </resources>

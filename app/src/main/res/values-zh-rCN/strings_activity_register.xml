@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="username">用户名</string>
+    <string name="email">邮箱</string>
+    <string name="password">密码</string>
+    <string name="first_name">名</string>
+    <string name="last_name">姓</string>
+    <string name="birthday">生日</string>
+    <string name="address">地址</string>
+    <string name="address2">地址 2</string>
+    <string name="city">城市</string>
+    <string name="state">州</string>
+    <string name="zipcode">邮政编码</string>
+    <string name="phone_number">电话号码</string>
+    <string name="driver_information">驾驶员信息</string>
+    <string name="car_make">生产厂商</string>
+    <string name="car_model">生产型号</string>
+    <string name="reg_year">年份</string>
+    <string name="number_of_seats">座位数量</string>
+    <string name="register_new_account">注册新账号</string>
+    <string name="already_have_account">已经有新账号了？这里登陆！</string>
+    <string name="already_driver">已经是司机了！</string>
+    <string name="want_driver">想要成为司机？</string>
+</resources>

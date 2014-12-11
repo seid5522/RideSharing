@@ -128,7 +128,7 @@
                           android:layout_height="wrap_content"
                           android:layout_marginTop="15dip"
                           android:layout_marginBottom="40dip"
-                          android:text="Don't have an account? Sign Up Here!"
+                          android:text="@string/no_account_sign_up"
                           android:gravity="center"
                           android:textSize="15sp"
                           android:textColor="#025f7c"

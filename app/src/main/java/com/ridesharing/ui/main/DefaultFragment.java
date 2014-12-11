@@ -334,7 +334,7 @@ public class DefaultFragment extends InjectFragment {
                 }
             }
         });
-        Toast.makeText(getActivity(), String.format("find %d record(s).", lists.size()), Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity(), String.format(getString(R.string.findRecords), lists.size()), Toast.LENGTH_LONG).show();
     }
 
     @Background

@@ -1,11 +1,8 @@
 package com.ridesharing.ui.main;
 
-<<<<<<< HEAD
 import java.util.Locale;
 
 import android.app.Activity;
-=======
->>>>>>> e59dfc2e0f4bd9bfa02fe31ff60c01a334a544cb
 import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.Context;
@@ -25,7 +22,6 @@ import android.view.MenuItem;
 import android.support.v4.widget.DrawerLayout;
 import android.widget.Toast;
 
-<<<<<<< HEAD
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.DialogInterface;
@@ -33,8 +29,7 @@ import android.util.DisplayMetrics;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
-=======
->>>>>>> e59dfc2e0f4bd9bfa02fe31ff60c01a334a544cb
+
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.ridesharing.Entity.User;
 import com.ridesharing.Entity.Wish;
@@ -338,8 +333,8 @@ public class MainActivity extends InjectActionBarActivity
         int id = item.getItemId();
         switch (id)
         {
-            case R.id.action_settings:
-                return true;
+           // case R.id.action_settings:
+           //     return true;
             case R.id.action_changelanguage:
                 /*
                 new AlertDialog.Builder(this)
@@ -377,7 +372,8 @@ public class MainActivity extends InjectActionBarActivity
 
 
                                         }
-                                        resources.updateConfiguration(config, dm);
+                                        onConfigurationChanged(config);
+                                        //resources.updateConfiguration(config, dm);
                                         dialog.dismiss();
                                     }
                                 }
@@ -391,13 +387,13 @@ public class MainActivity extends InjectActionBarActivity
                     config.locale = Locale.US; //English
                     */
 
-
+/*
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 DefaultFragment fragment = DefaultFragment.newInstance(1, getString(R.string.homePage));
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, fragment)
                         .commit();
-
+*/
 
                 return true;
             default:
@@ -409,6 +405,29 @@ public class MainActivity extends InjectActionBarActivity
         }
         */
         //return super.onOptionsItemSelected(item);
+    }
+
+    private void restartActivity() {
+        Intent intent = getIntent();
+        finish();
+        startActivity(intent);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        getBaseContext().getResources().updateConfiguration(newConfig, getBaseContext().getResources().getDisplayMetrics());
+        //setContentView(R.layout.activity_main);
+        restartActivity();
+        setTitle(R.string.app_name);
+
+        // Checks the active language
+        if (newConfig.locale == Locale.ENGLISH) {
+            Toast.makeText(this, getText(R.string.Lan_English), Toast.LENGTH_SHORT).show();
+        } else if (newConfig.locale == Locale.SIMPLIFIED_CHINESE){
+            Toast.makeText(this, getText(R.string.simplified_chinese), Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

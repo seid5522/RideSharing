@@ -90,7 +90,7 @@
 
         <activity
             android:name="com.ridesharing.ui.user.registerActivity_"
-            android:label="Register New Account"
+            android:label="@string/register_new_account"
             android:theme="@style/FlockActionBarTheme" >
 
             <!-- Parent activity meta-data to support API level 7+ -->

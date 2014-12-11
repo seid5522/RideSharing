@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="username">Username</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="birthday">Birthday</string>
+    <string name="address">Address</string>
+    <string name="address2">Address 2</string>
+    <string name="city">City</string>
+    <string name="state">State</string>
+    <string name="zipcode">Zip Code</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="driver_information">Driver Information</string>
+    <string name="car_make">Car Make</string>
+    <string name="car_model">Car Model</string>
+    <string name="reg_year">Year</string>
+    <string name="number_of_seats">Number of Seats</string>
+    <string name="register_new_account">Register New Account</string>
+    <string name="already_have_account">Already have an account? Login here!</string>
+    <string name="already_driver">Yay you\'re a Driver!</string>
+    <string name="want_driver">Want to be a Driver?</string>
+</resources>

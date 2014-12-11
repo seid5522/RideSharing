@@ -56,7 +56,7 @@ Date 2014/11/10.
                 <TextView android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="#372c24"
-                    android:text="Username"/>
+                    android:text="@string/username"/>
                 <EditText android:id="@+id/reg_username"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
@@ -67,7 +67,7 @@ Date 2014/11/10.
                 <TextView android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="#372c24"
-                    android:text="Email"/>
+                    android:text="@string/email"/>
                 <EditText android:id="@+id/reg_email"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
@@ -79,7 +79,7 @@ Date 2014/11/10.
                 <TextView android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="#372c24"
-                    android:text="Password"/>
+                    android:text="@string/password"/>
                 <EditText android:id="@+id/reg_password"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
@@ -90,7 +90,7 @@ Date 2014/11/10.
                 <TextView android:layout_width="match_parent"
                           android:layout_height="wrap_content"
                           android:textColor="#372c24"
-                          android:text="First Name"/>
+                          android:text="@string/first_name"/>
                 <EditText android:id="@+id/reg_firstname"
                           android:layout_width="fill_parent"
                           android:layout_height="wrap_content"
@@ -102,7 +102,7 @@ Date 2014/11/10.
                 <TextView android:layout_width="match_parent"
                           android:layout_height="wrap_content"
                           android:textColor="#372c24"
-                          android:text="Last Name"/>
+                          android:text="@string/last_name"/>
                 <EditText android:id="@+id/reg_lastname"
                           android:layout_width="match_parent"
                           android:layout_height="wrap_content"
@@ -114,7 +114,7 @@ Date 2014/11/10.
                 <TextView android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="#372c24"
-                    android:text="Birthday"/>
+                    android:text="@string/birthday"/>
 
                 <DatePicker android:id="@+id/reg_birthday"
                     android:layout_width="fill_parent"
@@ -130,7 +130,7 @@ Date 2014/11/10.
                 <TextView android:layout_width="match_parent"
                           android:layout_height="wrap_content"
                           android:textColor="#372c24"
-                          android:text="Address"/>
+                          android:text="@string/address"/>
                 <EditText android:id="@+id/reg_address"
                           android:layout_width="fill_parent"
                           android:layout_height="wrap_content"
@@ -141,7 +141,7 @@ Date 2014/11/10.
                 <TextView android:layout_width="match_parent"
                           android:layout_height="wrap_content"
                           android:textColor="#372c24"
-                          android:text="Address 2"/>
+                          android:text="@string/address2"/>
                 <EditText android:id="@+id/reg_address2"
                           android:layout_width="fill_parent"
                           android:layout_height="wrap_content"
@@ -152,7 +152,7 @@ Date 2014/11/10.
                 <TextView android:layout_width="match_parent"
                           android:layout_height="wrap_content"
                           android:textColor="#372c24"
-                          android:text="City"/>
+                          android:text="@string/city"/>
                 <EditText android:id="@+id/reg_city"
                           android:layout_width="fill_parent"
                           android:layout_height="wrap_content"
@@ -163,7 +163,7 @@ Date 2014/11/10.
                 <TextView android:layout_width="match_parent"
                           android:layout_height="wrap_content"
                           android:textColor="#372c24"
-                          android:text="State"/>
+                          android:text="@string/state"/>
                 <EditText android:id="@+id/reg_state"
                           android:layout_width="fill_parent"
                           android:layout_height="wrap_content"
@@ -175,7 +175,7 @@ Date 2014/11/10.
                 <TextView android:layout_width="match_parent"
                           android:layout_height="wrap_content"
                           android:textColor="#372c24"
-                          android:text="Zip Code"/>
+                          android:text="@string/zipcode"/>
                 <EditText android:id="@+id/reg_zip"
                           android:layout_width="fill_parent"
                           android:layout_height="wrap_content"
@@ -187,21 +187,21 @@ Date 2014/11/10.
                 <TextView android:layout_width="match_parent"
                           android:layout_height="wrap_content"
                           android:textColor="#372c24"
-                          android:text="Phone Number"/>
+                          android:text="@string/phone_number"/>
                 <EditText android:id="@+id/reg_phone"
                           android:layout_width="fill_parent"
                           android:layout_height="wrap_content"
                           android:layout_marginTop="2dip"
                           android:singleLine="true"
-                          android:inputType="number"
+                          android:inputType="phone"
                           android:layout_marginBottom="10dip"/>
 
                 <Switch
                         android:id="@+id/driverSwitch"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textOn="Yay you're a Driver!"
-                        android:textOff="Want to be a Driver?"
+                        android:textOn="@string/already_driver"
+                        android:textOff="@string/want_driver"
                         android:layout_marginTop="5dip"
                         android:clickable="true"
                         android:onClick="onSwitchClicked"
@@ -217,7 +217,7 @@ Date 2014/11/10.
                         android:visibility="gone"
                         android:textSize="20sp"
                         android:layout_marginTop="15dip"
-                        android:text= "Driver Information"/>
+                        android:text= "@string/driver_information"/>
 
 
                 <TextView
@@ -226,7 +226,7 @@ Date 2014/11/10.
                         android:layout_height="wrap_content"
                         android:textColor="#372c24"
                         android:visibility="gone"
-                        android:text="Car Make"/>
+                        android:text="@string/car_make"/>
                 <EditText android:id="@+id/reg_carMake"
                           android:layout_width="fill_parent"
                           android:layout_height="wrap_content"
@@ -241,7 +241,7 @@ Date 2014/11/10.
                         android:layout_height="wrap_content"
                         android:textColor="#372c24"
                         android:visibility="gone"
-                        android:text="Car Model"/>
+                        android:text="@string/car_model"/>
                 <EditText android:id="@+id/reg_carModel"
                           android:layout_width="fill_parent"
                           android:layout_height="wrap_content"
@@ -255,7 +255,7 @@ Date 2014/11/10.
                           android:layout_height="wrap_content"
                           android:textColor="#372c24"
                           android:visibility="gone"
-                          android:text="Year"/>
+                          android:text="@string/reg_year"/>
                 <EditText android:id="@+id/reg_carYear"
                           android:layout_width="fill_parent"
                           android:layout_height="wrap_content"
@@ -270,7 +270,7 @@ Date 2014/11/10.
                           android:layout_height="wrap_content"
                           android:textColor="#372c24"
                           android:visibility="gone"
-                          android:text="Number of Seats"/>
+                          android:text="@string/number_of_seats"/>
                 <EditText android:id="@+id/reg_numSeats"
                           android:layout_width="fill_parent"
                           android:layout_height="wrap_content"
@@ -285,7 +285,7 @@ Date 2014/11/10.
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dip"
-                        android:text="Register New Account"/>
+                        android:text="@string/register_new_account"/>
                 <!-- Link to Login Screen -->
                 <TextView android:id="@+id/link_to_login"
                         android:layout_width="match_parent"
@@ -293,7 +293,7 @@ Date 2014/11/10.
                         android:layout_marginTop="15dip"
                         android:layout_marginBottom="40dip"
                         android:gravity="center"
-                        android:text="Already have an account? Login here!"
+                        android:text="@string/already_have_account"
                         android:textSize="20dip"
                         android:textColor="#025f7c"
                         android:layout_below="@id/btnRegister"/>

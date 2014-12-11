@@ -42,6 +42,12 @@
     <string name="action_changelanguage">Change Language</string>
     <string name="Select_Language">Select Language</string>
     <string name="Lan_English">English</string>
-    <string name="Lan_Chinese">Chinese</string>
+    <string name="Lan_Chinese">中文</string>
     <string name="Cancel">Cancel</string>
+    <string name="passengerHint">#Passengers:</string>
+    <string name="toHint">To:</string>
+    <string name="fromHint">From:</string>
+    <string name="submit">Submit</string>
+    <string name="simplified_chinese">简体中文</string>
+    <string name="no_account_sign_up">Don\'t have an account? Sign Up Here!</string>
 </resources>

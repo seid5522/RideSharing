@@ -44,7 +44,7 @@ Date 2014/11/10.
 
             <TextView  android:layout_width="wrap_content"
                        android:layout_height="wrap_content"
-                       android:text="Destination"
+                       android:text="@string/destinationPage"
                        android:textSize="30dp"
                        android:paddingTop="30dp"
                        android:paddingBottom="30dp"/>
@@ -57,7 +57,7 @@ Date 2014/11/10.
                     android:id="@+id/toDest"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:hint="To:"
+                    android:hint="@string/toHint"
                     android:maxLines="1"
                     android:singleLine="true"
                     android:imeOptions="actionDone"
@@ -68,7 +68,7 @@ Date 2014/11/10.
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/currentLocation"
-                    android:hint="From:"
+                    android:hint="@string/fromHint"
                     android:maxLines="1"
                     android:singleLine="true"
                     android:imeOptions="actionDone"
@@ -104,13 +104,13 @@ Date 2014/11/10.
                     android:layout_height="wrap_content"
                     android:inputType="number"
                     android:imeOptions="actionDone"
-                    android:hint="#Passengers:"
+                    android:hint="@string/passengerHint"
                     />
          <Button
                  android:id="@+id/submitDest"
                  android:layout_width="fill_parent"
                  android:layout_height="wrap_content"
-                 android:hint="Submit"
+                 android:hint="@string/submit"
                 />
         </LinearLayout>
 
