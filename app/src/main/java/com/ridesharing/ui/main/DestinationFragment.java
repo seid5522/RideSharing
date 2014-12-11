@@ -1,4 +1,4 @@
-package com.ridesharing.ui.user;
+package com.ridesharing.ui.main;
 
 import android.app.Activity;
 import android.content.Context;
@@ -19,7 +19,7 @@ import com.ridesharing.R;
 import com.ridesharing.Service.LocationService;
 import com.ridesharing.Service.LocationServiceImpl;
 import com.ridesharing.Utility.DataProcess;
-import com.ridesharing.ui.main.MainActivity;
+import com.ridesharing.ui.main.DestinationFragment_;
 
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
@@ -38,7 +38,7 @@ import java.util.Date;
 
 
 @EFragment(R.layout.fragment_destination)
-public class destinationFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemSelectedListener {
+public class DestinationFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemSelectedListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -68,15 +68,15 @@ public class destinationFragment extends Fragment implements View.OnClickListene
      * @return A new instance of fragment destinationFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static destinationFragment newInstance(Integer param1, String param2) {
-        destinationFragment fragment = new destinationFragment_();
+    public static DestinationFragment newInstance(Integer param1, String param2) {
+        DestinationFragment fragment = new DestinationFragment_();
         Bundle args = new Bundle();
         args.putInt(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
-    public destinationFragment() {
+    public DestinationFragment() {
         // Required empty public constructor
     }
 
