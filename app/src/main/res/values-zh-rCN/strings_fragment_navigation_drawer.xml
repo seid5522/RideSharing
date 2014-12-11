@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="history">History</string>
-    <string name="logout">Logout</string>
+    <string name="history">历史</string>
+    <string name="logout">登出</string>
 </resources>

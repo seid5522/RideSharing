@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="options_array">
-        <item>Request</item>
-        <item>Offer</item>
+        <item>请求载客</item>
+        <item>提供载客</item>
     </string-array>
 </resources>

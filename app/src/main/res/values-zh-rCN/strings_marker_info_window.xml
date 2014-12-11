@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="name">Name: </string>
-    <string name="type">Type: </string>
-    <string name="to">To: </string>
-    <string name="join">Join</string>
-    <string name="from">From: </string>
-    <string name="time">Time: </string>
-    <string name="vehicle">Vehicle Info</string>
-    <string name="maker">Maker: </string>
-    <string name="model">Model: </string>
-    <string name="year">Year: </string>
-    <string name="status">Status: </string>
-    <string name="seatavailable">Seat Available: </string>
+    <string name="name">名称: </string>
+    <string name="type">类型: </string>
+    <string name="to">到: </string>
+    <string name="join">加入</string>
+    <string name="from">从: </string>
+    <string name="time">时间: </string>
+    <string name="vehicle">车辆信息</string>
+    <string name="maker">品牌: </string>
+    <string name="model">型号: </string>
+    <string name="year">年份: </string>
+    <string name="status">状态: </string>
+    <string name="seatavailable">座位数量: </string>
 </resources>
